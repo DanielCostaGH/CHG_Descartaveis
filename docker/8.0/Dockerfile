@@ -3,7 +3,7 @@ FROM ubuntu:20.04
 LABEL maintainer="Taylor Otwell"
 
 ARG WWWGROUP
-ARG NODE_VERSION=16
+ARG NODE_VERSION=18
 ARG POSTGRES_VERSION=13
 
 WORKDIR /var/www/html
@@ -59,6 +59,7 @@ COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY php.ini /etc/php/8.0/cli/conf.d/99-sail.ini
 COPY ext-xdebug.ini /etc/php/8.0/cli/conf.d/ext-xdebug.ini
 RUN chmod +x /usr/local/bin/start-container
+RUN chown -R sail:sail /var/www/html
 
 EXPOSE 8000
 
