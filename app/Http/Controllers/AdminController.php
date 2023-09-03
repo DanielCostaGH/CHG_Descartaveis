@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\AdminRequest;
 use App\Models\Admin;
-use Illuminate\Support\Facades\View;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 
 class AdminController extends Controller
@@ -22,6 +22,25 @@ class AdminController extends Controller
         return view('admin.index', compact('admins'));
     }
 
+    public function showLoginForm()
+    {
+        return view('admin.login');
+    }
+
+    public function login(Request $request)
+    {
+        $credentials = $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+
+        if (Auth::attempt($credentials)) {
+            return redirect()->route('admin.index');
+        }
+        return redirect()->route('admin.login')->with('error', 'Credenciais inválidas');
+    }
+
+    
 
     /**
      * Show the form for creating a new resource.
@@ -30,6 +49,7 @@ class AdminController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', Admin::class);
         return view('admin.create');
     }
 

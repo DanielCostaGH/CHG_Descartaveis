@@ -17,6 +17,11 @@
   "resolved" "https://registry.npmjs.org/@jridgewell/sourcemap-codec/-/sourcemap-codec-1.4.15.tgz"
   "version" "1.4.15"
 
+"@vitejs/plugin-vue@^4.3.4":
+  "integrity" "sha512-ciXNIHKPriERBisHFBvnTbfKa6r9SAesOYXeGDzgegcvy9Q4xdScSHAmKbNT0M3O0S9LKhIf5/G+UYG4NnnzYw=="
+  "resolved" "https://registry.npmjs.org/@vitejs/plugin-vue/-/plugin-vue-4.3.4.tgz"
+  "version" "4.3.4"
+
 "@vue/compiler-core@3.3.4":
   "integrity" "sha512-cquyDNvZ6jTbf/+x+AgM2Arrp6G4Dzbb0R64jiG804HRMfRiFXWI6kqUVqZ6ZR0bQhIoQjB4+2bhNtVwndW15g=="
   "resolved" "https://registry.npmjs.org/@vue/compiler-core/-/compiler-core-3.3.4.tgz"
@@ -277,7 +282,7 @@
   optionalDependencies:
     "fsevents" "~2.3.2"
 
-"vue@^3.3.4", "vue@3.3.4":
+"vue@^3.2.25", "vue@^3.3.4", "vue@3.3.4":
   "integrity" "sha512-VTyEYn3yvIeY1Py0WaYGZsXnz3y5UnGi62GjVEqvEGPl6nxbOrCXbVOTQWBEJUqAyTUk2uJ5JLVnYJ6ZzGbrSw=="
   "resolved" "https://registry.npmjs.org/vue/-/vue-3.3.4.tgz"
   "version" "3.3.4"
