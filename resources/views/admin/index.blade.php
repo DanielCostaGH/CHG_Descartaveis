@@ -1,5 +1,7 @@
-
+@extends('layouts.app')
+@section('title', 'Página de index dos administradores')
 @section('content')
+<h1><strong>PÁGINA INDEX DOS ADMINISTRADORES</strong></h1>
     <div class="container">
         <h1>Lista de Administradores</h1>
 

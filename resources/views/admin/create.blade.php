@@ -1,4 +1,7 @@
-<h1>tela create</h1>
+@extends('layouts.app')
+@section('title', 'Página de criação dos administradores')
+@section('content')
+<h1>tela de criação dos administradores</h1>
 <form method="POST" action="{{ route('admin.store') }}">
     @csrf
 
@@ -13,3 +16,4 @@
 
     <button type="submit">Create Admin</button>
 </form>
+@endsection
