@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AdminRequest;
+use App\Models\Admin;
 use Illuminate\Support\Facades\View;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -16,8 +18,10 @@ class AdminController extends Controller
      */
     public function index()
     {
-        return view('admin.login');
+        $admins = Admin::get();
+        return view('admin.index', compact('admins'));
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -26,7 +30,7 @@ class AdminController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.create');
     }
 
     /**
@@ -35,9 +39,14 @@ class AdminController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        //
+    public function store(AdminRequest $request) {
+        $admin = new Admin();
+        $admin->email = $request->input('email');
+        $admin->password = bcrypt($request->input('password'));
+        $admin->name = $request->input('name');
+        $admin->save();
+
+        return redirect()->route('admin.index');
     }
 
     /**

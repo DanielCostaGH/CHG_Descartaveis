@@ -20,12 +20,12 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::group(['prefix' => '/admin'], function () {
+Route::group(['prefix' => 'admin'], function () {
     Route::get('/login', [AdminController::class, 'index'])->name('admin.index');
-    Route::get('/test', function () {
-        return view('welcome');
-    });
+    Route::get('/create', [AdminController::class, 'create'])->name('admin.create');
+    Route::post('/', [AdminController::class, 'store'])->name('admin.store');
 });
+
 
 
 
