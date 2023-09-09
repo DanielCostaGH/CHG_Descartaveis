@@ -30,6 +30,11 @@ Route::group(['prefix' => 'admin'], function () {
     Route::post('/', [AdminController::class, 'store'])->name('admin.store');
 });
 
-
-
-
+Route::group(['prefix' => 'user'], function () {
+    Route::get('/', [UserController::class, 'index'])->name('user.name');
+    Route::get('/login', [UserController::class, 'showLoginForm'])->name('user.login');
+    Route::post('/login', [UserController::class, 'login']);
+    Route::get('/create', [UserController::class, 'create'])
+        ->name('user.create');
+    Route::post('/', [UserController::class, 'store'])->name('user.store');
+});
