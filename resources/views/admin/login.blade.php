@@ -1,4 +1,11 @@
-@extends('layouts.app')
+@extends('master')
+
+@section('content')
+    <admin-login></admin-login>
+@endsection
+
+
+{{-- @extends('layouts.app')
 @section('title', 'Página de login dos administradores')
 @section('content')
 <h1><strong>PAGINA DE LOGIN</strong></h1>
@@ -53,4 +60,4 @@
             </div>
         </div>
     </div>
-@endsection
+@endsection --}}
