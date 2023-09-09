@@ -1,4 +1,12 @@
-@extends('layouts.app')
+@extends('master')
+
+@section('content')
+    <user-index></user-index>
+@endsection
+
+
+
+{{-- @extends('layouts.app')
 @section('title', 'Página de index dos usuários')
 @section('content')
 <h1><strong>PÁGINA INDEX DOS USUÁRIOS</strong></h1>
@@ -30,4 +38,4 @@
             </tbody>
         </table>
     </div>
-@endsection
+@endsection --}}

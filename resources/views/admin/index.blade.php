@@ -1,4 +1,12 @@
-@extends('layouts.app')
+@extends('master')
+
+@section('content')
+    <admin-index></admin-index>
+@endsection
+
+
+
+{{-- @extends('layouts.app')
 @section('title', 'Página de index dos administradores')
 @section('content')
 <h1><strong>PÁGINA INDEX DOS ADMINISTRADORES</strong></h1>
@@ -26,4 +34,4 @@
             </tbody>
         </table>
     </div>
-@endsection
+@endsection --}}
