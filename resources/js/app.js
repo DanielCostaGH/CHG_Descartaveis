@@ -2,6 +2,7 @@ import './bootstrap';
 
 import { createApp } from 'vue';
 import App from './components/App.vue';
+import Home from './pages/Home.vue';
 
 const app = createApp();
 
@@ -25,5 +26,6 @@ app.component('admin-create', adminCreate);
 app.component('user-login', userLogin); 
 app.component('user-index', userIndex); 
 app.component('user-create', userCreate); 
+app.component('home', Home); 
 
 app.mount('#app');
