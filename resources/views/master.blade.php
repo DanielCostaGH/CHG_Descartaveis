@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     @vite('resources/css/app.css')
-    <title>Document</title>
+    <title>CHG Descartaveis</title>
 </head>
 <body>
     <div id="app">

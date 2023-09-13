@@ -1,19 +1,62 @@
 
 
 <template>
-    <div class="container mx-auto my-10 ">
-        <span class="text-xl">
-            Veja as melhores categorias
-        </span>
-<div class="flex justify-between my-10">
-    <div class="w-40 h-40 flex items-center justify-center rounded-full bg-gray-200 hover:border-2 hover:border-green-600 hover:shadow-lg"></div>
-    <div class="w-40 h-40 flex items-center justify-center rounded-full bg-gray-200 hover:border-2 hover:border-green-600 hover:shadow-lg"></div>
-    <div class="w-40 h-40 flex items-center justify-center rounded-full bg-gray-200 hover:border-2 hover:border-green-600 hover:shadow-lg"></div>
-    <div class="w-40 h-40 flex items-center justify-center rounded-full bg-gray-200 hover:border-2 hover:border-green-600 hover:shadow-lg"></div>
-    <div class="w-40 h-40 flex items-center justify-center rounded-full bg-gray-200 hover:border-2 hover:border-green-600 hover:shadow-lg"></div>
-    <div class="w-40 h-40 flex items-center justify-center rounded-full bg-gray-200 hover:border-2 hover:border-green-600 hover:shadow-lg"></div>
-</div>
+    <div class="container mx-auto my-10 py-10">
+        <div class="container flex justify-between">
+            <span class="text-xl">
+                Veja nossas categorias de produtos
+            </span>
+
+        </div>
+
+        <div class="flex justify-between my-10 text-xl">
+            
+            <div class="text-center">
+                <div
+                    class="w-52 h-52 rounded-full bg-[#F5F5F5] hover:border hover:border-blue-900 hover:shadow-lg">
+                </div> <br>
+
+                <span class="" style="padding-top: 40px;">Categoria</span>
+            </div>
+
+            <div class="text-center">
+                <div
+                    class="w-52 h-52 rounded-full bg-[#F5F5F5] hover:border hover:border-blue-900 hover:shadow-lg">
+                </div> <br>
+
+                <span class="" style="padding-top: 40px;">Categoria</span>
+            </div>
+
+            <div class="text-center">
+                <div
+                    class="w-52 h-52 rounded-full bg-[#F5F5F5] hover:border hover:border-blue-900 hover:shadow-lg">
+                </div> <br>
+
+                <span class="" style="padding-top: 40px;">Categoria</span>
+            </div>
+
+            <div class="text-center">
+                <div
+                    class="w-52 h-52 rounded-full bg-[#F5F5F5] hover:border hover:border-blue-900 hover:shadow-lg">
+                </div> <br>
+
+                <span class="" style="padding-top: 40px;">Categoria</span>
+            </div>
+
+            <div class="text-center">
+                <div
+                    class="w-52 h-52 rounded-full bg-[#F5F5F5] hover:border hover:border-blue-900 hover:shadow-lg">
+                </div> <br>
+
+                <span class="" style="padding-top: 40px;">Categoria</span>
+            </div>
+
+            
+
         
+
+        </div>
+
 
     </div>
 </template>

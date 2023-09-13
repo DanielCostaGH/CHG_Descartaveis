@@ -1,17 +1,21 @@
 <script>
 import navbar from '../components/navbar/navbar.vue';
-import category from '../components/category.vue';
+import topics from '../components/topics.vue';
 import carrousel from '../components/carrousel.vue';
 import products from '../components/products.vue';
-import category_scroll from '../components/category-scroll.vue'
+import category_scroll from '../components/category-scroll.vue';
+import top_marcas from '../components/top-marcas.vue';
+import foot from '../components/footer.vue';
 
 export default {
   components: {
     navbar,
-    category,
+    topics,
     carrousel,
     products,
-    category_scroll
+    category_scroll,
+    top_marcas,
+    foot,
   },
 
 }
@@ -20,13 +24,13 @@ export default {
 
 
 <template>
-  <div id="body">
+  <div id="body" class="">
     <div>
       <navbar />
     </div>
 
     <div>
-      <category/>
+      <topics/>
     </div>
 
     <div>
@@ -39,6 +43,14 @@ export default {
 
     <div>
       <category_scroll/>
+    </div>
+
+    <div>
+      <top_marcas/>
+    </div>
+
+    <div>
+      <foot/>
     </div>
 
   </div>

@@ -17,6 +17,7 @@
 
     <main>
         <!-- Conteúdo principal da página -->
+        
         @yield('content')
     </main>
 
