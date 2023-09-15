@@ -7,7 +7,15 @@ import category_scroll from '../components/category-scroll.vue';
 import top_marcas from '../components/top-marcas.vue';
 import foot from '../components/footer.vue';
 
+
+
 export default {
+  data() {
+    return {
+      wpp: 'images/wpp2.svg',
+    }
+  },
+  
   components: {
     navbar,
     topics,
@@ -17,6 +25,8 @@ export default {
     top_marcas,
     foot,
   },
+
+  
 
 }
 </script>
@@ -52,6 +62,13 @@ export default {
     <div>
       <foot/>
     </div>
+
+    <div class="fixed bottom-20 right-14 z-50">
+      <a href="https://api.whatsapp.com/send?phone=31980160125" target="_blank">
+        <img :src="wpp" class="h-[10vh] w-[10-vh] rounded-xl hover hover:shadow" alt="WhatsApp Icon">
+      </a>
+    </div>
+
 
   </div>
 </template>

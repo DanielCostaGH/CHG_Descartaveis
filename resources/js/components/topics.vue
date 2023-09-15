@@ -25,7 +25,7 @@
 
             <div
                 class="flex items-center border-2 border-green-600 rounded-lg py-2 px-5 cursor-pointer bg-[#F3F9FB] shadow hover hover:bg-[#D8E1E4]">
-                <a class="px-4" href="#">Compre pelo Whatsapp</a>
+                <a class="px-4" href="#">Falar com vendedor</a>
                 <v-icon>
                     <img :src="whatsapp" alt="">
                 </v-icon>
