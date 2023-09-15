@@ -68,8 +68,8 @@ export default {
   
       <div class="border-t border-gray-300 my-2 z-30 container mx-auto py-4"></div>
 
-      <div class="container text-white text-sm z-30 mx-auto text-center">
-        <span class="m-5">© {{ getCurrentYear() }} CHG Descartáveis Epi’s Limpeza LTDA.</span>
+      <div class="container text-white z-30 mx-auto text-center">
+        <span class="m-5 text-lg">© {{ getCurrentYear() }} CHG Descartáveis Epi’s Limpeza LTDA.</span>
     </div>
 
 
@@ -81,7 +81,7 @@ export default {
         style="position: absolute; top: -15vh; right: -15vh;"></div>
 
       <div id="circle_footer_2"
-        class="w-[52vh] h-[52vh] flex-shrink-1 border-4 border-[#68E500] overflow-hidden rounded-full z-10"
+        class="w-[51.5vh] h-[51.5vh] flex-shrink-1 border-4 border-[#68E500] overflow-hidden rounded-full z-10"
         style="position: absolute; top: -15vh; right: -15vh;"></div>
     </section>
 
