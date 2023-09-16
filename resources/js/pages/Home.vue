@@ -34,7 +34,7 @@ export default {
 
 
 <template>
-  <div id="body" class="">
+  <div id="main" class="">
     <div>
       <navbar />
     </div>
