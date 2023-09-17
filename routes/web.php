@@ -21,14 +21,19 @@ Route::get('/', function () {
 });
 
 Route::group(['prefix' => 'admin'], function () {
-    Route::get('/', [AdminController::class, 'index'])->name('admin.index');
     Route::get('/login', [AdminController::class, 'showLoginForm'])->name('admin.login');
     Route::post('/login/{id}', [AdminController::class, 'login']);
-    Route::get('/create', [AdminController::class, 'create'])
-        ->name('admin.create')
-        ->middleware('checkAdminEmail');
-    Route::post('/', [AdminController::class, 'store'])->name('admin.store');
+
+    Route::middleware(['AdminAuthMiddleware'])->group(function () {
+        Route::get('/', [AdminController::class, 'index'])->name('admin.index');
+        Route::post('/', [AdminController::class, 'store'])->name('admin.store');
+    });
+
+    Route::middleware(['AdminAuthMiddleware', 'checkAdminEmail'])->group(function () {
+        Route::get('/create', [AdminController::class, 'create'])->name('admin.create');
+    });
 });
+
 
 Route::group(['prefix' => 'user'], function () {
     Route::get('/', [UserController::class, 'index'])->name('user.name');
