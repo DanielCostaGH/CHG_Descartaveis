@@ -10,14 +10,14 @@ const app = createApp();
 app.component('app', App);
 
 // Bloco de templates do admin
-import adminLogin from './components/admin/login.vue';
-import adminIndex from './components/admin/index.vue'; 
-import adminCreate from './components/admin/create.vue'; 
+import adminLogin from './pages/admin/login.vue';
+import adminIndex from './pages/admin/index.vue'; 
+import adminCreate from './pages/admin/create.vue'; 
 
 // Bloco de templates do user
-import userLogin from './components/user/login.vue';
-import userIndex from './components/user/index.vue'; 
-import userCreate from './components/user/create.vue'; 
+import userLogin from './pages/user/login.vue';
+import userIndex from './pages/user/index.vue'; 
+import userCreate from './pages/user/create.vue'; 
 
 // Bloco de produtos
 import productsIndex from './pages/products.vue'
