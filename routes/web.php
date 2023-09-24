@@ -47,5 +47,10 @@ Route::group(['prefix' => 'user'], function () {
 
 Route::group(['prefix' => 'product' ], function() {
     Route::get('/', [ProductsController::class, 'index'])->name('product.name');
-    Route::get('/details/{id}', [ProductsController::class, 'show'])->name('product.show');
+    Route::get('/{id}', [ProductsController::class, 'show'])->name('product.show');
 });
+
+
+
+
+// Route::get('/api/product/details/{id}/description', [ProductsController::class, 'getDescription']);

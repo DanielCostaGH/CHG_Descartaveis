@@ -58,8 +58,8 @@ class ProductsController extends Controller
     
         return view('products.product_details', compact('product'));
     }
-    
 
+    
 
     /**
      * Show the form for editing the specified resource.
@@ -83,6 +83,18 @@ class ProductsController extends Controller
     {
         //
     }
+
+//     public function getDescription($id)
+// {
+//     $product = Product::where('id', $id)->first();
+
+//     if (!$product) {
+//         return response()->json(['error' => 'Produto não encontrado'], 404);
+//     }
+//     return response()->json(['description' => $product->description]);
+// }
+
+
 
     /**
      * Remove the specified resource from storage.
