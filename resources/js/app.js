@@ -34,7 +34,7 @@ app.component('user-create', userCreate);
 app.component('home', Home); 
 
 app.component('products' , productsIndex);
-app.component('productDetails', productDetails);
+app.component('product_details', productDetails);
 
 
 app.mount('#app');
