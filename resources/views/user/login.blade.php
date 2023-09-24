@@ -1,15 +1,15 @@
-@extends('master')
+{{-- @extends('master')
 
 @section('content')
     <user-login></user-login>
 @endsection
+ --}}
 
 
 
 
 
-
-{{-- @extends('layouts.app')
+@extends('layouts.app')
 @section('title', 'Página de login dos usuários')
 @section('content')
 <h1><strong>PAGINA DE LOGIN</strong></h1>
@@ -20,7 +20,7 @@
                     <div class="card-header">{{ __('Login de Usuário') }}</div>
 
                     <div class="card-body">
-                        <form method="POST" action="{{ route('user.login') }}">
+                        <form method="POST" action="{{ route('user.login.post') }}">
                             @csrf
 
                             <div class="form-group row">
@@ -64,4 +64,4 @@
             </div>
         </div>
     </div>
-@endsection --}}
+@endsection

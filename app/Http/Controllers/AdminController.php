@@ -7,6 +7,7 @@ use App\Models\Admin;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
 
 class AdminController extends Controller
@@ -20,6 +21,7 @@ class AdminController extends Controller
     {
         $admins = Admin::get();
         return view('admin.index', compact('admins'));
+        
     }
 
     public function showLoginForm()
@@ -29,15 +31,27 @@ class AdminController extends Controller
 
     public function login(Request $request)
     {
-        $credentials = $request->validate([
-            'email' => 'required|email',
-            'password' => 'required',
+        $request->validate([
+            'email' => 'required|string',
+            'password' => 'required|string'
         ]);
+        $admin = Admin::where('email', '=', $request->email)->first();
 
-        if (Auth::attempt($credentials)) {
-            return redirect()->route('admin.index');
+        if (!$admin || !Hash::check($request->password, $admin->password)) {
+            return response([
+                'message' => 'Credenciais inválidas'
+            ], 401);
         }
-        return redirect()->route('admin.login')->with('error', 'Credenciais inválidas');
+        
+
+        $token = $admin->createToken('auth_token')->plainTextToken;
+
+        $response = [
+            'user' => $admin,
+            'token' => $token
+        ];
+
+        return redirect()->route('admin.index')->with('response', $response);
     }
 
     
@@ -47,9 +61,10 @@ class AdminController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
         $this->authorize('create', Admin::class);
+        
         return view('admin.create');
     }
 
@@ -60,13 +75,25 @@ class AdminController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(AdminRequest $request) {
-        $admin = new Admin();
-        $admin->email = $request->input('email');
-        $admin->password = bcrypt($request->input('password'));
-        $admin->name = $request->input('name');
-        $admin->save();
+        $request->validate([
+            'name' => ['required|string|max:100|min:5'],
+            'email' => ['required|string|unique:admin, email|min:15max:100'],
+            'password' => ['required','string','min:4', 'confirmed'],
+        ]);
+        $admin = Admin::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => bcrypt($request->password)
+        ]);
 
-        return redirect()->route('admin.index');
+        $token = $admin->createToken('auth_token')->plainTextToken;
+
+        $response = [
+            'user' => $admin,
+            'token' => $token
+        ];
+
+        return redirect()->route('admin.index')->with('response', $response);
     }
 
     /**
@@ -112,5 +139,11 @@ class AdminController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function logout()
+    {
+        auth()->user()->currentAccessToken()->delete();
+        return redirect()->route('admin.login');
     }
 }
