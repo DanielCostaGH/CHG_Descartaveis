@@ -79,6 +79,12 @@
                 </div>
             </header>
 
+            <main>
+                <div>
+                    <span>appearence</span>
+                </div>
+            </main>
+
             
 
         </main>
