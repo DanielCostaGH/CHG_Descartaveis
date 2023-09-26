@@ -36,7 +36,6 @@ class AdminController extends Controller
             'password' => 'required|string'
         ]);
         $admin = Admin::where('email', '=', $request->email)->first();
-
         if (!$admin || !Hash::check($request->password, $admin->password)) {
             return response([
                 'message' => 'Credenciais inválidas'
@@ -47,11 +46,10 @@ class AdminController extends Controller
         $token = $admin->createToken('auth_token')->plainTextToken;
 
         $response = [
-            'user' => $admin,
+            'admin' => $admin,
             'token' => $token
         ];
-
-        return redirect()->route('admin.index')->with('response', $response);
+        return response()->json(['response' => $response]);
     }
 
     
@@ -61,7 +59,7 @@ class AdminController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request)
+    public function create()
     {
         $this->authorize('create', Admin::class);
         
@@ -89,7 +87,7 @@ class AdminController extends Controller
         $token = $admin->createToken('auth_token')->plainTextToken;
 
         $response = [
-            'user' => $admin,
+            'admin' => $admin,
             'token' => $token
         ];
 
