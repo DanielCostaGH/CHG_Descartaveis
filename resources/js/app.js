@@ -42,6 +42,7 @@ app.component('home', Home);
 app.component('products' , productsIndex);
 app.component('product_details', productDetails);
 
+
 app.component('dashboard-index', dashboardIndex);
 app.component('products-edit-list', productsEditList);
 app.component('product-edit', productEdit);

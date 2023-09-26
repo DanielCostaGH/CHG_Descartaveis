@@ -15,7 +15,7 @@ class ProductsController extends Controller
     public function index()
     {
         return(
-            view('products.add')
+            view('products.product_list')
         );
     }
 
@@ -50,12 +50,16 @@ class ProductsController extends Controller
      */
     public function show($id)
     {
-        $product = Product::where('id', $id)->first();
-
+        $product = Product::find($id);
+    
         if (!$product) {
-            abort(404);
+            abort(404); // Redireciona para a página de erro 404 se o produto não for encontrado.
         }
+    
+        return view('products.product_details', compact('product'));
     }
+
+    
 
     /**
      * Show the form for editing the specified resource.
@@ -79,6 +83,18 @@ class ProductsController extends Controller
     {
         //
     }
+
+//     public function getDescription($id)
+// {
+//     $product = Product::where('id', $id)->first();
+
+//     if (!$product) {
+//         return response()->json(['error' => 'Produto não encontrado'], 404);
+//     }
+//     return response()->json(['description' => $product->description]);
+// }
+
+
 
     /**
      * Remove the specified resource from storage.

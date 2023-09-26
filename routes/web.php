@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\DashboardController;
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -62,5 +63,4 @@ Route::group(['prefix' => 'dashboard'], function () {
     Route::get('/products/{id}', [DashboardController::class, 'editProduct'])->name('dashboard.products.edit');
     Route::get('/appearence', [DashboardController::class, 'appearence'])->name('dashboard.appearence.index');
 });
-
 
