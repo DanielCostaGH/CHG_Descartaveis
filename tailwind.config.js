@@ -6,7 +6,19 @@ module.exports = {
     "./resources/**/*.vue",
   ],
   theme: {
-    extend: {},
+    extend: {
+
+      colors: {
+        'blue_gradient': {
+          'light': '#6BAAFC',
+          'dark': '#305FEC',
+        },
+        'purple_gradient': {
+          'light': '#D623FE',
+          'dark': '#A530F2',
+        },
+      },
+    },
   },
   plugins: [],
 }

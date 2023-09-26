@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductsController;
+use App\Http\Controllers\DashboardController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -55,6 +57,10 @@ Route::group(['prefix' => 'product' ], function() {
 });
 
 
+Route::group(['prefix' => 'dashboard'], function () {
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
+    Route::get('/products', [DashboardController::class, 'showProducts'])->name('dashboard.products.index');
+    Route::get('/products/{id}', [DashboardController::class, 'editProduct'])->name('dashboard.products.edit');
+    Route::get('/appearence', [DashboardController::class, 'appearence'])->name('dashboard.appearence.index');
+});
 
-
-// Route::get('/api/product/details/{id}/description', [ProductsController::class, 'getDescription']);
