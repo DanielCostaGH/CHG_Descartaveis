@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProductsController;
+use App\Http\Controllers\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,15 +23,19 @@ Route::get('/', function () {
 });
 
 Route::group(['prefix' => 'admin'], function () {
-    Route::get('/login', [AdminController::class, 'showLoginForm'])->name('admin.login');
-    Route::post('/login/{id}', [AdminController::class, 'login']);
+    Route::middleware('guest')->group(function () {
+        Route::get('/login', [AdminController::class, 'showLoginForm'])->name('admin.login');
+        Route::post('/login', [AdminController::class, 'login'])->name('admin.login.post');
+    });
+    
+    Route::post('/logout', [AdminController::class, 'logout'])->name('admin.logout');
 
-    Route::middleware(['AdminAuthMiddleware'])->group(function () {
+    Route::group(['midleware' => ['auth:sanctum']], function (){
         Route::get('/', [AdminController::class, 'index'])->name('admin.index');
         Route::post('/', [AdminController::class, 'store'])->name('admin.store');
     });
 
-    Route::middleware(['AdminAuthMiddleware', 'checkAdminEmail'])->group(function () {
+    Route::middleware(['auth:sanctum', 'checkAdminEmail'])->group(function () {
         Route::get('/create', [AdminController::class, 'create'])->name('admin.create');
     });
 });
@@ -38,7 +44,7 @@ Route::group(['prefix' => 'admin'], function () {
 Route::group(['prefix' => 'user'], function () {
     Route::get('/', [UserController::class, 'index'])->name('user.name');
     Route::get('/login', [UserController::class, 'showLoginForm'])->name('user.login');
-    Route::post('/login/{id}', [UserController::class, 'login']);
+    Route::post('/login', [UserController::class, 'login'])->name('user.login.post');
     Route::get('/create', [UserController::class, 'create'])
         ->name('user.create');
     Route::post('/', [UserController::class, 'store'])->name('user.store');
@@ -46,5 +52,15 @@ Route::group(['prefix' => 'user'], function () {
 
 Route::group(['prefix' => 'product' ], function() {
     Route::get('/', [ProductsController::class, 'index'])->name('product.name');
-    Route::get('/details/{id}', [ProductsController::class, 'show'])->name('product.show');
+    Route::get('/{id}', [ProductsController::class, 'show'])->name('product.show');
 });
+
+
+Route::group(['prefix' => 'dashboard'], function () {
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
+    Route::get('/products', [DashboardController::class, 'showProducts'])->name('dashboard.products.index');
+    Route::get('/products/{id}', [DashboardController::class, 'editProduct'])->name('dashboard.products.edit');
+    Route::get('/appearence', [DashboardController::class, 'appearence'])->name('dashboard.appearence.index');
+});
+
+

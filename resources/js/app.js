@@ -23,6 +23,12 @@ import userCreate from './pages/user/create.vue';
 import productsIndex from './pages/products.vue'
 import productDetails from './pages/productDetails.vue';
 
+// Bloco dashboard
+import dashboardIndex from './pages//dashboard/dashboard.vue';
+import productEdit from './pages/dashboard/productEdit.vue';
+import productsEditList from './pages/dashboard/productsEditList.vue';
+import appearenceIndex from './pages/dashboard/appearence.vue'
+
 
 app.component('admin-login', adminLogin); 
 app.component('admin-index', adminIndex);
@@ -34,7 +40,13 @@ app.component('user-create', userCreate);
 app.component('home', Home); 
 
 app.component('products' , productsIndex);
-app.component('productDetails', productDetails);
+app.component('product_details', productDetails);
+
+app.component('dashboard-index', dashboardIndex);
+app.component('products-edit-list', productsEditList);
+app.component('product-edit', productEdit);
+app.component('appearence-index', appearenceIndex);
+
 
 
 app.mount('#app');
