@@ -11,14 +11,16 @@
             </div>
 
             <div class=" flex justify-center">
-                <form action="">
+                <form @submit.prevent="submitForm">
                     <div class="text-center mb-16">
                         <span class="text-3xl text-[#727272] font-bold">LOGIN</span>
                     </div>
 
                     <div class="relative w-[60vh]">
-                        <input class="bg-[#ECECEC] w-full h-[5vh] my-2 p-5 rounded" type="text" placeholder="E-mail">
-                        <input class="bg-[#ECECEC] w-full h-[5vh] my-3 p-5 rounded" type="password" placeholder="Senha">
+                        <input v-model="email" class="bg-[#ECECEC] w-full h-[5vh] my-2 p-5 rounded" type="text" placeholder="E-mail" :class="{ 'border-red-500': emailError }">
+                        <div class="text-red-500">{{ emailError }}</div>
+                        <input v-model="password" class="bg-[#ECECEC] w-full h-[5vh] my-3 p-5 rounded" type="password" placeholder="Senha" :class="{ 'border-red-500': passwordError }">
+                        <div class="text-red-500">{{ passwordError }}</div>
                     </div>
 
                     <div class="flex justify-between items-center">
@@ -35,8 +37,9 @@
                     </div>
 
                     <div class="text-center text-white">
-                        <button class="bg-[#007AFF] w-full h-[6vh] mt-10 rounded" type="submit">Entrar</button>
+                        <button @click="submitForm" class="bg-[#007AFF] w-full h-[6vh] mt-10 rounded" type="button">Entrar</button>
                     </div>
+
 
                     <div class="text-center">
                         <button class="bg-[#F3F3F3] text-[#1A1A1A] w-full h-[6vh] my-4 rounded flex justify-center items-center" type="submit">
@@ -54,15 +57,53 @@ export default {
         return {
             logo_light: '/images/logo_light.svg',
             google_icon: '/images/google_icon.svg',
-            isSwitchChecked: false
-        }
+            isSwitchChecked: false,
+            email: '',
+            password: '',
+            emailError: '',
+            passwordError: ''
+        };
     },
     methods: {
         toggleSwitch() {
             this.isSwitchChecked = !this.isSwitchChecked;
+        },
+        submitForm() {
+            this.emailError = '';
+            this.passwordError = '';
+
+            // Validar campos
+            if (!this.email) {
+                this.emailError = 'O campo de email deve ser preenchido.';
+            }
+
+            if (!this.password) {
+                this.passwordError = 'O campo de senha deve ser preenchido.';
+            }
+
+            if (this.emailError || this.passwordError) {
+                return;
+            }
+
+            axios.post('/admin/login', {
+                email: this.email,
+                password: this.password
+            })
+            .then(response => {
+                console.log('aaaa', response.data.response.token)
+                if (response.data.response.token) {
+                    window.location.href = '/admin';
+                } else {
+                    this.emailError = 'Credenciais inválidas';
+                }
+            })
+            .catch(error => {
+                // Trate os erros do backend aqui, por exemplo, exiba uma mensagem de erro
+            });
         }
     }
 }
+
 </script>
 
 <style scoped>
