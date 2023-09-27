@@ -1,12 +1,12 @@
 <template>
     <section class="w-full">
-        <div class="bg-white p-4 rounded-lg shadow-md w-full group hover:shadow-lg">
+        <div class="bg-white p-8 rounded-lg shadow-md w-full group hover:shadow-lg">
             <div class="flex justify-between cursor-pointer" @click="toggleSection">
-                <h3 class="text-xl font-semibold text-gray-400 mb-4 " >Editar Rodapé</h3>
+                <h3 class="text-xl font-semibold text-gray-500 mb-4 " >Editar Rodapé</h3>
 
                 <img :src="down_arrow" alt="">
             </div>
-            <div v-if="isOpen">
+            <div v-if="isOpen" class="border-t pt-5">
                 <div class="grid grid-cols-2 gap-4">
                     <!-- Campo de Whatsapp -->
                     <div class="mb-4">
@@ -55,7 +55,7 @@
                     Salvar Alterações
                 </button>
             </div>
-            <!-- Campos de edição -->
+            
 
         </div>
     </section>
@@ -66,11 +66,11 @@ export default {
     data() {
         return {
             isOpen: false,
-            whatsapp: '', // Valor do Whatsapp
-            phone: '', // Valor do Telefone
-            instagram: '', // Valor do Instagram
-            email: '', // Valor do Email
-            logoImage: null, // Imagem da Logo
+            whatsapp: '', 
+            phone: '', 
+            instagram: '', 
+            email: '', 
+            logoImage: null, 
             down_arrow: '/images/down_arrow.svg',
         };
     },
@@ -89,8 +89,9 @@ export default {
             }
         },
         saveChanges() {
-            // Enviar os valores editados do Footer de volta ao servidor
-            // Substitua esta parte pela lógica real para salvar as alterações no backend
+        // Enviar os valores editados do Footer de volta ao servidor
+        // Troca essa parte aqui pela lógica real do backend pra buscar no banco de dados
+
             const data = {
                 whatsapp: this.whatsapp,
                 phone: this.phone,
@@ -104,8 +105,4 @@ export default {
     },
 };
 </script>
-  
-<style scoped>
-/* Estilos específicos do componente */
-</style>
   

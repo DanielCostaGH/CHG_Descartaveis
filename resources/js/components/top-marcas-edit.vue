@@ -1,13 +1,13 @@
 <template>
     <section class="w-full">
-      <div class="bg-white p-4 rounded-lg shadow-md w-full group hover:shadow-lg">
+      <div class="bg-white p-8 rounded-lg shadow-md w-full group hover:shadow-lg">
         <div class="flex justify-between cursor-pointer" @click="toggleSection">
-                <h3 class="text-xl font-semibold text-gray-400 mb-4 " >Principais Marcas</h3>
+                <h3 class="text-xl font-semibold text-gray-500 mb-4 " >Principais Marcas</h3>
 
                 <img :src="down_arrow" alt="">
             </div>
         <!-- Lista de Marcas Atuais -->
-        <div v-if="isOpen" class="flex flex-wrap -mx-2">
+        <div v-if="isOpen" class="flex flex-wrap -mx-2 border-t pt-5">
           <div v-for="(brand, index) in editedBrands" :key="index" class="w-full mb-4">
             <div class="flex items-center justify-between mb-2">
               <!-- Campo de Seleção de Marca -->
@@ -44,9 +44,9 @@
       return {
         down_arrow: '/images/down_arrow.svg',
         isOpen: false,
-        brands: [], // Marcas atuais carregadas do banco de dados
-        editedBrands: [], // Marcas editadas pelo usuário
-        brandOptions: [], // Opções de marcas recebidas do banco de dados
+        brands: [], 
+        editedBrands: [], 
+        brandOptions: [], 
       };
     },
     created() {
@@ -60,8 +60,8 @@
         this.isOpen = !this.isOpen;
       },
       loadBrands() {
-        // Simular o carregamento das marcas atuais do banco de dados
-        // Substitua esta parte pela lógica real para obter marcas do backend
+      // Troca essa parte aqui pela lógica real do backend pra buscar no banco de dados
+
         this.brands = [
           { selectedBrand: null, image: null },
           { selectedBrand: null, image: null },
@@ -72,8 +72,8 @@
         this.editedBrands = this.brands.map(brand => ({ ...brand }));
       },
       loadBrandOptions() {
-        // Simular o carregamento das opções de marcas do banco de dados
-        // Substitua esta parte pela lógica real para obter opções de marcas do backend
+      // Troca essa parte aqui pela lógica real do backend pra buscar no banco de dados
+
         this.brandOptions = [
           { id: 1, name: 'Marca A' },
           { id: 2, name: 'Marca B' },
@@ -93,8 +93,8 @@
         }
       },
       saveChanges() {
-        // Enviar as marcas editadas de volta ao servidor
-        // Substitua esta parte pela lógica real para salvar as alterações no backend
+      // Enviar as marcas editadas de volta ao servidor
+      // Troca essa parte aqui pela lógica real do backend pra buscar no banco de dados
         console.log('Marcas editadas:', this.editedBrands);
         alert('Alterações salvas com sucesso!');
       },
@@ -102,7 +102,4 @@
   };
   </script>
   
-  <style scoped>
-  /* Estilos específicos do componente */
-  </style>
   

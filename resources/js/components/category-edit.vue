@@ -1,14 +1,14 @@
 <template>
     <section class="w-full cursor-pointer">
-        <div class="bg-white p-4 rounded-lg shadow-md w-full group hover:shadow-lg">
+        <div class="bg-white p-8 rounded-lg shadow-md w-full group hover:shadow-lg">
             
             <div class="flex justify-between cursor-pointer" @click="toggleSection">
-                <h3 class="text-xl font-semibold text-gray-400 mb-4 " >Principais Categorias</h3>
+                <h3 class="text-xl font-semibold text-gray-500 mb-4 " >Principais Categorias</h3>
 
                 <img :src="down_arrow" alt="">
             </div>
             <!-- Lista de Categorias Atuais -->
-            <div v-if="isOpen" class="flex flex-wrap -mx-2">
+            <div v-if="isOpen" class="flex flex-wrap -mx-2 border-t pt-5">
                 <div v-for="(category, index) in editedCategories" :key="index" class="w-full mb-4">
                     <div class="flex items-center justify-between mb-2">
                         <!-- Campo de Seleção de Categoria -->
@@ -42,9 +42,9 @@ export default {
         return {
             down_arrow: '/images/down_arrow.svg',
             isOpen: false,
-            categories: [], // Categorias atuais carregadas do banco de dados
-            editedCategories: [], // Categorias editadas pelo usuário
-            categoryOptions: [], // Opções de categorias recebidas do banco de dados
+            categories: [], 
+            editedCategories: [],
+            categoryOptions: [], 
         };
     },
     created() {
@@ -58,8 +58,8 @@ export default {
             this.isOpen = !this.isOpen;
         },
         loadCategories() {
-            // Simular o carregamento das categorias atuais do banco de dados
-            // Substitua esta parte pela lógica real para obter categorias do backend
+        // Troca essa parte aqui pela lógica real do backend pra buscar no banco de dados
+
             this.categories = [
                 { selectedCategory: null, image: null },
                 { selectedCategory: null, image: null },
@@ -69,8 +69,8 @@ export default {
             this.editedCategories = this.categories.map(category => ({ ...category }));
         },
         loadCategoryOptions() {
-            // Simular o carregamento das opções de categorias do banco de dados
-            // Substitua esta parte pela lógica real para obter opções de categorias do backend
+        // Troca essa parte aqui pela lógica real do backend pra buscar no banco de dados
+
             this.categoryOptions = [
                 { id: 1, name: 'Categoria A' },
                 { id: 2, name: 'Categoria B' },
@@ -81,7 +81,7 @@ export default {
         onCategoryImageInputChange(event, index) {
             const file = event.target.files[0];
             if (file) {
-                // Manipular a seleção de imagem da categoria pelo usuário
+        // Manipular a seleção de imagem da categoria pelo usuário
                 this.editedCategories[index].image = URL.createObjectURL(file);
             } else {
                 // Limpar a imagem se o usuário remover a seleção
@@ -89,8 +89,9 @@ export default {
             }
         },
         saveChanges() {
-            // Enviar as categorias editadas de volta ao servidor
-            // Substitua esta parte pela lógica real para salvar as alterações no backend
+        // Enviar as categorias editadas de volta ao servidor
+        // Troca essa parte aqui pela lógica real do backend pra buscar no banco de dados
+
             console.log('Categorias editadas:', this.editedCategories);
             alert('Alterações salvas com sucesso!');
         },
@@ -98,7 +99,4 @@ export default {
 };
 </script>
   
-<style scoped>
-/* Estilos específicos do componente */
-</style>
   
