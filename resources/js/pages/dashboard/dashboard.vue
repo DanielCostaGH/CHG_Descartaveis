@@ -4,17 +4,17 @@
     <sidebar />
 
     <!-- Conteúdo principal -->
-    <main class="w-4/5 p-6 bg-[#F3F4F5]">
+    <main class="w-4/5 p-6 bg-gray-100">
       <!-- Header -->
-      <header class="bg-white shadow-md p-4 mb-6 rounded-lg">
-        <div class="flex justify-between items-center">
-          <h2 class="text-xl font-semibold">Painel de Controle</h2>
-          <div class="flex space-x-4">
-            <a href="/admin/profile" class="text-gray-600 hover:text-blue-500 ease-in-out">Perfil</a>
-            <a href="#" class="text-gray-600 hover:text-blue-500 ease-in-out">Sair</a>
-          </div>
-        </div>
-      </header>
+      <header class="bg-gray-600 shadow-md p-6 mb-6 rounded-lg">
+                <div class="flex justify-between items-center text-white">
+                    <h2 class="text-2xl font-semibold ">Painel de Controle</h2>
+                    <div class="flex space-x-4 ">
+                        <a href="/admin/profile" class="text-white hover:text-blue-500">Perfil</a>
+                        <a href="#" class="text-white hover:text-blue-500">Sair</a>
+                    </div>
+                </div>
+            </header>
 
       <!-- Painel de Visão Geral -->
       <div class="bg-white p-6 rounded-lg shadow mb-6">

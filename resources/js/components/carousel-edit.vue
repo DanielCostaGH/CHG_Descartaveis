@@ -1,17 +1,17 @@
 <template>
     <section class="w-full">
-        <div class="bg-white p-4 rounded-lg shadow-md w-full group hover:shadow-lg">
-            <div class="flex justify-between cursor-pointer" @click="toggleSection">
-                <h3 class="text-xl font-semibold text-gray-400 mb-4 " >Carrossel de Imagens</h3>
+        <div class="bg-white p-8 rounded-lg shadow-md w-full group hover:shadow-lg">
+            <div class="flex justify-between cursor-pointer " @click="toggleSection">
+                <h3 class="text-xl font-semibold text-gray-500 mb-4 ">Carrossel de Imagens</h3>
 
                 <img :src="down_arrow" alt="">
             </div>
 
 
-            <div v-if="isOpen" class="mb-4 grid grid-cols-2 gap-4">
-                <!-- Conteúdo do acordeão -->
+            <div v-if="isOpen" class="mb-4 grid grid-cols-2 gap-4 border-t pt-5">
+
                 <div v-for="index in 6" :key="index" class="relative bg-white rounded-lg shadow-md">
-                    <div class="p-4">{{ `Imagem ${index}` }}</div>
+                    <div class="p-4">{{ `Slide ${index}` }}</div>
                     <div class="border border-dashed border-gray-400 p-4">
                         <img :src="getImageSource(index - 1)" alt="Imagem" class="h-[30vh] mx-auto" />
                         <div class="flex justify-between mt-2">
@@ -27,7 +27,7 @@
                                 </button>
                             </div>
                         </div>
-                        <!-- Confirmação de Exclusão (inicialmente oculta) -->
+                        <!-- Confirmação de Exclusão (ta oculta mas aparece quando clica em excluir) -->
                         <div v-if="deleteConfirmation === index" class="mt-2">
                             <p class="text-red-600">Tem certeza que deseja excluir esta imagem?</p>
                             <button @click="deleteImage(index - 1)" class="bg-red-500 text-white px-2 py-1 rounded">
@@ -51,7 +51,7 @@ export default {
     data() {
         return {
             down_arrow: '/images/down_arrow.svg',
-            isOpen: false,
+            isOpen: true,
             images: [],
             selectedImages: [],
             deleteConfirmation: null,
@@ -64,13 +64,16 @@ export default {
         },
 
         getImageSource(index) {
+            //se tiver imagens no banco ela deve puxar essas imagens 
+            // (dai teria que configurar la em baixo pra [images] estar recebendo as imagens corretas)
             if (this.images[index] && this.images[index].url) {
                 return this.images[index].url;
             } else if (this.selectedImages[index]) {
+            // se voce selecionar alguma imagem vai mostrar ela 
                 return URL.createObjectURL(this.selectedImages[index]);
             } else {
-
-                return '/placeholder-image.jpg';
+            //se nao selecionar nenhuma ela retorna essa imagem
+                return '/images/empty.png';
             }
         },
 
@@ -98,9 +101,8 @@ export default {
         deleteImage(index) {
             if (this.images[index] !== undefined) {
                 // Fazer uma requisição para excluir a imagem do backend aqui.
-                // Após a exclusão bem-sucedida, você pode remover a imagem do array `images`.
 
-                // Após a exclusão bem-sucedida, remova a confirmação de exclusão.
+                // Depois da exclusão, tira a confirmação de exclusão.
                 this.cancelDelete();
             }
         },
