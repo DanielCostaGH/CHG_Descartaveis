@@ -1,24 +1,4 @@
-<script>
-import '../../css/sharp.css';
-import '../../css/app.css';
 
-export default {
-  data() {
-    return {
-      imagePath: '/images/logo_dark.svg',
-      whatsapp_dark: '/images/whatsapp_dark.svg',
-      call_dark: '/images/call_dark.svg',
-      insta_dark: '/images/insta_dark.svg',
-      mail_dark: '/images/mail_dark.svg',
-    };
-  },
-  methods: {
-    getCurrentYear() {
-      return new Date().getFullYear();
-    },
-  },
-};
-</script>
 
 <template>
   <footer class="w-full h-[65vh] flex-shrink-0 bg-[#212844] relative z-0 overflow-hidden">
@@ -91,7 +71,27 @@ export default {
   </footer>
 </template>
 
-<style scoped></style>
+<script>
+import '../../css/sharp.css';
+import '../../css/app.css';
+
+export default {
+  data() {
+    return {
+      imagePath: '/images/logo_dark.svg',
+      whatsapp_dark: '/images/whatsapp_dark.svg',
+      call_dark: '/images/call_dark.svg',
+      insta_dark: '/images/insta_dark.svg',
+      mail_dark: '/images/mail_dark.svg',
+    };
+  },
+  methods: {
+    getCurrentYear() {
+      return new Date().getFullYear();
+    },
+  },
+};
+</script>
 
 
   
