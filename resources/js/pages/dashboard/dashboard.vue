@@ -1,63 +1,7 @@
 <template>
   <div class="flex">
     <!-- Barra lateral -->
-    <aside class="bg-white text-gray-700 w-1/5 min-h-screen p-5">
-      <div class="flex w-full items-center justify-center">
-        <img class="mb-8 w-4/6" :src="logo_light" alt="">
-      </div>
-
-      <ul class="text-xl">
-        <li class="mb-4 mx-5">
-          <a href="/dashboard" class="flex items-center p-5 rounded-lg hover:bg-[#F3F4F5] hover:shadow-lg active:bg-gray-300">
-            <img class="pr-6" :src="dashboard" alt="">
-            <span>Dashboard</span>
-          </a>
-        </li>
-
-        <li class="mb-4 mx-5">
-          <a href="/dashboard/products" class="flex items-center p-5 rounded-lg hover:bg-[#F3F4F5] hover:shadow-lg">
-            <img class="pr-6" :src="product" alt="">
-            <span>Produtos</span>
-          </a>
-        </li>
-
-        <li class="mb-4 mx-5">
-          <a href="/dashboard/appearence" class="flex items-center p-5 rounded-lg hover:bg-[#F3F4F5] hover:shadow-lg">
-            <img class="pr-6" :src="appearance" alt="">
-            <span>Aparência</span>
-          </a>
-        </li>
-
-        <li class="mb-4 mx-5">
-          <a href="#" class="flex items-center p-5 rounded-lg hover:bg-[#F3F4F5] hover:shadow-lg">
-            <img class="pr-6" :src="order_pending" alt="">
-            <span>Pedidos pendentes</span>
-          </a>
-        </li>
-
-        <li class="mb-4 mx-5">
-          <a href="#" class="flex items-center p-5 rounded-lg hover:bg-[#F3F4F5] hover:shadow-lg">
-            <img class="pr-6" :src="product_sent" alt="">
-            <span>Pedidos Enviados</span>
-          </a>
-        </li>
-
-        <li class="mb-4 mx-5">
-          <a href="#" class="flex items-center p-5 rounded-lg hover:bg-[#F3F4F5] hover:shadow-lg">
-            <img class="pr-6" :src="payment" alt="">
-            <span>Pagamentos</span>
-          </a>
-        </li>
-
-        <li class="mb-4 mx-5">
-          <a href="#" class="flex items-center p-5 rounded-lg hover:bg-[#F3F4F5] hover:shadow-lg">
-            <img class="pr-6" :src="config" alt="">
-            <span>Configurações</span>
-          </a>
-        </li>
-
-      </ul>
-    </aside>
+    <sidebar />
 
     <!-- Conteúdo principal -->
     <main class="w-4/5 p-6 bg-[#F3F4F5]">
@@ -111,7 +55,7 @@
                 d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
             </svg>
             <span class="mx-5">Editar Produto</span>
-            
+
           </a>
 
 
@@ -123,28 +67,52 @@
 
       <!-- Listagem de Produtos Recentes -->
       <div class="bg-white p-6 rounded-lg shadow mb-6">
-  
+
         <h3 class="text-xl font-semibold mb-4">Produtos Recentes</h3>
         <table class="w-full">
           <thead>
-            <tr class="">
-              <th class="border border-gray-400 bg-gray-200 p-4">Nome do produto</th>
-              <th class="border border-gray-400 bg-gray-200 p-4">Preço</th>
-              <th class="border border-gray-400 bg-gray-200 p-4">Estoque</th>
-              <th class="border border-gray-400 bg-gray-200 p-4">Categoria</th>
-              <th class="border border-gray-400 bg-gray-200 p-4">Status</th>
+            <tr class="text-left">
+              <th class=" border-gray-400 bg-gray-200 p-4">Nome do produto</th>
+              <th class=" border-gray-400 bg-gray-200 p-4">Preço</th>
+              <th class=" border-gray-400 bg-gray-200 p-4">Estoque</th>
+              <th class=" border-gray-400 bg-gray-200 p-4">Categoria</th>
+              <th class=" border-gray-400 bg-gray-200 p-4">Status</th>
             </tr>
           </thead>
 
           <tbody class="">
             <tr class="">
-              <td class="border border-gray-400 p-4">Produto 1</td>
-              <td class="border border-gray-400 p-4">R$ 50</td>
-              <td class="border border-gray-400 p-4">100</td>
-              <td class="border border-gray-400 p-4">Categoria</td>
-              <td class="border border-gray-400 p-4">Ativo</td>
+              <td class=" border-gray-400 p-4">Produto 1</td>
+              <td class=" border-gray-400 p-4">R$ 50</td>
+              <td class=" border-gray-400 p-4">100</td>
+              <td class=" border-gray-400 p-4">Categoria</td>
+              <td class=" border-gray-400 p-4">Ativo</td>
             </tr>
-            <!-- Adicione mais produtos aqui -->
+
+            <tr class="">
+              <td class=" border-gray-400 p-4">Produto 1</td>
+              <td class=" border-gray-400 p-4">R$ 50</td>
+              <td class=" border-gray-400 p-4">100</td>
+              <td class=" border-gray-400 p-4">Categoria</td>
+              <td class=" border-gray-400 p-4">Ativo</td>
+            </tr>
+
+            <tr class="">
+              <td class=" border-gray-400 p-4">Produto 1</td>
+              <td class=" border-gray-400 p-4">R$ 50</td>
+              <td class=" border-gray-400 p-4">100</td>
+              <td class=" border-gray-400 p-4">Categoria</td>
+              <td class=" border-gray-400 p-4">Ativo</td>
+            </tr>
+
+            <tr class="">
+              <td class=" border-gray-400 p-4">Produto 1</td>
+              <td class=" border-gray-400 p-4">R$ 50</td>
+              <td class=" border-gray-400 p-4">100</td>
+              <td class=" border-gray-400 p-4">Categoria</td>
+              <td class=" border-gray-400 p-4">Ativo</td>
+            </tr>
+
           </tbody>
         </table>
       </div>
@@ -154,6 +122,9 @@
 </template>
 
 <script>
+
+import sidebar from '../../components/side-bar-dashboard.vue'
+
 export default {
   data() {
     return {
@@ -167,5 +138,9 @@ export default {
       config: '/images/config_icon.svg',
     };
   },
+  components: {
+    sidebar,
+
+  }
 };
 </script>

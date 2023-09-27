@@ -1,70 +1,7 @@
 <template>
     <div class="flex">
         <!-- Barra lateral -->
-        <aside class="bg-white text-gray-700 w-1/5 min-h-screen p-5">
-            <div class="flex w-full items-center justify-center">
-                <img class="mb-8 w-4/6" :src="logo_light" alt="">
-            </div>
-
-            <ul class="text-xl">
-                <li class="mb-4 mx-5">
-                    <a href="/dashboard"
-                        class="flex items-center p-5 rounded-lg hover:bg-[#F3F4F5] hover:border-purple-500 hover:shadow-lg">
-                        <img class="pr-6" :src="dashboard" alt="">
-                        <span>Dashboard</span>
-                    </a>
-                </li>
-
-                <li class="mb-4 mx-5">
-                    <a href="/dashboard/products"
-                        class="flex items-center p-5 rounded-lg hover:bg-[#F3F4F5] hover:border-purple-500 hover:shadow-lg">
-                        <img class="pr-6" :src="product" alt="">
-                        <span>Produtos</span>
-                    </a>
-                </li>
-
-                <li class="mb-4 mx-5">
-                    <a href="/dashboard/appearence"
-                        class="flex items-center p-5 rounded-lg hover:bg-[#F3F4F5] hover:border-purple-500 hover:shadow-lg">
-                        <img class="pr-6" :src="appearance" alt="">
-                        <span>Aparência</span>
-                    </a>
-                </li>
-
-                <li class="mb-4 mx-5">
-                    <a href="#"
-                        class="flex items-center p-5 rounded-lg hover:bg-[#F3F4F5] hover:border-purple-500 hover:shadow-lg">
-                        <img class="pr-6" :src="order_pending" alt="">
-                        <span>Pedidos pendentes</span>
-                    </a>
-                </li>
-
-                <li class="mb-4 mx-5">
-                    <a href="#"
-                        class="flex items-center p-5 rounded-lg hover:bg-[#F3F4F5] hover:border-purple-500 hover:shadow-lg">
-                        <img class="pr-6" :src="product_sent" alt="">
-                        <span>Pedidos Enviados</span>
-                    </a>
-                </li>
-
-                <li class="mb-4 mx-5">
-                    <a href="#"
-                        class="flex items-center p-5 rounded-lg hover:bg-[#F3F4F5] hover:border-purple-500 hover:shadow-lg">
-                        <img class="pr-6" :src="payment" alt="">
-                        <span>Pagamentos</span>
-                    </a>
-                </li>
-
-                <li class="mb-4 mx-5">
-                    <a href="#"
-                        class="flex items-center p-5 rounded-lg hover:bg-[#F3F4F5] hover:border-purple-500 hover:shadow-lg">
-                        <img class="pr-6" :src="config" alt="">
-                        <span>Configurações</span>
-                    </a>
-                </li>
-
-            </ul>
-        </aside>
+        <sidebar/>
 
         <!-- Conteúdo principal -->
         <main class="w-4/5 p-6 bg-[#F3F4F5]">
@@ -101,6 +38,7 @@
   
 <script>
 import filters from '../../components/filters.vue'
+import sidebar from '../../components/side-bar-dashboard.vue'
 
 export default {
 
@@ -119,6 +57,7 @@ export default {
 
     components: {
         filters,
+        sidebar,
 
     },
 
