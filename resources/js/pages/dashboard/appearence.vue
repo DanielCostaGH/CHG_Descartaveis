@@ -6,14 +6,8 @@
         <!-- Conteúdo principal -->
         <main class="w-4/5 p-6 bg-gray-100">
             <!-- Header -->
-            <header class="bg-gray-600 shadow-md p-8 rounded-lg">
-                <div class="flex justify-between items-center text-white">
-                    <h2 class="text-2xl font-semibold ">Painel de Controle</h2>
-                    <div class="flex space-x-4 ">
-                        <a href="/admin/profile" class="text-white hover:text-blue-500">Perfil</a>
-                        <a href="#" class="text-white hover:text-blue-500">Sair</a>
-                    </div>
-                </div>
+            <header>
+                <painel/>
             </header>
 
             <div class="p-4 w-full h-screen overflow-y-scroll">
@@ -55,6 +49,7 @@ import category from '../../components/category-edit.vue'
 import foot from '../../components/footer-edit.vue'
 import top_marcas from '../../components/top-marcas-edit.vue'
 import about from '../../components/about-edit.vue'
+import painel from '../../components/painel-bar.vue'
 
 export default {
     data() {
@@ -74,6 +69,7 @@ export default {
         foot,
         top_marcas,
         about,
+        painel,
     },
 
 };
