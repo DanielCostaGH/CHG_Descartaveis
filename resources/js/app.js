@@ -28,6 +28,7 @@ import dashboardIndex from './pages//dashboard/dashboard.vue';
 import productEdit from './pages/dashboard/productEdit.vue';
 import productsEditList from './pages/dashboard/productsEditList.vue';
 import appearenceIndex from './pages/dashboard/appearence.vue'
+import productCreate from './pages/dashboard/productCreate.vue'
 
 
 app.component('admin-login', adminLogin); 
@@ -47,6 +48,7 @@ app.component('dashboard-index', dashboardIndex);
 app.component('products-edit-list', productsEditList);
 app.component('product-edit', productEdit);
 app.component('appearence-index', appearenceIndex);
+app.component('product-create', productCreate);
 
 
 

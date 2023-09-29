@@ -4,20 +4,14 @@
         <sidebar/>
 
         <!-- Conteúdo principal -->
-        <main class="w-4/5 p-6 bg-[#F3F4F5]">
+        <main class="w-4/5 p-6 bg-gray-100">
             <!-- Header -->
-            <header class="bg-white shadow-md p-4 mb-6 rounded-lg">
-                <div class="flex justify-between items-center">
-                    <h2 class="text-xl font-semibold">Painel de Controle</h2>
-                    <div class="flex space-x-4">
-                        <a href="/admin/profile" class="text-gray-600 hover:text-blue-500 ease-in-out">Perfil</a>
-                        <a href="#" class="text-gray-600 hover:text-blue-500 ease-in-out">Sair</a>
-                    </div>
-                </div>
+            <header>
+                <painel/>
             </header>
 
             <div>
-                <filters />
+                <dashboard_filters />
                 <!-- Cards de Produto -->
                 <div class="flex flex-wrap">
                     <!-- Card -->
@@ -37,8 +31,9 @@
 </template>
   
 <script>
-import filters from '../../components/filters.vue'
+import dashboard_filters from '../../components/dashboard-filters.vue'
 import sidebar from '../../components/side-bar-dashboard.vue'
+import painel from '../../components/painel-bar.vue'
 
 export default {
 
@@ -56,9 +51,9 @@ export default {
     },
 
     components: {
-        filters,
+        dashboard_filters,
         sidebar,
-
+        painel,
     },
 
 

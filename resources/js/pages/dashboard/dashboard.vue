@@ -6,15 +6,9 @@
     <!-- Conteúdo principal -->
     <main class="w-4/5 p-6 bg-gray-100">
       <!-- Header -->
-      <header class="bg-gray-600 shadow-md p-6 mb-6 rounded-lg">
-                <div class="flex justify-between items-center text-white">
-                    <h2 class="text-2xl font-semibold ">Painel de Controle</h2>
-                    <div class="flex space-x-4 ">
-                        <a href="/admin/profile" class="text-white hover:text-blue-500">Perfil</a>
-                        <a href="#" class="text-white hover:text-blue-500">Sair</a>
-                    </div>
-                </div>
-            </header>
+      <header>
+        <painel />
+      </header>
 
       <!-- Painel de Visão Geral -->
       <div class="bg-white p-6 rounded-lg shadow mb-6">
@@ -37,7 +31,7 @@
         <div class="grid grid-cols-2 gap-4">
 
 
-          <a href="#" class="flex justify-center items-center p-7 border rounded-lg text-center  text-xl font-bold
+          <a href="/dashboard/create" class="flex justify-center items-center p-7 border rounded-lg text-center  text-xl font-bold
             hover:bg-[#F3F4F5] hover:border-[#2A4178] hover:shadow-md text-[#4864A7] hover:text-[#2A4178] ">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3.0"
               stroke="currentColor" class="w-6 h-6">
@@ -47,7 +41,7 @@
           </a>
 
 
-          <a href="#" class="flex justify-center items-center p-4 border rounded-lg text-center  text-xl font-bold
+          <a href="/dashboard/products" class="flex justify-center items-center p-4 border rounded-lg text-center  text-xl font-bold
             hover:bg-[#F3F4F5] hover:border-[#2A4178] hover:shadow-md text-[#4864A7] hover:text-[#2A4178] ">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
               stroke="currentColor" class="w-6 h-6">
@@ -83,7 +77,7 @@
           <tbody class="">
             <tr class="">
               <td class=" border-gray-400 p-4">Produto 1</td>
-              <td class=" border-gray-400 p-4">R$ 50</td>
+              <td class=" border-gray-400 p-4">R$ 50,00</td>
               <td class=" border-gray-400 p-4">100</td>
               <td class=" border-gray-400 p-4">Categoria</td>
               <td class=" border-gray-400 p-4">Ativo</td>
@@ -91,7 +85,7 @@
 
             <tr class="">
               <td class=" border-gray-400 p-4">Produto 1</td>
-              <td class=" border-gray-400 p-4">R$ 50</td>
+              <td class=" border-gray-400 p-4">R$ 50,00</td>
               <td class=" border-gray-400 p-4">100</td>
               <td class=" border-gray-400 p-4">Categoria</td>
               <td class=" border-gray-400 p-4">Ativo</td>
@@ -99,7 +93,7 @@
 
             <tr class="">
               <td class=" border-gray-400 p-4">Produto 1</td>
-              <td class=" border-gray-400 p-4">R$ 50</td>
+              <td class=" border-gray-400 p-4">R$ 50,00</td>
               <td class=" border-gray-400 p-4">100</td>
               <td class=" border-gray-400 p-4">Categoria</td>
               <td class=" border-gray-400 p-4">Ativo</td>
@@ -107,7 +101,7 @@
 
             <tr class="">
               <td class=" border-gray-400 p-4">Produto 1</td>
-              <td class=" border-gray-400 p-4">R$ 50</td>
+              <td class=" border-gray-400 p-4">R$ 50,00</td>
               <td class=" border-gray-400 p-4">100</td>
               <td class=" border-gray-400 p-4">Categoria</td>
               <td class=" border-gray-400 p-4">Ativo</td>
@@ -117,13 +111,15 @@
         </table>
       </div>
       <!-- ... Resto do código ... -->
+      
     </main>
   </div>
 </template>
 
 <script>
 
-import sidebar from '../../components/side-bar-dashboard.vue'
+import sidebar from '../../components/side-bar-dashboard.vue';
+import painel from '../../components/painel-bar.vue'
 
 export default {
   data() {
@@ -140,6 +136,7 @@ export default {
   },
   components: {
     sidebar,
+    painel,
 
   }
 };
