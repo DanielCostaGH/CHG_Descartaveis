@@ -7,20 +7,20 @@
             </header>
 
             <!-- Conteúdo de edição do produto -->
-            <div class="bg-white p-4 rounded shadow max-h-[80vh] overflow-scroll">
-                <h2 class="text-2xl font-bold text-gray-800 mb-4">Editar Produto</h2>
+            <div class="bg-white p-4 rounded  max-h-[80vh] overflow-scroll">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Adicionar Produto</h2>
 
                 <!-- Formulário de edição do produto -->
                 <form @submit.prevent="updateProduct">
                     <div class="flex flex-wrap justify-around">
 
                         <!-- CAMPO DA IMAGEM -->
-                        <div class="max-h-[90vh] max-w-[50vh] overflow-scroll"
+                        <div class="max-h-[90vh] max-w-[60vh] overflow-scroll"
                             style="scrollbar-width: none; -ms-overflow-style: none;">
-                            <label for="productImages" class="block text-gray-700 font-bold mb-2">Imagens</label>
+                            <label for="productImages" class=" text-gray-700 font-bold mb-2">Imagens</label>
                             <img :src="editedProduct.selectedImage ? editedProduct.selectedImage : defaultImage"
                                 alt="imagem" class="mb-2 mx-auto h-[40vh]" />
-                            <input type="file" id="productImages" class="w-full p-2 border rounded" accept="image/*"
+                            <input type="file" id="productImages" class="w-full p-2  rounded" accept="image/*"
                                 @change="onImageChange" multiple />
                             <div>
                                 <span class="font-semibold text-gray-700">Imagens do produto:</span>
@@ -239,8 +239,8 @@ export default {
                 quantity: null,
                 status: 'active',
             },
-            newVariation: '',
-            productVariations: [],
+            newVariation: '', 
+            productVariations: [], 
 
         };
     },
@@ -320,11 +320,11 @@ export default {
             this.closeModal(); 
         },
 
-        // Método para adicionar uma variação à lista de variações
+        // Método para adicionar uma variação a lista de variações
         addVariation() {
             if (this.newVariation.trim() !== '') {
                 this.productVariations.push(this.newVariation);
-                this.newVariation = ''; // Limpar o campo de entrada após adicionar a variação
+                this.newVariation = ''; 
             }
         },
 

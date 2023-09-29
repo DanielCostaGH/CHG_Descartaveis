@@ -15,7 +15,8 @@
         "vite": "^4.0.0"
     },
     "dependencies": {
+        "@syncfusion/ej2-vue-inputs": "^23.1.38",
         "vue": "^3.2.36",
-        "vuedraggable": "^4.1.0"
+        "vue-color": "^2.8.1"
     }
 }

@@ -18,7 +18,7 @@ class DashboardController extends Controller
         return view('dashboard.products.index');
     }
 
-    // Método para exibir o formulário de edição de produto
+    // Método para a edição de produto
     public function editProduct($id)
     {
         $product = Product::find($id);
@@ -29,6 +29,13 @@ class DashboardController extends Controller
         
         return view('dashboard.products.edit', compact('product')); 
     }
+
+
+    // Método para a criação de produto
+    public function createProduct()
+{
+    return view('dashboard.products.create');
+}
 
     public function appearence() {
         return view('dashboard.appearence.index');

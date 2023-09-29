@@ -11,7 +11,7 @@
             </header>
 
             <div>
-                <filters />
+                <dashboard_filters />
                 <!-- Cards de Produto -->
                 <div class="flex flex-wrap">
                     <!-- Card -->
@@ -31,7 +31,7 @@
 </template>
   
 <script>
-import filters from '../../components/filters.vue'
+import dashboard_filters from '../../components/dashboard-filters.vue'
 import sidebar from '../../components/side-bar-dashboard.vue'
 import painel from '../../components/painel-bar.vue'
 
@@ -51,7 +51,7 @@ export default {
     },
 
     components: {
-        filters,
+        dashboard_filters,
         sidebar,
         painel,
     },

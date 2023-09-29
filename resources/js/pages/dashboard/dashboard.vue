@@ -31,7 +31,7 @@
         <div class="grid grid-cols-2 gap-4">
 
 
-          <a href="#" class="flex justify-center items-center p-7 border rounded-lg text-center  text-xl font-bold
+          <a href="/dashboard/create" class="flex justify-center items-center p-7 border rounded-lg text-center  text-xl font-bold
             hover:bg-[#F3F4F5] hover:border-[#2A4178] hover:shadow-md text-[#4864A7] hover:text-[#2A4178] ">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3.0"
               stroke="currentColor" class="w-6 h-6">
@@ -41,7 +41,7 @@
           </a>
 
 
-          <a href="#" class="flex justify-center items-center p-4 border rounded-lg text-center  text-xl font-bold
+          <a href="/dashboard/products" class="flex justify-center items-center p-4 border rounded-lg text-center  text-xl font-bold
             hover:bg-[#F3F4F5] hover:border-[#2A4178] hover:shadow-md text-[#4864A7] hover:text-[#2A4178] ">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
               stroke="currentColor" class="w-6 h-6">
@@ -77,7 +77,7 @@
           <tbody class="">
             <tr class="">
               <td class=" border-gray-400 p-4">Produto 1</td>
-              <td class=" border-gray-400 p-4">R$ 50</td>
+              <td class=" border-gray-400 p-4">R$ 50,00</td>
               <td class=" border-gray-400 p-4">100</td>
               <td class=" border-gray-400 p-4">Categoria</td>
               <td class=" border-gray-400 p-4">Ativo</td>
@@ -85,7 +85,7 @@
 
             <tr class="">
               <td class=" border-gray-400 p-4">Produto 1</td>
-              <td class=" border-gray-400 p-4">R$ 50</td>
+              <td class=" border-gray-400 p-4">R$ 50,00</td>
               <td class=" border-gray-400 p-4">100</td>
               <td class=" border-gray-400 p-4">Categoria</td>
               <td class=" border-gray-400 p-4">Ativo</td>
@@ -93,7 +93,7 @@
 
             <tr class="">
               <td class=" border-gray-400 p-4">Produto 1</td>
-              <td class=" border-gray-400 p-4">R$ 50</td>
+              <td class=" border-gray-400 p-4">R$ 50,00</td>
               <td class=" border-gray-400 p-4">100</td>
               <td class=" border-gray-400 p-4">Categoria</td>
               <td class=" border-gray-400 p-4">Ativo</td>
@@ -101,7 +101,7 @@
 
             <tr class="">
               <td class=" border-gray-400 p-4">Produto 1</td>
-              <td class=" border-gray-400 p-4">R$ 50</td>
+              <td class=" border-gray-400 p-4">R$ 50,00</td>
               <td class=" border-gray-400 p-4">100</td>
               <td class=" border-gray-400 p-4">Categoria</td>
               <td class=" border-gray-400 p-4">Ativo</td>
@@ -111,6 +111,7 @@
         </table>
       </div>
       <!-- ... Resto do código ... -->
+      
     </main>
   </div>
 </template>
