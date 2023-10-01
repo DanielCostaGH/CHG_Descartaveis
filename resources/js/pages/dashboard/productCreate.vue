@@ -11,7 +11,7 @@
                 <h2 class="text-2xl font-bold text-gray-800 mb-4">Adicionar Produto</h2>
 
                 <!-- Formulário de edição do produto -->
-                <form @submit.prevent="updateProduct">
+                <form @submit.prevent="updateProduct" action="/dashboard/store" method="POST">
                     <div class="flex flex-wrap justify-around">
 
                         <!-- CAMPO DA IMAGEM -->
@@ -235,7 +235,7 @@ export default {
                 selectedImage: '',
                 brand: '',
                 colors: [],
-                variation: '',
+                variation: [],
                 quantity: null,
                 status: 'active',
             },
@@ -246,8 +246,25 @@ export default {
     },
     methods: {
         updateProduct() {
-            // Lógica para enviar as alterações do produto para o servidor aqui
-            console.log('Produto atualizado:', this.editedProduct);
+            console.log('variation:aaaa', this.editedProduct,        
+            )
+            axios.post('/dashboard/store', {
+                name: this.editedProduct.name,
+                description: this.editedProduct.description,
+                price: this.editedProduct.price,
+                images: this.editedProduct.images,
+                brand: this.editedProduct.brand,
+                color: this.editedProduct.colors,
+                variation: this.editedProduct.variation,
+                quantity: this.editedProduct.quantity,
+                status: this.editedProduct.status
+            })
+            .then(response => {
+                console.log('Produto atualizado com sucesso', response.data);
+            })
+            .catch(error => {
+                console.error('Erro ao atualizar o produto', error);
+            });
         },
         moveImageUp(index) {
             if (index > 0) {
@@ -324,7 +341,8 @@ export default {
         addVariation() {
             if (this.newVariation.trim() !== '') {
                 this.productVariations.push(this.newVariation);
-                this.newVariation = ''; 
+                this.newVariation = '';
+                this.editedProduct.variation = [...this.productVariations];
             }
         },
 

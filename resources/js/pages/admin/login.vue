@@ -92,7 +92,7 @@ export default {
             .then(response => {
                 console.log('aaaa', response.data.response.token)
                 if (response.data.response.token) {
-                    window.location.href = '/admin';
+                    window.location.href = '/dashboard';
                 } else {
                     this.emailError = 'Credenciais inválidas';
                 }
