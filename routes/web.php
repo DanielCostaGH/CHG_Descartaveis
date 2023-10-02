@@ -51,7 +51,7 @@ Route::group(['prefix' => 'user'], function () {
     Route::post('/', [UserController::class, 'store'])->name('user.store');
 });
 
-Route::group(['prefix' => 'product' ], function() {
+Route::group(['prefix' => 'products' ], function() {
     Route::get('/', [ProductsController::class, 'index'])->name('product.name');
     Route::get('/{id}', [ProductsController::class, 'show'])->name('product.show');
 });
