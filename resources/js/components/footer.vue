@@ -1,7 +1,7 @@
 
 
 <template>
-  <footer class="w-full h-[65vh] flex-shrink-0 bg-[#212844] relative z-0 overflow-hidden">
+  <footer class="w-full h-[65vh] flex-shrink-0 bg-[#212844] relative z-0 overflow-hidden mt-10">
     <div class="container mx-auto flex justify-between items-center h-5/6 relative">
       <div class="w-[45vh] h-[34vh] flex-shrink-0">
         <img :src="imagePath" alt="">

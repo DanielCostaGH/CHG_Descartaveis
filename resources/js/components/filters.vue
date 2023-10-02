@@ -58,7 +58,7 @@
         <div v-if="showFilterModal" class="fixed inset-0 flex items-center justify-center z-50" @click="closeFilterModal"
             style="background-color: rgba(0, 0, 0, 0.5);">
 
-            <main class="bg-white p-6 rounded-lg shadow-lg h-[70vh] w-[50vh] text-gray-800">
+            <main class="bg-white p-6 rounded-lg shadow-lg h-[70vh] w-[50vh] text-gray-800" @click.stop>
 
                 <div class="h-5/6">
                     <div class="w-full flex justify-between">
