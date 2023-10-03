@@ -35,7 +35,7 @@ export default {
           <v-icon class="mr-2">
             <img :src="user" alt="">
           </v-icon>
-          <a href="#">Login/Cadastro</a>
+          <a href="/user/login">Login/Cadastro</a>
         </div>
         <div class="flex items-center hover:underline">
           <v-icon class="mr-2">
