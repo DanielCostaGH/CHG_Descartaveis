@@ -8,6 +8,10 @@ module.exports = {
   theme: {
     extend: {
 
+      boxShadow: {
+        'xlx':  '1px 0 10px rgba(0, 0, 0, 0.1), 1px 0 10px rgba(0, 0, 0, 0.1)',
+      },
+
       colors: {
         'blue_gradient': {
           'light': '#6BAAFC',
