@@ -8,7 +8,7 @@
             </a>
         </div>
 
-        <div class="flex justify-between my-10">
+        <div class="flex justify-between my-10 overflow-x-scroll">
 
 
             <div class="relative overflow-hidden w-96 h-52 flex-shrink-0 rounded-lg cursor-pointer bg-[#313131] hover:bg-[#525252] transition-colors duration-300 ease-in-out">

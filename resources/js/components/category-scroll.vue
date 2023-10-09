@@ -1,7 +1,7 @@
 
 
 <template>
-    <div class="container mx-auto my-10 py-10">
+    <div class="container mx-auto my-10 py-10 ">
         <div class="container flex justify-between">
             <span class="text-xl">
                 Veja nossas categorias de produtos
@@ -9,7 +9,7 @@
 
         </div>
 
-        <div class="flex justify-between my-10 text-xl">
+        <div class="flex justify-between my-10 text-xl overflow-x-scroll">
             
             <div class="text-center">
                 <div
