@@ -7,8 +7,9 @@
                 <v-icon><img :src="simple_arrow" alt=""></v-icon>
             </a>
         </div>
+        <hr class="border-b-2 border-[#212844] w-1/5 rounded-full my-3" />
 
-        <div class="flex justify-between my-10 overflow-x-scroll">
+        <div class="flex justify-between my-10 overflow-hidden">
 
 
             <div

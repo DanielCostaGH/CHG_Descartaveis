@@ -1,55 +1,56 @@
 
 
 <template>
-    <div class="container mx-auto my-10 py-10 hidden lg:block">
+    <div class="container mx-auto my-10  hidden lg:block">
         <div class="container flex justify-between">
             <span class="text-xl">
-                Veja nossas categorias de produtos
+                Principais categorias!
             </span>
 
         </div>
+        <hr class="border-b-2 border-[#212844] w-1/5 rounded-full my-3" />
 
-        <div class="flex justify-between my-10 text-xl overflow-x-scroll">
+        <div class="flex justify-between my-10 text-xl overflow-hidden">
             
-            <div class="text-center">
+            <a class="text-center cursor-pointer mx-3">
+                <div class="w-52 h-52 rounded-full border shadow hover:shadow-lg hover:duration:500 mb-5 overflow-hidden flex justify-center items-center">
+                    <img src="" alt="">
+                </div> 
+
+                <span class="font-bold text-gray-500">Categoria</span>
+            </a>
+
+            <a class="text-center cursor-pointer mx-3">
                 <div
-                    class="w-52 h-52 rounded-full bg-[#F5F5F5] hover:border hover:border-blue-900 hover:shadow-lg">
-                </div> <br>
+                    class="w-52 h-52 rounded-full border shadow hover:shadow-lg hover:duration:500 mb-5">
+                </div> 
 
-                <span class="" style="padding-top: 40px;">Categoria</span>
-            </div>
+                <span class="font-bold text-gray-500">Categoria</span>
+            </a>
 
-            <div class="text-center">
+            <a class="text-center cursor-pointer mx-3">
                 <div
-                    class="w-52 h-52 rounded-full bg-[#F5F5F5] hover:border hover:border-blue-900 hover:shadow-lg">
-                </div> <br>
+                    class="w-52 h-52 rounded-full border shadow hover:shadow-lg hover:duration:500 mb-5">
+                </div> 
 
-                <span class="" style="padding-top: 40px;">Categoria</span>
-            </div>
+                <span class="font-bold text-gray-500">Categoria</span>
+            </a>
 
-            <div class="text-center">
+            <a class="text-center cursor-pointer mx-3">
                 <div
-                    class="w-52 h-52 rounded-full bg-[#F5F5F5] hover:border hover:border-blue-900 hover:shadow-lg">
-                </div> <br>
+                    class="w-52 h-52 rounded-full border shadow hover:shadow-lg hover:duration:500 mb-5">
+                </div> 
 
-                <span class="" style="padding-top: 40px;">Categoria</span>
-            </div>
+                <span class="font-bold text-gray-500">Categoria</span>
+            </a>
 
-            <div class="text-center">
+            <a class="text-center cursor-pointer mx-3">
                 <div
-                    class="w-52 h-52 rounded-full bg-[#F5F5F5] hover:border hover:border-blue-900 hover:shadow-lg">
-                </div> <br>
+                    class="w-52 h-52 rounded-full border shadow hover:shadow-lg hover:duration:500 mb-5">
+                </div> 
 
-                <span class="" style="padding-top: 40px;">Categoria</span>
-            </div>
-
-            <div class="text-center">
-                <div
-                    class="w-52 h-52 rounded-full bg-[#F5F5F5] hover:border hover:border-blue-900 hover:shadow-lg">
-                </div> <br>
-
-                <span class="" style="padding-top: 40px;">Categoria</span>
-            </div>
+                <span class="font-bold text-gray-500">Categoria</span>
+            </a>
 
             
         </div>
