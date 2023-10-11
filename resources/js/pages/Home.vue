@@ -6,6 +6,7 @@ import products from '../components/products.vue';
 import category_scroll from '../components/category-scroll.vue';
 import top_marcas from '../components/top-marcas.vue';
 import foot from '../components/footer.vue';
+import slides from '../components/slides.vue';
 
 
 
@@ -15,7 +16,7 @@ export default {
       wpp: 'images/wpp2.svg',
     }
   },
-  
+
   components: {
     navbar,
     topics,
@@ -24,9 +25,10 @@ export default {
     category_scroll,
     top_marcas,
     foot,
+    slides
   },
 
-  
+
 
 }
 </script>
@@ -40,32 +42,34 @@ export default {
     </div>
 
     <div>
-      <topics/>
+      <topics />
     </div>
 
     <div>
-      <carrousel/>
+      <!-- <carrousel /> -->
+      <slides />
     </div>
 
     <div>
-      <products/>
+      <products />
     </div>
 
     <div>
-      <category_scroll/>
+      <category_scroll />
     </div>
 
     <div>
-      <top_marcas/>
+      <top_marcas />
     </div>
 
     <div>
-      <foot/>
+      <foot />
     </div>
 
     <div class="fixed bottom-20 right-5 z-50">
       <a href="https://api.whatsapp.com/send?phone=31980160125" target="_blank">
-        <img :src="wpp" class="h-[6vh] :w-[6-vh] lg:h-[10vh] lg:w-[10-vh] rounded-xl hover hover:shadow" alt="WhatsApp Icon">
+        <img :src="wpp" class="h-[6vh] :w-[6-vh] lg:h-[10vh] lg:w-[10-vh] rounded-xl hover hover:shadow"
+          alt="WhatsApp Icon">
       </a>
     </div>
 
