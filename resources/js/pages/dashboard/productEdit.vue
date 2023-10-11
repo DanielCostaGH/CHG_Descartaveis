@@ -15,7 +15,7 @@
                     <div class="flex flex-wrap justify-around">
 
                         <!-- CAMPO DA IMAGEM -->
-                        <div class="max-h-[90vh] max-w-[50vh] overflow-scroll"
+                        <div class="max-h-[90vh] max-w-[50vh]"
                             style="scrollbar-width: none; -ms-overflow-style: none;">
                             <label for="productImages" class="block text-gray-700 font-bold mb-2">Imagens</label>
                             <img :src="editedProduct.selectedImage ? editedProduct.selectedImage : defaultImage"

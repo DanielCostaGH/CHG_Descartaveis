@@ -1,6 +1,6 @@
 <template>
     <div class="container mx-auto flex flex-col my-5 py-3 border-y">
-        <section class="flex w-full items-center text-lg justify-between">
+        <section class="lg:flex w-full items-center text-lg justify-between hidden">
             <div class="flex items-center">
                 <span>Filtros de pesquisa:</span>
 
@@ -51,6 +51,28 @@
 
 
                 Filtros
+            </button>
+        </section>
+
+
+        <!-- MOBILE SECTION -->
+
+        <section class="flex w-full items-center text-lg justify-between lg:hidden">
+            <div class="flex items-center px-5">
+                <span>Filtros de pesquisa:</span>
+
+            </div>
+
+
+            <!-- Botão para abrir a modal de filtros -->
+            <button @click="openFilterModal"
+                class="flex items-center justify-between rounded-lg py-2 px-5 mx-10 cursor-pointer bg-[#F3F9FB] shadow hover hover:bg-[#D8E1E4]">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                    stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75" />
+                </svg>
+
             </button>
         </section>
 
