@@ -2,7 +2,7 @@
     <swiper :cssMode="true" :loop="true" :navigation="true" :pagination="true" :mousewheel="true" :autoplay="{
         delay: 7000,
         disableOnInteraction: false,
-    }" :keyboard="true" :modules="modules" class="mySwiper h-[30vh] md:h-[40vh] lg:h-[60vh] container mx-auto bg-gray-100 rounded">
+    }" :keyboard="true" :modules="modules" class="mySwiper h-[30vh] md:h-[40vh] lg:h-[60vh]  mx-auto bg-gray-100 rounded">
         <swiper-slide class="h-full">
             <div class=" w-full flex justify-center items-center h-5/6 lg:h-[60vh]">
                 <img class="h-5/6" :src="image1" alt="imagem">
@@ -30,6 +30,12 @@
         <swiper-slide class="h-full">
             <div class=" w-full flex justify-center items-center h-5/6 lg:h-[60vh]">
                 <img class="h-5/6" :src="image5" alt="imagem">
+            </div>
+        </swiper-slide>
+
+        <swiper-slide class="h-full">
+            <div class=" w-full flex justify-center items-center h-5/6 lg:h-[60vh]">
+                <img class="h-5/6" :src="image3" alt="imagem">
             </div>
         </swiper-slide>
        
