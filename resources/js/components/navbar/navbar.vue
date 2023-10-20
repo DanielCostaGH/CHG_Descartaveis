@@ -1,5 +1,3 @@
-
-
 <template>
   <!-- MODELO DESKTOP -->
 
@@ -25,7 +23,7 @@
         <div class="flex items-center hover:underline">
 
           <img class="mr-2" :src="user" alt="">
-          <a href="#">Login/Cadastro</a>
+          <a href="/user/login">Login/Cadastro</a>
         </div>
         <div class="flex items-center hover:underline">
           <v-icon class="mr-2">

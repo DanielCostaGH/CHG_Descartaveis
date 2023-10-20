@@ -1,14 +1,14 @@
-{{-- @extends('master')
+@extends('master')
 
 @section('content')
     <user-login></user-login>
 @endsection
- --}}
 
 
 
 
 
+{{-- 
 @extends('layouts.app')
 @section('title', 'Página de login dos usuários')
 @section('content')
@@ -64,4 +64,4 @@
             </div>
         </div>
     </div>
-@endsection
+@endsection --}}

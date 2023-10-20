@@ -1,30 +1,28 @@
 <template>
     <div class="container mx-auto">
-        <div class="flex justify-around items-center h-screen w-full bg-red-">
-            <div class="">
-                <v-icon>
-                    <img class="w-[55vh]" :src="logo_light" alt="Logo">
-                </v-icon>
-                <div>
-                    <a href=""><v-icon></v-icon></a>
+        <div class="lg:flex justify-around items-center h-screen w-full bg-red-">
+            <div class="w-full text-center">
+                    <img class="w-[55vh] mx-auto" :src="logo_light" alt="Logo">
+                <div class="mb-5">
+                    <a href="/" class="text-blue-500 ">Voltar para pagina inicial?</a>
                 </div>
             </div>
 
-            <div class=" flex justify-center">
-                <form @submit.prevent="submitForm">
-                    <div class="text-center mb-16">
+            <div class=" flex justify-center w-full">
+                <form @submit.prevent="submitForm" class="w-full mx-5 md:w-4/6 lg:w-[60vh] ">
+                    <div class="text-center mb-5 md:mb-10 lg:mb-16">
                         <span class="text-3xl text-[#727272] font-bold">LOGIN</span>
                     </div>
 
-                    <div class="relative w-[60vh]">
+                    <div class="relative">
                         <input v-model="email" class="bg-[#ECECEC] w-full h-[5vh] my-2 p-5 rounded" type="text" placeholder="E-mail" :class="{ 'border-red-500': emailError }">
                         <div class="text-red-500">{{ emailError }}</div>
                         <input v-model="password" class="bg-[#ECECEC] w-full h-[5vh] my-3 p-5 rounded" type="password" placeholder="Senha" :class="{ 'border-red-500': passwordError }">
                         <div class="text-red-500">{{ passwordError }}</div>
                     </div>
 
-                    <div class="flex justify-between items-center">
-                        <div class="flex items-center">
+                    <div class="flex flex-wrap lg:justify-between items-center">
+                        <div class="flex items-center w-full lg:w-auto">
                             <div class="switch mr-3">
                                 <input type="checkbox" class="sr-only">
                                 <div :class="{'slider': true, 'checked': isSwitchChecked}" @click="toggleSwitch"></div>
@@ -33,7 +31,7 @@
                         </div>
 
 
-                        <a class="text-[#007AFF]" href="/admin/cadastro">Esqueci minha senha</a>
+                        <a class="text-[#007AFF] my-2 lg:my-0" href="/admin/cadastro">Esqueci minha senha</a>
                     </div>
 
                     <div class="text-center text-white">
