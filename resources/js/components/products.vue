@@ -196,7 +196,7 @@ export default {
         {
           name: 'Produto 1',
           price: '100,00',
-          rating: 4.5,
+          rating: 2,
           image: 'public/images/1/i1.png'
         },
         {

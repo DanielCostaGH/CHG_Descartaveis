@@ -10,7 +10,7 @@
     <foot />
   </v-app>
 
-  <div class="fixed bottom-20 right-5 z-50">
+  <div class="hidden lg:fixed md:fixed bottom-20 right-5 z-50">
     <a href="https://api.whatsapp.com/send?phone=31980160125" target="_blank">
       <img :src="wpp" class="h-[6vh] :w-[6-vh] lg:h-[10vh] lg:w-[10-vh] rounded-xl hover hover:shadow"
         alt="WhatsApp Icon">
