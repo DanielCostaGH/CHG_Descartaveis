@@ -169,8 +169,7 @@
 </template>
 
 <script>
-import '../../css/sharp.css';
-import '../../css/app.css';
+
 
 export default {
   data() {

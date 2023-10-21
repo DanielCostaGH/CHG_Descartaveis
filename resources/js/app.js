@@ -1,10 +1,15 @@
 import './bootstrap';
 
-import { createApp } from 'vue';
+import { createApp } from 'vue'
+import { createVuetify } from 'vuetify'
 import App from './components/App.vue';
 import Home from './pages/Home.vue';
+import '@mdi/font/css/materialdesignicons.css'
+
 
 const app = createApp();
+app.use(createVuetify())
+
 
 // Dashboard
 app.component('app', App);
