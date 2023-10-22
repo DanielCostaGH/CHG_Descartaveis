@@ -46,14 +46,9 @@ class DashboardController extends Controller
         $product->description = $request->input('description');
         $product->price = $request->input('price');
 
+        $product->images = "iTeste";
         $imageUrls = $request->input('images');
         $imageNames = [];
-        foreach ($imageUrls as $imageUrl) {
-            $parts = explode('/', $imageUrl);
-            $imageName = 'i' . end($parts);
-            $imageNames[] = $imageName;
-        }
-        $product->images = implode(';', $imageNames);
 
         $product->category_id = $request->input('category_id') ?? 1;
         $product->brand = $request->input('brand');
@@ -68,9 +63,34 @@ class DashboardController extends Controller
         $product->status = $request->input('status');
         $product->save();
 
+        // Obtenha o ID do produto após salvar
+        $productId = $product->id;
+
+        // Crie a pasta com o nome do ID do produto
+        $productImagePath = public_path("images/{$productId}");
+        if (!is_dir($productImagePath)) {
+            mkdir($productImagePath, 0755, true);
+        }
+
+        // Agora mova as imagens para a pasta recém-criada
+        foreach ($imageUrls as $imageUrl) {
+            $parts = explode('/', $imageUrl);
+            $imageName = 'i' . end($parts);
+            $newImageName = "{$productId}/{$imageName}";
+            $imageNames[] = $newImageName;
+
+            // Copie a imagem para a pasta do produto
+            copy(public_path($imageUrl), public_path("images/{$newImageName}"));
+        }
+
+        // Atualize os nomes das imagens no produto, se necessário
+        $product->images = implode(';', $imageNames);
+        $product->save();
+
         return redirect()->route('product.show', ['id' => $product->id])
             ->with('success', 'Produto criado com sucesso!');
     }
+
 
 
 

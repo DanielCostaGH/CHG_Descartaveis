@@ -31,7 +31,7 @@ import productDetails from './pages/productDetails.vue';
 // Bloco dashboard
 import dashboardIndex from './pages//dashboard/dashboard.vue';
 import productEdit from './pages/dashboard/productEdit.vue';
-import productsEditList from './pages/dashboard/productsEditList.vue';
+import productsList from './pages/dashboard/productsList.vue';
 import appearenceIndex from './pages/dashboard/appearence.vue'
 import productCreate from './pages/dashboard/productCreate.vue'
 
@@ -50,7 +50,7 @@ app.component('product_details', productDetails);
 
 
 app.component('dashboard-index', dashboardIndex);
-app.component('products-edit-list', productsEditList);
+app.component('products-edit-list', productsList);
 app.component('product-edit', productEdit);
 app.component('appearence-index', appearenceIndex);
 app.component('product-create', productCreate);
