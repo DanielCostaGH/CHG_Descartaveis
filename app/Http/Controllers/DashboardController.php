@@ -50,7 +50,7 @@ class DashboardController extends Controller
         $imageNames = [];
         foreach ($imageUrls as $imageUrl) {
             $parts = explode('/', $imageUrl);
-            $imageName = 'i' . end($parts);
+            $imageName = end($parts);
             $imageNames[] = $imageName;
         }
         $product->images = implode(';', $imageNames);
@@ -68,6 +68,7 @@ class DashboardController extends Controller
         $product->status = $request->input('status');
         $product->save();
 
+        
         return redirect()->route('product.show', ['id' => $product->id])
             ->with('success', 'Produto criado com sucesso!');
     }
