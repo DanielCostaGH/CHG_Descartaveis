@@ -9,7 +9,7 @@
             <!-- Conteúdo de edição do produto -->
             <div class="bg-white p-4 rounded shadow max-h-[80vh] overflow-scroll">
                 <h2 class="text-2xl font-bold text-gray-800 mb-4">Editar Produto</h2>
-
+                
                 <!-- Formulário de edição do produto -->
                 <form @submit.prevent="updateProduct">
                     <div class="flex flex-wrap justify-around">
@@ -21,7 +21,7 @@
                             <img :src="editedProduct.selectedImage ? editedProduct.selectedImage : defaultImage"
                                 alt="imagem" class="mb-2 mx-auto h-[40vh]" />
                             <input type="file" id="productImages" class="w-full p-2 border rounded" accept="image/*"
-                                @change="onImageChange" multiple />
+                                @change="onImageChange" multiple enctype="multipart/form-data" />
                             <div>
                                 <span class="font-semibold text-gray-700">Imagens do produto:</span>
                                 <ul>
@@ -56,8 +56,7 @@
                         <div class="w-2/6">
                             <div class="mb-4">
                                 <label for="productName" class="block text-gray-700 font-bold mb-2">Nome do Produto</label>
-                                <input type="text" id="productName" v-model="editedProduct.name"
-                                    class="w-full p-2 border rounded" placeholder="Nome do Produto" />
+                                <input type="text" id="productName" v-model="editedProduct.name" class="w-full p-2 border rounded" placeholder="Nome do Produto" />
                             </div>
 
                             <div class="mb-4">
@@ -244,6 +243,22 @@ export default {
 
         };
     },
+    created() {
+        // Verifique se selectedProduct está disponível e carregado corretamente
+        if (this.$props.product) {
+            const product = this.$props.product;
+            this.editedProduct.name = product.name;
+            this.editedProduct.description = product.description;
+            this.editedProduct.price = product.price;
+            this.editedProduct.images = product.images;
+            this.editedProduct.selectedImage = product.selectedImage;
+            this.editedProduct.brand = product.brand;
+            this.editedProduct.colors = product.colors;
+            this.editedProduct.variation = product.variation;
+            this.editedProduct.quantity = product.quantity;
+            this.editedProduct.status = product.status;
+        }
+    },
     methods: {
         updateProduct() {
             // Lógica para enviar as alterações do produto para o servidor aqui
@@ -336,6 +351,9 @@ export default {
     components: {
         sidebar,
         painel,
+    },
+    props: {
+        product: Object, // Propriedade para passar os dados do produto para o componente
     },
 };
 </script>

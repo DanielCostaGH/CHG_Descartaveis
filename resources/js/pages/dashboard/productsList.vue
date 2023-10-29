@@ -12,17 +12,20 @@
 
             <div>
                 <dashboard_filters />
-                <!-- Cards de Produto -->
+                <!-- Lista de Produtos -->
                 <div class="flex flex-wrap">
-                    <!-- Card -->
-                    <a href="/dashboard/products/1" class="bg-white rounded-lg shadow-md p-4 transition-transform hover:scale-105 hover:shadow-lg relative">
-                        <div class="h-[30vh] w-[30vh]">
-                            <img class="h-5/6 text-center bg-gray-100" src="/images/teste." alt="imagem do produto">
-                            <div class="text-center py-5">
-                                <span>Nome do produto</span>
+                    <!-- Loop through products -->
+                    <div v-for="product in products" :key="product.id" class="w-1/4 p-4">
+                        <a :href="'/dashboard/products/edit/' + product.id" class="bg-white rounded-lg shadow-md p-4 transition-transform hover:scale-105 hover:shadow-lg relative">
+                            <div class="h-[30vh] w-[30vh]">
+                                <img class="h-5/6 text-center bg-gray-100" :src="product.image" :alt="product.name">
+                                <div class="text-center py-5">
+                                    <!-- Exibe o nome do produto -->
+                                    <span>{{ product.name }}</span>
+                                </div>
                             </div>
-                        </div>
-                    </a>
+                        </a>
+                    </div>
                 </div>
             </div>
 
@@ -36,7 +39,6 @@ import sidebar from '../../components/side-bar-dashboard.vue'
 import painel from '../../components/painel-bar.vue'
 
 export default {
-
     data() {
         return {
             logo_light: '/images/logo_light.svg',
@@ -56,7 +58,8 @@ export default {
         painel,
     },
 
-
+    props: {
+        products: Array, // Espera um array de produtos
+    },
 };
 </script>
-  

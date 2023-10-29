@@ -17,7 +17,11 @@ class DashboardController extends Controller
     // Método para exibir a lista de produtos
     public function showProducts()
     {
-        return view('dashboard.products.index');
+        $products = Product::paginate(15);
+        $productsData = $products->items(); // Extrai os produtos como um array
+        return view('dashboard.products.index', ['products' => $productsData]);
+
+
     }
 
     // Método para a edição de produto
@@ -32,74 +36,80 @@ class DashboardController extends Controller
         return view('dashboard.products.edit', compact('product'));
     }
 
-
     // Método para a criação de produto
     public function createProduct()
     {
         return view('dashboard.products.create');
     }
 
-    public function Productstore(Request $request)
-{
-    // Valide os dados do formulário, se necessário
+    public function productStore(ProductRequest $request)
+    {
+        $product = new Product();
+        $product->sku = $request->input('sku') ?? 'testee';
+        $product->name = $request->input('name');
+        $product->description = $request->input('description');
+        $product->price = $request->input('price');
 
-    // Crie um novo produto
-    $product = new Product();
-    $product->sku = $request->input('sku') ?? 'testee';
-    $product->name = $request->input('name');
-    $product->description = $request->input('description');
-    $product->price = $request->input('price');
-    $product->category_id = $request->input('category_id') ?? 1;
-    $product->brand = $request->input('brand');
-    
-    $colors = $request->input('color');
-    $product->color = implode(';', $colors);
-    
-    $variations = $request->input('variation');
-    $product->variation = implode(';', $variations);
-    
-    $product->quantity = $request->input('quantity');
-    $product->status = $request->input('status');
-    
-    // Salve o novo produto
-    $product->save();
+        $imageUrls = $request->input('images');
+        $imageNames = [];
+        foreach ($imageUrls as $imageUrl) {
+            $parts = explode('/', $imageUrl);
+            $imageName = end($parts);
+            $imageNames[] = $imageName;
+        }
+        $product->images = implode(';', $imageNames);
 
-    // Chame a função upload para lidar com o armazenamento de imagens
-    $this->uploadImages($request, $product);
+        $product->category_id = $request->input('category_id') ?? 1;
+        $product->brand = $request->input('brand');
 
-    return redirect()->route('product.show', ['id' => $product->id])
-        ->with('success', 'Produto criado com sucesso!');
-}
+        $colors = $request->input('color');
+        $product->color = implode(';', $colors);
 
-public function uploadImages(Request $request, $product)
-{
-    if ($request->hasFile('images')) {
-        $imagePaths = [];
+        $variations = $request->input('variation');
+        $product->variation = implode(';', $variations);
+
+        $product->quantity = $request->input('quantity');
+        $product->status = $request->input('status');
+        $product->save();
+
+
+        return redirect()->route('product.show', ['id' => $product->id])
+            ->with('success', 'Produto criado com sucesso!');
+    }
+
+
+    public function uploadImages(Request $request, $product)
+    {
+        $rootDirectory = 'products';
+
+        if (!Storage::exists($rootDirectory)) {
+            Storage::makeDirectory($rootDirectory);
+        }
         $productId = $product->id;
+        $productDirectory = "{$rootDirectory}/$productId";
 
-        foreach ($request->file('images') as $image) {
-            $imageName = $productId . '_' . time() . '.' . $image->extension();
-            
-            // Crie a pasta se ela não existir
-            $directory = "images/products/$productId";
-            Storage::makeDirectory($directory);
-
-            // Mova o arquivo para a pasta criada
-            $image->storeAs($directory, $imageName, 'public');
-            $imagePaths[] = "$directory/$imageName";
+        if (!Storage::exists($productDirectory)) {
+            Storage::makeDirectory($productDirectory);
         }
 
-        $product->images = implode(';', $imagePaths);
-        $product->save();
+        if ($request->hasFile('images')) {
+            $imagePaths = [];
+            foreach ($request->file('images') as $index => $image) {
+                $imageName = $productId . '_' . time() . '_' . $index . '.' . $image->getClientOriginalExtension();
+
+                $image->storeAs($productDirectory, $imageName, 'public');
+
+                $imagePaths[] = "$productDirectory/$imageName";
+            }
+
+            $product->images = implode(';', $imagePaths);
+            $product->save();
+        }
     }
-}
 
 
 
-
-
-    public function appearence()
-    {
+    public function appearence() {
         return view('dashboard.appearence.index');
     }
 }

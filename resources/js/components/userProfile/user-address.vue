@@ -14,22 +14,25 @@
                         </div>
 
                         <div class="flex w-full">
-                            <v-text-field v-model="formData.cep" label="CEP" outlined dense class="mb-4"></v-text-field>
+                            <v-text-field v-model="formData.cep" label="CEP" outlined dense
+                                class="mb-4 mr-5"></v-text-field>
                             <v-text-field v-model="formData.cidade" label="Cidade" outlined dense
-                                class="mb-4 mr-5 w-1/2"></v-text-field>
-                        </div>
-
-                        <div class="flex w-full">
-
-                            <v-text-field v-model="formData.estado" label="Estado" outlined dense
                                 class="mb-4 ml-5 w-1/2"></v-text-field>
                         </div>
 
+                        <div class="flex w-full">
+                            <v-text-field v-model="formData.estado" label="Estado" outlined dense
+                                class="mb-4 mr-5"></v-text-field>
+
+                            <v-btn @click="adicionarEndereco" class="rounded-full bg-blue-darken-2 pt-5 pb-9">
+                                <v-icon class="mr-2">mdi-plus</v-icon>
+                                Adicionar Endereço
+                            </v-btn>
+                        </div>
 
 
-                        <v-btn @click="adicionarEndereco" class="rounded-full bg-blue-darken-2 w-1/2">
-                            Adicionar Endereço
-                        </v-btn>
+
+
                     </div>
                 </v-form>
 

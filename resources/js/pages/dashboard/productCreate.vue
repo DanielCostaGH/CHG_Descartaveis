@@ -11,7 +11,8 @@
                 <h2 class="text-2xl font-bold text-gray-800 mb-4">Adicionar Produto</h2>
 
                 <!-- Formulário de edição do produto -->
-                <form @submit.prevent="updateProduct" action="/dashboard/store" method="POST">
+                <form @submit.prevent="updateProduct" action="/dashboard/store" method="POST" enctype="multipart/form-data">
+
                     <div class="flex flex-wrap justify-around">
 
                         <!-- CAMPO DA IMAGEM -->
@@ -19,8 +20,8 @@
                             <label for="productImages" class=" text-gray-700 font-bold mb-2">Imagens</label>
                             <img :src="editedProduct.selectedImage ? editedProduct.selectedImage : defaultImage"
                                 alt="imagem" class="mb-2 mx-auto h-[40vh]" />
-                            <input type="file" id="productImages" class="w-full p-2  rounded" accept="image/*"
-                                @change="onImageChange" multiple />
+                                <input type="file" id="productImages" name="images[]" class="w-full p-2  rounded" accept="image/*" @change="onImageChange" multiple enctype="multipart/form-data" />
+
                             <div>
                                 <span class="font-semibold text-gray-700">Imagens do produto:</span>
                                 <ul>
@@ -249,46 +250,63 @@ export default {
     methods: {
         onImageChange(event) {
             const files = event.target.files;
+
             if (files && files.length > 0) {
+                const novasImagens = []; 
+
                 for (let i = 0; i < files.length; i++) {
-                    const imageName = files[i].name;
-                    const imageUrl = URL.createObjectURL(files[i]);
-                    const imageInfo = {
-                        name: imageName,
-                        url: imageUrl,
+                    const nomeImagem = files[i].name;
+                    const urlImagem = URL.createObjectURL(files[i]);
+                    const infoImagem = {
+                        nome: nomeImagem,
+                        url: urlImagem,
+                        file: files[i],
                     };
-                    this.editedProduct.images.push(imageInfo);
+                    
+                    novasImagens.push(infoImagem);
+
                 }
 
-                if (!this.editedProduct.selectedImage && this.editedProduct.images.length > 0) {
-                    this.editedProduct.selectedImage = this.editedProduct.images[0].url;
+                if (!this.editedProduct.selectedImage && novasImagens.length > 0) {
+                    this.editedProduct.selectedImage = novasImagens[0].url;
                 }
+
+                this.editedProduct.images = this.editedProduct.images.concat(novasImagens);
+                console.log(this.editedProduct.images);
             }
         },
         updateProduct() {
-            // Mapeie os objetos de imagem para URLs completas
-            const imagesWithUrls = this.editedProduct.images.map(imageInfo => {
-                return imageInfo.name + this.imageUrlBase; // Certifique-se de que this.imageUrlBase seja definida
-            });
+            const formData = new FormData();
 
-            axios.post('/dashboard/store', {
-                name: this.editedProduct.name,
-                description: this.editedProduct.description,
-                price: this.editedProduct.price,
-                images: imagesWithUrls,
-                brand: this.editedProduct.brand,
-                color: this.editedProduct.colors,
-                variation: this.editedProduct.variation,
-                quantity: this.editedProduct.quantity,
-                status: this.editedProduct.status
+            formData.append('name', this.editedProduct.name);
+            formData.append('description', this.editedProduct.description);
+            formData.append('price', this.editedProduct.price);
+            formData.append('brand', this.editedProduct.brand);
+            formData.append('quantity', this.editedProduct.quantity);
+            formData.append('status', this.editedProduct.status);
+            formData.append('variation', this.editedProduct.variation);
+            formData.append('color', this.editedProduct.colors);
+
+            for (const imageInfo of this.editedProduct.images) {
+
+                formData.append('images[]', imageInfo.file); 
+            }
+
+            axios.post('/dashboard/store', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
             })
-                .then(response => {
-                    console.log('Produto atualizado com sucesso', response.data);
-                })
-                .catch(error => {
-                    console.error('Erro ao atualizar o produto', error);
-                });
+            .then(response => {
+                console.log('Produto atualizado com sucesso', response.data);
+                
+                window.location.href = '/dashboard/products?success=Produto+criado+com+sucesso';
+            })
+            .catch(error => {
+                console.error('Erro ao atualizar o produto', error);
+            });
         },
+
 
         moveImageUp(index) {
             if (index > 0) {
