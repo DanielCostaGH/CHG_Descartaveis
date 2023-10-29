@@ -28,12 +28,11 @@ class DashboardController extends Controller
     public function editProduct($id)
     {
         $product = Product::find($id);
-
         if (!$product) {
-            abort(404);
+            abort(404); 
         }
-
-        return view('dashboard.products.edit', compact('product'));
+        
+        return view('dashboard.products.edit', compact('product')); 
     }
 
     // Método para a criação de produto
@@ -49,35 +48,20 @@ class DashboardController extends Controller
         $product->name = $request->input('name');
         $product->description = $request->input('description');
         $product->price = $request->input('price');
-
-        $imageUrls = $request->input('images');
-        $imageNames = [];
-        foreach ($imageUrls as $imageUrl) {
-            $parts = explode('/', $imageUrl);
-            $imageName = end($parts);
-            $imageNames[] = $imageName;
-        }
-        $product->images = implode(';', $imageNames);
-
         $product->category_id = $request->input('category_id') ?? 1;
         $product->brand = $request->input('brand');
-
-        $colors = $request->input('color');
-        $product->color = implode(';', $colors);
-
-        $variations = $request->input('variation');
-        $product->variation = implode(';', $variations);
-
+        $product->images = "teste";
+        $product->color = $request->input('color');
+        $product->variation = $request->input('variation');
         $product->quantity = $request->input('quantity');
-        $product->status = $request->input('status');
         $product->save();
+        $this->uploadImages($request, $product);
 
-
-        return redirect()->route('product.show', ['id' => $product->id])
+        return redirect()->route('dashboard.products.index')
             ->with('success', 'Produto criado com sucesso!');
     }
 
-
+    
     public function uploadImages(Request $request, $product)
     {
         $rootDirectory = 'products';
@@ -96,9 +80,9 @@ class DashboardController extends Controller
             $imagePaths = [];
             foreach ($request->file('images') as $index => $image) {
                 $imageName = $productId . '_' . time() . '_' . $index . '.' . $image->getClientOriginalExtension();
-
+                
                 $image->storeAs($productDirectory, $imageName, 'public');
-
+                
                 $imagePaths[] = "$productDirectory/$imageName";
             }
 
@@ -142,4 +126,5 @@ class DashboardController extends Controller
     public function appearence() {
         return view('dashboard.appearence.index');
     }
+
 }
