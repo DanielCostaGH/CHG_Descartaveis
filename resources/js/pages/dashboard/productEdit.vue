@@ -11,15 +11,16 @@
                 <h2 class="text-2xl font-bold text-gray-800 mb-4">Editar Produto</h2>
                 
                 <!-- Formulário de edição do produto -->
-                <form @submit.prevent="updateProduct">
+                <form @submit.prevent="updateProduct" action="/dashboard/update" method="PUT" enctype="multipart/form-data">
                     <div class="flex flex-wrap justify-around">
 
                         <!-- CAMPO DA IMAGEM -->
                         <div class="max-h-[90vh] max-w-[50vh]"
                             style="scrollbar-width: none; -ms-overflow-style: none;">
                             <label for="productImages" class="block text-gray-700 font-bold mb-2">Imagens</label>
-                            <img :src="editedProduct.selectedImage ? editedProduct.selectedImage : defaultImage"
-                                alt="imagem" class="mb-2 mx-auto h-[40vh]" />
+                            <div v-for="(image, index) in getImageUrls(editedProduct.images)" :key="index">
+                              <img :src="image" alt="Imagem do produto" class="inline-block w-10 h-10 mx-4 cursor-pointer" @click="selectImage(image)" />
+                            </div>
                             <input type="file" id="productImages" class="w-full p-2 border rounded" accept="image/*"
                                 @change="onImageChange" multiple enctype="multipart/form-data" />
                             <div>
@@ -280,15 +281,43 @@ export default {
         },
         onImageChange(event) {
             const files = event.target.files;
+
             if (files && files.length > 0) {
+                const novasImagens = []; 
+
                 for (let i = 0; i < files.length; i++) {
-                    const imageUrl = URL.createObjectURL(files[i]);
-                    this.editedProduct.images.push(imageUrl);
+                    const nomeImagem = files[i].name;
+                    const urlImagem = URL.createObjectURL(files[i]);
+                    const infoImagem = {
+                        nome: nomeImagem,
+                        url: urlImagem,
+                        file: files[i],
+                    };
+                    
+                    novasImagens.push(infoImagem);
+
                 }
-                if (!this.editedProduct.selectedImage) {
-                    this.editedProduct.selectedImage = this.editedProduct.images[0];
+
+                if (!this.editedProduct.selectedImage && novasImagens.length > 0) {
+                    this.editedProduct.selectedImage = novasImagens[0].url;
                 }
+
+                this.editedProduct.images = this.editedProduct.images.concat(novasImagens);
+                console.log(this.editedProduct.images);
             }
+        },
+        getImageUrls(imagePaths) {
+            // Use a URL base para construir as URLs completas
+            console.log(imagePaths);
+            const baseUrl = '/storage'; // Substitua pela URL do seu servidor Laravel
+
+            // Divida o campo de imagens em uma lista usando ponto e vírgula como delimitador
+            const paths = imagePaths.split(';');
+
+            // Construa as URLs completas
+            const imageUrls = paths.map(path => baseUrl + '/' + path);
+            console.log(imageUrls);
+            return imageUrls;
         },
         removeImage(index) {
             this.editedProduct.images.splice(index, 1);

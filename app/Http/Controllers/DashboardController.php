@@ -91,6 +91,36 @@ class DashboardController extends Controller
         }
     }
 
+    public function productUpdate(ProductRequest $request, Product $product)
+    {
+        $product->sku = $request->input('sku') ?? 'testee';
+        $product->name = $request->input('name');
+        $product->description = $request->input('description');
+        $product->price = $request->input('price');
+        $product->category_id = $request->input('category_id') ?? 1;
+        $product->brand = $request->input('brand');
+        $product->color = $request->input('color');
+        $product->variation = $request->input('variation');
+        $product->quantity = $request->input('quantity');
+        $product->save();
+
+        $this->deleteImages($product);
+
+        $this->uploadImages($request, $product);
+
+        return redirect()->route('dashboard.products.index')
+            ->with('success', 'Produto atualizado com sucesso!');
+    }
+
+    public function deleteImages(Product $product)
+    {
+        $imagePaths = explode(';', $product->images);
+
+        foreach ($imagePaths as $imagePath) {
+            Storage::delete("public/$imagePath");
+        }
+    }
+
 
 
     public function appearence() {
