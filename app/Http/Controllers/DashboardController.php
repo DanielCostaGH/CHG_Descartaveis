@@ -52,11 +52,11 @@ class DashboardController extends Controller
 
         $imageUrls = $request->input('images');
         $imageNames = [];
-        foreach ($imageUrls as $imageUrl) {
-            $parts = explode('/', $imageUrl);
-            $imageName = end($parts);
-            $imageNames[] = $imageName;
-        }
+        // foreach ($imageUrls as $imageUrl) {
+        //     $parts = explode('/', $imageUrl);
+        //     $imageName = end($parts);
+        //     $imageNames[] = $imageName;
+        // }
         $product->images = implode(';', $imageNames);
 
         $product->category_id = $request->input('category_id') ?? 1;

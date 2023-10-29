@@ -1,38 +1,42 @@
 <template>
     <div class="flex">
         <!-- Barra lateral -->
-        <sidebar/>
+        <sidebar />
 
         <!-- Conteúdo principal -->
         <main class="w-4/5 p-6 bg-gray-100">
             <!-- Header -->
             <header>
-                <painel/>
+                <painel />
             </header>
 
             <div>
                 <dashboard_filters />
                 <!-- Lista de Produtos -->
                 <div class="flex flex-wrap">
-                    <!-- Loop through products -->
-                    <div v-for="product in products" :key="product.id" class="w-1/4 p-4">
-                        <a :href="'/dashboard/products/edit/' + product.id" class="bg-white rounded-lg shadow-md p-4 transition-transform hover:scale-105 hover:shadow-lg relative">
-                            <div class="h-[30vh] w-[30vh]">
-                                <img class="h-5/6 text-center bg-gray-100" :src="product.image" :alt="product.name">
-                                <div class="text-center py-5">
-                                    <!-- Exibe o nome do produto -->
-                                    <span>{{ product.name }}</span>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
+                    <v-card>
+                        <v-card-title class="text-xl font-medium">Lista de Produtos</v-card-title>
+                        <v-card-text>
+                            <v-row>
+                                <v-col v-for="(product, index) in products" :key="index" cols="3">
+                                    <a :href="'/products/' + product.id">
+                                        <v-card class="mx-auto">
+                                            <v-img src="https://via.placeholder.com/150" max-height="80%"></v-img>
+                                            <v-card-title class="text-h6 mt-2">{{ product.name }}</v-card-title>
+                                        </v-card>
+                                    </a>
+                                </v-col>
+                            </v-row>
+                        </v-card-text>
+                    </v-card>
+
                 </div>
             </div>
 
         </main>
     </div>
 </template>
-  
+
 <script>
 import dashboard_filters from '../../components/dashboard-filters.vue'
 import sidebar from '../../components/side-bar-dashboard.vue'
@@ -61,5 +65,21 @@ export default {
     props: {
         products: Array, // Espera um array de produtos
     },
+
+    methods:{
+        getImageUrls(imagePaths) {
+            // Use a URL base para construir as URLs completas
+
+            const baseUrl = '/storage'; // Substitua pela URL do seu servidor Laravel
+
+            // Divida o campo de imagens em uma lista usando ponto e vírgula como delimitador
+            const paths = imagePaths.split(';');
+
+            // Construa as URLs completas
+            const imageUrls = paths.map(path => baseUrl + '/' + path);
+            console.log(imageUrls);
+            return imageUrls;
+        },
+    }
 };
 </script>

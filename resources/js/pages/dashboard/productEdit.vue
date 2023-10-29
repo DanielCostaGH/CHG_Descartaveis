@@ -9,7 +9,7 @@
             <!-- Conteúdo de edição do produto -->
             <div class="bg-white p-4 rounded shadow max-h-[80vh] overflow-scroll">
                 <h2 class="text-2xl font-bold text-gray-800 mb-4">Editar Produto</h2>
-                
+
                 <!-- Formulário de edição do produto -->
                 <form @submit.prevent="updateProduct" action="/dashboard/update" method="PUT" enctype="multipart/form-data">
                     <div class="flex flex-wrap justify-around">
@@ -189,7 +189,7 @@
         </div>
     </div>
 </template>
-  
+
 <script>
 import sidebar from '../../components/side-bar-dashboard.vue'
 import painel from '../../components/painel-bar.vue'
@@ -283,7 +283,7 @@ export default {
             const files = event.target.files;
 
             if (files && files.length > 0) {
-                const novasImagens = []; 
+                const novasImagens = [];
 
                 for (let i = 0; i < files.length; i++) {
                     const nomeImagem = files[i].name;
@@ -293,7 +293,7 @@ export default {
                         url: urlImagem,
                         file: files[i],
                     };
-                    
+
                     novasImagens.push(infoImagem);
 
                 }
@@ -308,7 +308,7 @@ export default {
         },
         getImageUrls(imagePaths) {
             // Use a URL base para construir as URLs completas
-            console.log(imagePaths);
+
             const baseUrl = '/storage'; // Substitua pela URL do seu servidor Laravel
 
             // Divida o campo de imagens em uma lista usando ponto e vírgula como delimitador
@@ -361,7 +361,7 @@ export default {
                 this.hexValue = ''; // Limpar o valor após adicionar a cor
             }
 
-            this.closeModal(); 
+            this.closeModal();
         },
 
         // Método para adicionar uma variação à lista de variações
