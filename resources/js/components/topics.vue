@@ -51,8 +51,8 @@
 
         <!-- MODELO MOBILE -->
 
-        <section class="flex lg:hidden w-full justify-between items-center text-lg overflow-scroll">
-            <div class="text-center mx-2">
+        <section class="hidden w-full justify-between items-center text-lg overflow-scroll">
+            <div class="mx-2">
                 <v-menu open-on-hover>
                     <template v-slot:activator="{ props }">
                         <button href="/products"
@@ -80,7 +80,7 @@
 
     </div>
 </template>
-  
+
 <script>
 export default {
     data() {
@@ -96,4 +96,3 @@ export default {
     },
 };
 </script>
-  

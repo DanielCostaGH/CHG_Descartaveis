@@ -118,9 +118,9 @@
                 <div v-for="(product, index) in products" :key="index" class="border mx-2 items-stretch h-5/6">
 
                     <div class="h-1/6 w-full px-1 flex items-center justify-between">
-                        <div class="flex mx-1 items-center">
+                        <div class="flex mx-1 items-center overflow-hidden">
                             <v-rating class="text-yellow-500" v-model="rating" density="compact" half-increments readonly
-                                size="md">
+                                >
                                 <template v-slot:item="{ value, isFilled }">
                                     <svg xmlns="http://www.w3.org/2000/svg" :fill="isFilled ? 'currentColor' : 'none'"
                                         viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
@@ -217,7 +217,7 @@ export default {
           rating: 4.8,
           image: '/images/1/i1.png'
         },
-    
+
       ],
     };
   },
