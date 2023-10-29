@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ProductRequest;
 use Illuminate\Http\Request;
 use App\Models\Product; // Importe a model Product
+use Illuminate\Support\Facades\Storage;
 
 class DashboardController extends Controller
 {
@@ -16,21 +17,23 @@ class DashboardController extends Controller
     // Método para exibir a lista de produtos
     public function showProducts()
     {
-        return view('dashboard.products.index');
+        $products = Product::paginate(15);
+        $productsData = $products->items(); // Extrai os produtos como um array
+        return view('dashboard.products.index', ['products' => $productsData]);
+
+
     }
 
     // Método para a edição de produto
     public function editProduct($id)
     {
         $product = Product::find($id);
-    
         if (!$product) {
             abort(404); 
         }
         
         return view('dashboard.products.edit', compact('product')); 
     }
-
 
     // Método para a criação de produto
     public function createProduct()
@@ -45,52 +48,48 @@ class DashboardController extends Controller
         $product->name = $request->input('name');
         $product->description = $request->input('description');
         $product->price = $request->input('price');
-
-        $product->images = "iTeste";
-        $imageUrls = $request->input('images');
-        $imageNames = [];
-
         $product->category_id = $request->input('category_id') ?? 1;
         $product->brand = $request->input('brand');
-
-        $colors = $request->input('color');
-        $product->color = implode(';', $colors);
-
-        $variations = $request->input('variation');
-        $product->variation = implode(';', $variations);
-
+        $product->images = "teste";
+        $product->color = $request->input('color');
+        $product->variation = $request->input('variation');
         $product->quantity = $request->input('quantity');
-        $product->status = $request->input('status');
         $product->save();
+        $this->uploadImages($request, $product);
 
-        // Obtenha o ID do produto após salvar
-        $productId = $product->id;
-
-        // Crie a pasta com o nome do ID do produto
-        $productImagePath = public_path("images/{$productId}");
-        if (!is_dir($productImagePath)) {
-            mkdir($productImagePath, 0755, true);
-        }
-
-        // Agora mova as imagens para a pasta recém-criada
-        foreach ($imageUrls as $imageUrl) {
-            $parts = explode('/', $imageUrl);
-            $imageName = 'i' . end($parts);
-            $newImageName = "{$productId}/{$imageName}";
-            $imageNames[] = $newImageName;
-
-            // Copie a imagem para a pasta do produto
-            copy(public_path($imageUrl), public_path("images/{$newImageName}"));
-        }
-
-        // Atualize os nomes das imagens no produto, se necessário
-        $product->images = implode(';', $imageNames);
-        $product->save();
-
-        return redirect()->route('product.show', ['id' => $product->id])
+        return redirect()->route('dashboard.products.index')
             ->with('success', 'Produto criado com sucesso!');
     }
 
+    
+    public function uploadImages(Request $request, $product)
+    {
+        $rootDirectory = 'products';
+
+        if (!Storage::exists($rootDirectory)) {
+            Storage::makeDirectory($rootDirectory);
+        }
+        $productId = $product->id;
+        $productDirectory = "{$rootDirectory}/$productId";
+
+        if (!Storage::exists($productDirectory)) {
+            Storage::makeDirectory($productDirectory);
+        }
+
+        if ($request->hasFile('images')) {
+            $imagePaths = [];
+            foreach ($request->file('images') as $index => $image) {
+                $imageName = $productId . '_' . time() . '_' . $index . '.' . $image->getClientOriginalExtension();
+                
+                $image->storeAs($productDirectory, $imageName, 'public');
+                
+                $imagePaths[] = "$productDirectory/$imageName";
+            }
+
+            $product->images = implode(';', $imagePaths);
+            $product->save();
+        }
+    }
 
 
 

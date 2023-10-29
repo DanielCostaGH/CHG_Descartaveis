@@ -11,17 +11,17 @@
                 <h2 class="text-2xl font-bold text-gray-800 mb-4">Adicionar Produto</h2>
 
                 <!-- Formulário de edição do produto -->
-                <form @submit.prevent="updateProduct" action="/dashboard/store" method="POST">
+                <form @submit.prevent="updateProduct" action="/dashboard/store" method="POST" enctype="multipart/form-data">
+
                     <div class="flex flex-wrap justify-around">
 
                         <!-- CAMPO DA IMAGEM -->
-                        <div class="max-h-[90vh] max-w-[60vh]"
-                            style="scrollbar-width: none; -ms-overflow-style: none;">
+                        <div class="max-h-[90vh] max-w-[60vh]" style="scrollbar-width: none; -ms-overflow-style: none;">
                             <label for="productImages" class=" text-gray-700 font-bold mb-2">Imagens</label>
                             <img :src="editedProduct.selectedImage ? editedProduct.selectedImage : defaultImage"
                                 alt="imagem" class="mb-2 mx-auto h-[40vh]" />
-                            <input type="file" id="productImages" class="w-full p-2  rounded" accept="image/*"
-                                @change="onImageChange" multiple />
+                                <input type="file" id="productImages" name="images[]" class="w-full p-2  rounded" accept="image/*" @change="onImageChange" multiple enctype="multipart/form-data" />
+
                             <div>
                                 <span class="font-semibold text-gray-700">Imagens do produto:</span>
                                 <ul>
@@ -36,10 +36,10 @@
                                                 <img :src="down_arrow" alt="seta descer" />
                                             </button>
 
-                                            <img :src="image" alt="Imagem do produto"
+                                            <img :src="image.url" alt="Imagem do produto"
                                                 class="inline-block w-10 h-10 mx-4 cursor-pointer"
-                                                @click="selectImage(image)" />
-                                            <span class="text-gray-800">{{ getImageName(image) }}</span>
+                                                @click="selectImage(image.url)" />
+                                            <span class="text-gray-800">{{ getImageName(image.url) }}</span>
                                         </div>
 
                                         <div>
@@ -49,6 +49,7 @@
                                         </div>
                                     </li>
                                 </ul>
+
                             </div>
                         </div>
 
@@ -113,7 +114,8 @@
                                 <!-- Lista de Variações -->
                                 <div class="mt-4">
                                     <ul class="border-b w-4/6 ">
-                                        <li class="flex justify-between p-2" v-for="(variation, index) in productVariations" :key="index">
+                                        <li class="flex justify-between p-2" v-for="(variation, index) in productVariations"
+                                            :key="index">
                                             {{ variation }}
                                             <!-- Botão para remover a variação -->
                                             <button @click="removeVariation(index)" class="text-red-500 ml-2">
@@ -200,6 +202,7 @@ export default {
             down_arrow: '/images/down_arrow.svg',
             up_arrow: '/images/up_arrow.svg',
             defaultImage: '/images/empty.png',
+            imageUrlBase: '',
             close: '/images/close.svg',
             showModal: false,
             hexValue: '',
@@ -239,33 +242,72 @@ export default {
                 quantity: null,
                 status: 'active',
             },
-            newVariation: '', 
-            productVariations: [], 
+            newVariation: '',
+            productVariations: [],
 
         };
     },
     methods: {
+        onImageChange(event) {
+            const files = event.target.files;
+
+            if (files && files.length > 0) {
+                const novasImagens = []; 
+
+                for (let i = 0; i < files.length; i++) {
+                    const nomeImagem = files[i].name;
+                    const urlImagem = URL.createObjectURL(files[i]);
+                    const infoImagem = {
+                        nome: nomeImagem,
+                        url: urlImagem,
+                        file: files[i],
+                    };
+                    
+                    novasImagens.push(infoImagem);
+
+                }
+
+                if (!this.editedProduct.selectedImage && novasImagens.length > 0) {
+                    this.editedProduct.selectedImage = novasImagens[0].url;
+                }
+
+                this.editedProduct.images = this.editedProduct.images.concat(novasImagens);
+                console.log(this.editedProduct.images);
+            }
+        },
         updateProduct() {
-            console.log('variation:aaaa', this.editedProduct,        
-            )
-            axios.post('/dashboard/store', {
-                name: this.editedProduct.name,
-                description: this.editedProduct.description,
-                price: this.editedProduct.price,
-                images: this.editedProduct.images,
-                brand: this.editedProduct.brand,
-                color: this.editedProduct.colors,
-                variation: this.editedProduct.variation,
-                quantity: this.editedProduct.quantity,
-                status: this.editedProduct.status
+            const formData = new FormData();
+
+            formData.append('name', this.editedProduct.name);
+            formData.append('description', this.editedProduct.description);
+            formData.append('price', this.editedProduct.price);
+            formData.append('brand', this.editedProduct.brand);
+            formData.append('quantity', this.editedProduct.quantity);
+            formData.append('status', this.editedProduct.status);
+            formData.append('variation', this.editedProduct.variation);
+            formData.append('color', this.editedProduct.colors);
+
+            for (const imageInfo of this.editedProduct.images) {
+
+                formData.append('images[]', imageInfo.file); 
+            }
+
+            axios.post('/dashboard/store', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
             })
             .then(response => {
                 console.log('Produto atualizado com sucesso', response.data);
+                
+                window.location.href = '/dashboard/products?success=Produto+criado+com+sucesso';
             })
             .catch(error => {
                 console.error('Erro ao atualizar o produto', error);
             });
         },
+
+
         moveImageUp(index) {
             if (index > 0) {
                 const tempImage = this.editedProduct.images[index];
@@ -280,18 +322,9 @@ export default {
                 this.editedProduct.images[index + 1] = tempImage;
             }
         },
-        onImageChange(event) {
-            const files = event.target.files;
-            if (files && files.length > 0) {
-                for (let i = 0; i < files.length; i++) {
-                    const imageUrl = URL.createObjectURL(files[i]);
-                    this.editedProduct.images.push(imageUrl);
-                }
-                if (!this.editedProduct.selectedImage) {
-                    this.editedProduct.selectedImage = this.editedProduct.images[0];
-                }
-            }
-        },
+
+
+
         removeImage(index) {
             this.editedProduct.images.splice(index, 1);
             if (this.editedProduct.selectedImage === this.editedProduct.images[index]) {
@@ -303,7 +336,9 @@ export default {
         },
         getImageName(imageUrl) {
             const parts = imageUrl.split('/');
-            return parts[parts.length - 1];
+            const fileName = parts[parts.length - 1];
+            const fileNameWithExtension = fileName.split('?')[0]; // Remove parâmetros da URL, se houver
+            return fileNameWithExtension;
         },
         addColor() {
             this.showModal = true;
@@ -334,7 +369,7 @@ export default {
                 this.hexValue = ''; // Limpar o valor após adicionar a cor
             }
 
-            this.closeModal(); 
+            this.closeModal();
         },
 
         // Método para adicionar uma variação a lista de variações

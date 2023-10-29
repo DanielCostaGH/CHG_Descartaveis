@@ -50,7 +50,7 @@ Route::group(['prefix' => 'products' ], function() {
 Route::group(['prefix' => 'dashboard'], function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
     Route::get('/products', [DashboardController::class, 'showProducts'])->name('dashboard.products.index');
-    Route::get('/products/{id}', [DashboardController::class, 'editProduct'])->name('dashboard.products.edit');
+    Route::get('/products/edit/{id}', [DashboardController::class, 'editProduct'])->name('dashboard.products.edit');
     Route::get('/appearence', [DashboardController::class, 'appearence'])->name('dashboard.appearence.index');
     Route::get('/create', [DashboardController::class, 'createProduct'])->name('dashboard.products.create');
     Route::post('/store', [DashboardController::class, 'productStore'])->name('dashboard.products.store');
