@@ -18,17 +18,20 @@ class DashboardController extends Controller
     public function showProducts()
     {
         $products = Product::paginate(15);
-        $productsData = $products->items(); // Extrai os produtos como um array
-        return view('dashboard.products.index', ['products' => $productsData]);
+        // $productsData = $products->items();
+        return view('dashboard.products.index', ['products' => $products]);
+    }
 
-
+    public function show()
+    {
+        $products = Product::all();
+        return response()->json($products);
     }
 
     // Método para a edição de produto
     public function editProduct($id)
     {
         $product = Product::find($id);
-
         if (!$product) {
             abort(404);
         }
@@ -49,38 +52,23 @@ class DashboardController extends Controller
         $product->name = $request->input('name');
         $product->description = $request->input('description');
         $product->price = $request->input('price');
-
-        $imageUrls = $request->input('images');
-        $imageNames = [];
-        // foreach ($imageUrls as $imageUrl) {
-        //     $parts = explode('/', $imageUrl);
-        //     $imageName = end($parts);
-        //     $imageNames[] = $imageName;
-        // }
-        $product->images = implode(';', $imageNames);
-
         $product->category_id = $request->input('category_id') ?? 1;
         $product->brand = $request->input('brand');
-
-        $colors = $request->input('color');
-        $product->color = implode(';', $colors);
-
-        $variations = $request->input('variation');
-        $product->variation = implode(';', $variations);
-
+        $product->images = "teste";
+        $product->color = $request->input('color');
+        $product->variation = $request->input('variation');
         $product->quantity = $request->input('quantity');
-        $product->status = $request->input('status');
         $product->save();
+        $this->uploadImages($request, $product);
 
-
-        return redirect()->route('product.show', ['id' => $product->id])
+        return redirect()->route('dashboard.products.index')
             ->with('success', 'Produto criado com sucesso!');
     }
 
 
     public function uploadImages(Request $request, $product)
     {
-        $rootDirectory = 'products';
+        $rootDirectory = 'images/products';
 
         if (!Storage::exists($rootDirectory)) {
             Storage::makeDirectory($rootDirectory);
@@ -99,7 +87,7 @@ class DashboardController extends Controller
 
                 $image->storeAs($productDirectory, $imageName, 'public');
 
-                $imagePaths[] = "$productDirectory/$imageName";
+                $imagePaths[] = "$imageName";
             }
 
             $product->images = implode(';', $imagePaths);
@@ -142,4 +130,5 @@ class DashboardController extends Controller
     public function appearence() {
         return view('dashboard.appearence.index');
     }
+
 }

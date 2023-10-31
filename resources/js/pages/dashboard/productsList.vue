@@ -22,15 +22,15 @@
                                 <div v-for="(product, index) in products" :key="index" class="p-4">
                                     <div class="">
                                         <div class="bg-white border shadow-md rounded-lg p-4 w-[40vh] h-[45vh]">
-                                            <div class="h-1/6">
+                                            <div class="overflow-x-hidden">
                                                 <h3 class="text-lg font-medium mt-2">{{ product.name }}</h3>
                                             </div>
 
-                                            <div class="h-3/6 flex justify-center items-center">
-                                                <img class="h-5/6" :src="getFirstImage(product)" alt="Product Image">
+                                            <div class="h-4/6 flex justify-center items-center">
+                                                <img class="object-contain h-full" :src="getFirstImage(product)" alt="Product Image">
                                             </div>
 
-                                            <div class="mt-4 h-2/6 flex justify-around items-center">
+                                            <div class="mt-4 h-2/6 pb-5 flex justify-around items-center">
 
                                                 <a class="flex items-center border-2 border-blue-600 text-blue-600 hover hover:text-white hover:bg-blue-600 py-3 px-4 rounded"
                                                     :href="'/dashboard/products/edit/' + product.id">
