@@ -18,10 +18,14 @@ class DashboardController extends Controller
     public function showProducts()
     {
         $products = Product::paginate(15);
-        $productsData = $products->items(); // Extrai os produtos como um array
-        return view('dashboard.products.index', ['products' => $productsData]);
+        // $productsData = $products->items();
+        return view('dashboard.products.index', ['products' => $products]);
+    }
 
-
+    public function show()
+    {
+        $products = Product::all();
+        return response()->json($products);
     }
 
     // Método para a edição de produto
@@ -29,10 +33,10 @@ class DashboardController extends Controller
     {
         $product = Product::find($id);
         if (!$product) {
-            abort(404); 
+            abort(404);
         }
-        
-        return view('dashboard.products.edit', compact('product')); 
+
+        return view('dashboard.products.edit', compact('product'));
     }
 
     // Método para a criação de produto
@@ -61,10 +65,10 @@ class DashboardController extends Controller
             ->with('success', 'Produto criado com sucesso!');
     }
 
-    
+
     public function uploadImages(Request $request, $product)
     {
-        $rootDirectory = 'products';
+        $rootDirectory = 'images/products';
 
         if (!Storage::exists($rootDirectory)) {
             Storage::makeDirectory($rootDirectory);
@@ -80,10 +84,10 @@ class DashboardController extends Controller
             $imagePaths = [];
             foreach ($request->file('images') as $index => $image) {
                 $imageName = $productId . '_' . time() . '_' . $index . '.' . $image->getClientOriginalExtension();
-                
+
                 $image->storeAs($productDirectory, $imageName, 'public');
-                
-                $imagePaths[] = "$productDirectory/$imageName";
+
+                $imagePaths[] = "$imageName";
             }
 
             $product->images = implode(';', $imagePaths);

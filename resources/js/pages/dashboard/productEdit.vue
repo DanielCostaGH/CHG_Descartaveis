@@ -9,17 +9,17 @@
             <!-- Conteúdo de edição do produto -->
             <div class="bg-white p-4 rounded shadow max-h-[80vh] overflow-scroll">
                 <h2 class="text-2xl font-bold text-gray-800 mb-4">Editar Produto</h2>
-                
+
                 <!-- Formulário de edição do produto -->
                 <form @submit.prevent="updateProduct" action="/dashboard/update" method="PUT" enctype="multipart/form-data">
                     <div class="flex flex-wrap justify-around">
 
                         <!-- CAMPO DA IMAGEM -->
-                        <div class="max-h-[90vh] max-w-[50vh]"
-                            style="scrollbar-width: none; -ms-overflow-style: none;">
+                        <div class="max-h-[90vh] max-w-[50vh]" style="scrollbar-width: none; -ms-overflow-style: none;">
                             <label for="productImages" class="block text-gray-700 font-bold mb-2">Imagens</label>
                             <div v-for="(image, index) in getImageUrls(editedProduct.images)" :key="index">
-                              <img :src="image" alt="Imagem do produto" class="inline-block w-10 h-10 mx-4 cursor-pointer" @click="selectImage(image)" />
+                                <img :src="image" alt="Imagem do produto" class="inline-block w-10 h-10 mx-4 cursor-pointer"
+                                    @click="selectImage(image)" />
                             </div>
                             <input type="file" id="productImages" class="w-full p-2 border rounded" accept="image/*"
                                 @change="onImageChange" multiple enctype="multipart/form-data" />
@@ -57,7 +57,8 @@
                         <div class="w-2/6">
                             <div class="mb-4">
                                 <label for="productName" class="block text-gray-700 font-bold mb-2">Nome do Produto</label>
-                                <input type="text" id="productName" v-model="editedProduct.name" class="w-full p-2 border rounded" placeholder="Nome do Produto" />
+                                <input type="text" id="productName" v-model="editedProduct.name"
+                                    class="w-full p-2 border rounded" placeholder="Nome do Produto" />
                             </div>
 
                             <div class="mb-4">
@@ -113,7 +114,8 @@
                                 <!-- Lista de Variações -->
                                 <div class="mt-4">
                                     <ul class="border-b w-4/6 ">
-                                        <li class="flex justify-between p-2" v-for="(variation, index) in productVariations" :key="index">
+                                        <li class="flex justify-between p-2" v-for="(variation, index) in productVariations"
+                                            :key="index">
                                             {{ variation }}
                                             <!-- Botão para remover a variação -->
                                             <button @click="removeVariation(index)" class="text-red-500 ml-2">
@@ -189,7 +191,7 @@
         </div>
     </div>
 </template>
-  
+
 <script>
 import sidebar from '../../components/side-bar-dashboard.vue'
 import painel from '../../components/painel-bar.vue'
@@ -241,7 +243,6 @@ export default {
             },
             newVariation: '',
             productVariations: [],
-
         };
     },
     created() {
@@ -261,9 +262,16 @@ export default {
         }
     },
     methods: {
-        updateProduct() {
-            // Lógica para enviar as alterações do produto para o servidor aqui
-            console.log('Produto atualizado:', this.editedProduct);
+
+        async updateProduct() {
+            try {
+                await axios.put(`/api/products/${this.productId}`, this.editedProduct);
+                this.$router.push({ name: 'dashboard.products.index' });
+                this.$notify.success('Produto atualizado com sucesso!');
+            } catch (error) {
+                console.error('Erro ao atualizar o produto:', error);
+                this.$notify.error('Erro ao atualizar o produto.');
+            }
         },
         moveImageUp(index) {
             if (index > 0) {
@@ -283,7 +291,7 @@ export default {
             const files = event.target.files;
 
             if (files && files.length > 0) {
-                const novasImagens = []; 
+                const novasImagens = [];
 
                 for (let i = 0; i < files.length; i++) {
                     const nomeImagem = files[i].name;
@@ -293,9 +301,8 @@ export default {
                         url: urlImagem,
                         file: files[i],
                     };
-                    
-                    novasImagens.push(infoImagem);
 
+                    novasImagens.push(infoImagem);
                 }
 
                 if (!this.editedProduct.selectedImage && novasImagens.length > 0) {
@@ -306,19 +313,16 @@ export default {
                 console.log(this.editedProduct.images);
             }
         },
-        getImageUrls(imagePaths) {
-            // Use a URL base para construir as URLs completas
-            console.log(imagePaths);
-            const baseUrl = '/storage'; // Substitua pela URL do seu servidor Laravel
-
+        getImageUrls(imagePaths, productId) {
             // Divida o campo de imagens em uma lista usando ponto e vírgula como delimitador
             const paths = imagePaths.split(';');
 
             // Construa as URLs completas
-            const imageUrls = paths.map(path => baseUrl + '/' + path);
+            const imageUrls = paths.map(path => `/images/products/${productId}/${path}`);
             console.log(imageUrls);
             return imageUrls;
         },
+
         removeImage(index) {
             this.editedProduct.images.splice(index, 1);
             if (this.editedProduct.selectedImage === this.editedProduct.images[index]) {
@@ -361,7 +365,7 @@ export default {
                 this.hexValue = ''; // Limpar o valor após adicionar a cor
             }
 
-            this.closeModal(); 
+            this.closeModal();
         },
 
         // Método para adicionar uma variação à lista de variações
@@ -386,3 +390,4 @@ export default {
     },
 };
 </script>
+
