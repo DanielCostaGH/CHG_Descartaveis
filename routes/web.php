@@ -6,8 +6,7 @@ use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\DashboardController;
-
-
+use App\Http\Middleware\AdminAuthMiddleware;
 
 Route::get('/', function () {
     return view('home');
@@ -15,13 +14,13 @@ Route::get('/', function () {
 
 Route::group(['prefix' => 'admin'], function () {
     Route::middleware('guest')->group(function () {
-        Route::get('/login', [AdminController::class, 'showLoginForm'])->name('admin.login');
+        Route::get('/login', [AdminController::class, 'showLoginForm'])->name('login');
         Route::post('/login', [AdminController::class, 'login'])->name('admin.login.post');
     });
-
+    
     Route::post('/logout', [AdminController::class, 'logout'])->name('admin.logout');
 
-    Route::group(['midleware' => ['auth:sanctum']], function (){
+    Route::group(['middleware' => ['auth:sanctum']], function (){
         Route::get('/', [AdminController::class, 'index'])->name('admin.index');
         Route::post('/', [AdminController::class, 'store'])->name('admin.store');
     });
@@ -33,12 +32,18 @@ Route::group(['prefix' => 'admin'], function () {
 
 
 Route::group(['prefix' => 'user'], function () {
-    Route::get('/', [UserController::class, 'index'])->name('user.name');
-    Route::get('/login', [UserController::class, 'showLoginForm'])->name('user.login');
-    Route::post('/login', [UserController::class, 'login'])->name('user.login.post');
-    Route::get('/create', [UserController::class, 'create'])
-        ->name('user.create');
-    Route::post('/', [UserController::class, 'store'])->name('user.store');
+    Route::middleware('guest')->group(function () {
+        Route::get('/login', [UserController::class, 'showLoginForm'])->name('user.login');
+        Route::post('/login', [UserController::class, 'login'])->name('user.login.post');
+        Route::get('/create', [UserController::class, 'create'])->name('user.create');
+        Route::post('/', [UserController::class, 'store'])->name('user.store');
+
+    });
+
+    Route::post('/logout', [AdminController::class, 'logout'])->name('user.logout');
+    // Route::group(['middleware' => ['auth:sanctum']], function () {
+        Route::get('/', [UserController::class, 'index'])->name('user.index');
+    // }); 
 });
 
 Route::group(['prefix' => 'products' ], function() {
@@ -47,7 +52,7 @@ Route::group(['prefix' => 'products' ], function() {
 });
 
 
-Route::group(['prefix' => 'dashboard'], function () {
+Route::group(['prefix' => 'dashboard', 'middleware' => ['adminAuthMiddleware']], function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
     Route::get('/products', [DashboardController::class, 'showProducts'])->name('dashboard.products.index');
     Route::get('/products/edit/{id}', [DashboardController::class, 'editProduct'])->name('dashboard.products.edit');
@@ -55,10 +60,10 @@ Route::group(['prefix' => 'dashboard'], function () {
     Route::get('/create', [DashboardController::class, 'createProduct'])->name('dashboard.products.create');
     Route::post('/store', [DashboardController::class, 'productStore'])->name('dashboard.products.store');
     Route::put('/update', [DashboardController::class, 'productUpdate'])->name('dashboard.products.update');
-
 });
 
 
-Route::get('/api/products', [DashboardController::class, 'show']);
 
-
+Route::get('/get-csrf-token', function () {
+    return response()->json(['csrfToken' => csrf_token()]);
+});

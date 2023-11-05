@@ -19,6 +19,7 @@
                         <div class="text-red-500">{{ emailError }}</div>
                         <input v-model="password" class="bg-[#ECECEC] w-full h-[5vh] my-3 p-5 rounded" type="password" placeholder="Senha" :class="{ 'border-red-500': passwordError }">
                         <div class="text-red-500">{{ passwordError }}</div>
+                        <input type="hidden" name="_token" :value="csrfToken">
                     </div>
 
                     <div class="flex flex-wrap lg:justify-between items-center">
@@ -59,45 +60,69 @@ export default {
             email: '',
             password: '',
             emailError: '',
-            passwordError: ''
+            passwordError: '',
+            csrfToken: '',
         };
+    },
+    mounted() {
+            this.fetchCsrfToken();
     },
     methods: {
         toggleSwitch() {
             this.isSwitchChecked = !this.isSwitchChecked;
         },
-        submitForm() {
+
+        async fetchCsrfToken() {
+            try {
+                const response = await axios.get('/get-csrf-token');
+
+                axios.defaults.headers.common['X-CSRF-TOKEN'] = response.data.csrfToken;
+
+                this.csrfToken = response.data.csrfToken;
+            } catch (error) {
+                console.error('Erro ao buscar o token CSRF:', error);
+            }
+        },
+        async submitForm() {
             this.emailError = '';
             this.passwordError = '';
 
             // Validar campos
             if (!this.email) {
                 this.emailError = 'O campo de email deve ser preenchido.';
+                return;
             }
 
             if (!this.password) {
                 this.passwordError = 'O campo de senha deve ser preenchido.';
-            }
-
-            if (this.emailError || this.passwordError) {
                 return;
             }
 
-            axios.post('/admin/login', {
-                email: this.email,
-                password: this.password
-            })
-            .then(response => {
-                console.log('aaaa', response.data.response.token)
-                if (response.data.response.token) {
-                    window.location.href = '/dashboard';
-                } else {
-                    this.emailError = 'Credenciais inválidas';
-                }
-            })
-            .catch(error => {
-                // Trate os erros do backend aqui, por exemplo, exiba uma mensagem de erro
-            });
+            try {
+                // Realizar a requisição POST
+                const response = await axios.post('/admin/login', {
+                    email: this.email,
+                    password: this.password,
+                    _token: this.csrfToken,
+                });
+
+                // Verificar a resposta do backend
+                // if (response.data.token) {
+                //     // Definir o cabeçalho "X-CSRF-TOKEN" na solicitação de redirecionamento
+                //     axios.get('/dashboard', {
+                //         headers: {
+                //             'X-CSRF-TOKEN': response.data.token
+                //         }
+                //     });
+                // } else {
+                //     // Credenciais inválidas
+                //     this.emailError = 'Credenciais inválidas';
+                // }
+            } catch (error) {
+                // Tratar erros de conexão com o backend
+                console.error('Erro na requisição:', error);
+                // Exiba uma mensagem de erro adequada ao usuário, se necessário
+            }
         }
     }
 }

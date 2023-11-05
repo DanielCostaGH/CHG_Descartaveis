@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ProductRequest;
 use Illuminate\Http\Request;
 use App\Models\Product; // Importe a model Product
+use Illuminate\Auth\AuthenticationException;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class DashboardController extends Controller

@@ -31,25 +31,75 @@ class AdminController extends Controller
 
     public function login(Request $request)
     {
-        $request->validate([
-            'email' => 'required|string',
-            'password' => 'required|string'
-        ]);
-        $admin = Admin::where('email', '=', $request->email)->first();
+        // $request->validate([
+        //     'email' => 'required|string',
+        //     'password' => 'required|string'
+        // ]);
+
+        // $admin = Admin::where('email', '=', $request->email)->first();
+        // if (!$admin || !Hash::check($request->password, $admin->password)) {
+        //     return response([
+        //         'message' => 'Credenciais inválidas'
+        //     ], 401);
+        // }
+
+        // if (!hash_equals($request->session()->token(), $request->input('_token'))) {
+        //     return response([
+        //         'message' => 'Token CSRF inválido'
+        //     ], 401);
+        // }
+
+        // dd(Auth::attempt($request->only(['email', 'password'])));
+
+        // Auth::login($admin);
+        // if (Auth::check()) {
+        //     // O admin está autenticado com sucesso
+        //     $token = $admin->createToken('auth_token');
+        //     $response = [
+        //         'admin' => $admin,
+        //         'token' => $token
+        //     ];
+        //     // return redirect()->route('dashboard.index');
+        //     return response($response)
+        //         ->header('X-CSRF-TOKEN', $request->session()->token());
+
+        // } else {
+        //     // Autenticação falhou
+        //     return response([
+        //         'message' => 'Autenticação falhou'
+        //     ], 401);
+        // }
+        // $admin = Admin::where('email', $request->email)->first();
+        // // dd(Hash::check($request->password, $admin->password));
+        // $credentials = [
+        //     'email' => $admin->email,
+        //     'password' => $admin->password,
+        // ];
+
+        // // dd(Hash::check($request->password, $admin->password));
+        // Auth::login($admin);
+        // dd(Auth::check());    
+
+        // // if (!Hash::check($request->password, $admin->password)) {
+        // //     return redirect()->back()->withErrors('Usuário ou senha inválidos');
+        // // }
+        // // if (!Auth::attempt($credentials) ){
+        // //     dd($request->only(['email', 'password']));
+        // //     return redirect()->back()->withErrors('Usuário ou senha inválidos');
+        // // }
+
+        // return to_route('dashboard.index');
+        $admin = Admin::where('email', $request->email)->first();
+
         if (!$admin || !Hash::check($request->password, $admin->password)) {
-            return response([
-                'message' => 'Credenciais inválidas'
-            ], 401);
+            return redirect()->back()->withErrors('Usuário ou senha inválidos');
         }
-        
 
-        $token = $admin->createToken('auth_token')->plainTextToken;
+        Auth::login($admin);
 
-        $response = [
-            'admin' => $admin,
-            'token' => $token
-        ];
-        return response()->json(['response' => $response]);
+        if (Auth::check()) {
+            return redirect()->route('dashboard.index');
+        }
     }
 
     
