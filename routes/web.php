@@ -42,7 +42,7 @@ Route::group(['prefix' => 'user'], function () {
 });
 
 Route::group(['prefix' => 'products' ], function() {
-    Route::get('/', [ProductsController::class, 'index'])->name('product.name');
+    Route::get('/all', [ProductsController::class, 'index'])->name('product.index');
     Route::get('/{id}', [ProductsController::class, 'show'])->name('product.show');
 });
 
