@@ -3,11 +3,13 @@
 
         <div class="mt-10">
             <v-row justify="space-between" align="center">
-                <v-col>
+                <!-- Use cols="auto" para que esta coluna só tome o espaço necessário -->
+                <v-col cols="auto">
                     <span class="text-h6 ml-2">Melhores produtos!</span>
                 </v-col>
-                <v-col class="text-right">
-                    <v-btn text :href="'/products'">
+                <!-- Defina a largura da segunda coluna para ocupar o espaço restante -->
+                <v-col cols="auto" class="text-right">
+                    <v-btn class="mx-2" text :href="'/products'">
                         Ver Todos
                         <v-icon right>
                             mdi-arrow-right
@@ -16,11 +18,11 @@
                 </v-col>
             </v-row>
         </div>
-        <hr class="border-b-2 border-[#212844] w-1/5 rounded-full my-2" />
+        <hr class="hidden lg:block border-b-2 border-[#212844] w-1/5 rounded-full my-2" />
 
 
         <div class="flex overflow-x-scroll py-8">
-            <v-card v-for="(product, index) in products" :key="index" :loading="loading" class="mx-4" max-width="374">
+            <v-card v-for="(product, index) in products" :key="index" :loading="loading" class="mx-4" max-width="300">
 
                 <v-row align="center" class="mx-2 my-3">
                     <v-rating :model-value="product.rating" color="amber" density="compact" half-increments readonly
@@ -35,7 +37,7 @@
                 <v-img fit height="200" :src="product.image"></v-img>
 
                 <v-card-item class="border-top my-2">
-                    <v-card-title>{{ product.title }}</v-card-title>
+                    <v-card-title class="text-h6 overflow-hidden text--secondary">{{ product.title }}</v-card-title>
                 </v-card-item>
 
                 <v-card-actions class="justify-center">
@@ -65,7 +67,7 @@ export default {
             {
                 title: 'Produto 2',
                 image: '/images/products/1/i2.png',
-                rating: 4.5,
+                rating: 3.5,
                 reviewCount: 413,
             },
             {

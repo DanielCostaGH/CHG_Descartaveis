@@ -6,8 +6,8 @@
             <v-col cols="auto" class="text-center">
                 <v-menu open-on-hover offset-y>
                     <template v-slot:activator="{ on, attrs }">
-                        <v-btn color="#212844" text dark v-bind="attrs" v-on="on">
-                            Todas Categorias
+                        <v-btn href="/products" color="#212844" text dark v-bind="attrs" v-on="on">
+                            Todos os Produtos
                         </v-btn>
                     </template>
 
@@ -43,7 +43,7 @@
                 <v-menu open-on-hover offset-y>
                     <template v-slot:activator="{ on, attrs }">
                         <v-btn color="#212844" text dark v-bind="attrs" v-on="on">
-                            Categorias
+                            Ver Produtos
                         </v-btn>
                     </template>
 
