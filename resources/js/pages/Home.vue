@@ -1,21 +1,22 @@
 <template>
-  <v-app>
-    <navbar />
-    <topics />
-    <!-- <carrousel/> -->
-    <slides />
-    <products />
-    <category_scroll />
-    <top_marcas />
-    <foot />
-  </v-app>
+    <v-app>
+        <navbar />
+        <topics />
+        <!-- <carrousel/> -->
+        <slides />
+        <products />
+        <category_scroll />
+        <top_marcas />
+        <foot />
 
-  <div class="lg:fixed md:fixed sm:hidden bottom-20 right-5 z-50">
-    <a href="https://api.whatsapp.com/send?phone=31980160125" target="_blank">
-      <img :src="wpp" class="h-[6vh] :w-[6-vh] lg:h-[10vh] lg:w-[10-vh] rounded-xl hover hover:shadow"
-        alt="WhatsApp Icon">
-    </a>
-  </div>
+
+        <!-- Botão do WhatsApp flutuante com CSS puro -->
+        <div class="whatsapp-btn">
+            <a href="https://api.whatsapp.com/send?phone=31980160125" target="_blank">
+                <img :src="wpp" alt="WhatsApp Icon">
+            </a>
+        </div>
+    </v-app>
 </template>
 
 <script>
@@ -29,20 +30,60 @@ import foot from '../components/footer.vue';
 import slides from '../components/slides.vue';
 
 export default {
-  data() {
+    data() {
     return {
-      wpp: '/images/wpp2.svg' // Importe a imagem do WhatsApp corretamente
-    };
+      wpp: 'images/wpp2.svg',
+    }
   },
-  components: {
-    navbar,
-    topics,
-    carrousel,
-    products,
-    category_scroll,
-    top_marcas,
-    foot,
-    slides
-  }
+
+    components: {
+        navbar,
+        topics,
+        carrousel,
+        products,
+        category_scroll,
+        top_marcas,
+        foot,
+        slides
+    }
 };
 </script>
+
+
+<style>
+.whatsapp-btn {
+  position: fixed;
+  bottom: 50px;
+  right: 50px;
+  z-index: 1000;
+}
+
+.whatsapp-btn img {
+  height: 6vh;
+  width: 6vh;
+  transition: transform 0.3s;
+}
+
+.whatsapp-btn img:hover {
+  transform: scale(1.1);
+}
+
+@media (min-width: 992px) {
+  .whatsapp-btn img {
+    height: 10vh;
+    width: 10vh;
+  }
+}
+
+@media (max-width: 400px) {
+  .whatsapp-btn {
+    bottom: 10px;
+    right: 10px;
+  }
+
+  .whatsapp-btn img {
+    height: 50px;
+    width: 50px;
+  }
+}
+</style>

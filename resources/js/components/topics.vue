@@ -1,84 +1,84 @@
 <template>
     <v-container fluid class="my-5 py-3 border-y">
 
-      <!-- MODELO DESKTOP -->
-      <v-row class="d-none d-lg-flex justify-center align-center text-lg overflow-hidden">
-        <v-col cols="auto" class="text-center">
-          <v-menu open-on-hover offset-y>
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn color="#212844" text dark v-bind="attrs" v-on="on">
-                Categorias
-              </v-btn>
-            </template>
+        <!-- MODELO DESKTOP -->
+        <v-row class="d-none d-lg-flex justify-center align-center text-lg overflow-hidden">
+            <v-col cols="auto" class="text-center">
+                <v-menu open-on-hover offset-y>
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-btn color="#212844" text dark v-bind="attrs" v-on="on">
+                            Todas Categorias
+                        </v-btn>
+                    </template>
 
-            <v-list>
-              <v-list-item v-for="(item, index) in items" :key="index" link>
-                <v-list-item-content>
-                  <v-list-item-title>{{ item.title }}</v-list-item-title>
-                </v-list-item-content>
-              </v-list-item>
-            </v-list>
-          </v-menu>
-        </v-col>
+                    <v-list>
+                        <v-list-item v-for="(item, index) in items" :key="index" link>
+                            <v-list-item-content>
+                                <v-list-item-title>{{ item.title }}</v-list-item-title>
+                            </v-list-item-content>
+                        </v-list-item>
+                    </v-list>
+                </v-menu>
+            </v-col>
 
-        <v-col cols="auto" v-for="category in ['Saúde', 'Limpeza', 'Alimentação', 'Utilidade']" :key="category">
-          <v-btn text color="grey lighten-5" class="mx-2">
-            {{ category }}
-          </v-btn>
-        </v-col>
+            <v-col cols="auto" v-for="category in ['Saúde', 'Limpeza', 'Alimentação', 'Utilidade']" :key="category">
+                <v-btn text color="blue-grey-lighten-4" class="mx-2">
+                    {{ category }}
+                </v-btn>
+            </v-col>
 
-        <v-col cols="auto">
-          <v-btn text color="grey lighten-5" class="mx-2" :href="'/'">
-            <span class="pr-2">Falar com vendedor</span>
-            <v-icon>
-              mdi-whatsapp
-            </v-icon>
-          </v-btn>
-        </v-col>
-      </v-row>
+            <v-col cols="auto">
+                <v-btn color="green-accent-4" class="mx-2 text-white" :href="'/'">
+                    <span class="pr-2 ">Falar com vendedor</span>
+                    <v-icon>
+                        mdi-whatsapp
+                    </v-icon>
+                </v-btn>
+            </v-col>
+        </v-row>
 
-      <!-- MODELO MOBILE -->
-      <v-row class="d-lg-none justify-center align-center text-lg overflow-x-auto">
-        <v-col cols="12" class="d-flex justify-space-between">
-          <v-menu open-on-hover offset-y>
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn color="#212844" text dark v-bind="attrs" v-on="on">
-                Categorias
-              </v-btn>
-            </template>
+        <!-- MODELO MOBILE -->
+        <v-row class="d-lg-none justify-center align-center text-lg overflow-x-auto">
+            <v-col cols="12" class="d-flex justify-space-between">
+                <v-menu open-on-hover offset-y>
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-btn color="#212844" text dark v-bind="attrs" v-on="on">
+                            Categorias
+                        </v-btn>
+                    </template>
 
-            <v-list>
-              <v-list-item v-for="(item, index) in items" :key="index" link>
-                <v-list-item-content>
-                  <v-list-item-title>{{ item.title }}</v-list-item-title>
-                </v-list-item-content>
-              </v-list-item>
-            </v-list>
-          </v-menu>
+                    <v-list>
+                        <v-list-item v-for="(item, index) in items" :key="index" link>
+                            <v-list-item-content>
+                                <v-list-item-title>{{ item.title }}</v-list-item-title>
+                            </v-list-item-content>
+                        </v-list-item>
+                    </v-list>
+                </v-menu>
 
-          <v-btn text color="grey lighten-5" class="mx-2" :href="'/products'">
-            <span class="pr-2">Whatsapp</span>
-            <v-icon>
-              mdi-whatsapp
-            </v-icon>
-          </v-btn>
-        </v-col>
-      </v-row>
+                <v-btn text color="green-accent-4" class="mx-2 white--text" :href="'/products'">
+                    <span class="pr-2 text-white">Whatsapp</span>
+                    <v-icon class="text-white">
+                        mdi-whatsapp
+                    </v-icon>
+                </v-btn>
+            </v-col>
+        </v-row>
 
     </v-container>
-  </template>
+</template>
 
-  <script>
-  export default {
+<script>
+export default {
     data() {
-      return {
-        items: [
-          { title: 'Click Me' },
-          { title: 'Click Me' },
-          { title: 'Click Me' },
-          { title: 'Click Me 2' },
-        ],
-      };
+        return {
+            items: [
+                { title: 'Click Me' },
+                { title: 'Click Me' },
+                { title: 'Click Me' },
+                { title: 'Click Me 2' },
+            ],
+        };
     },
-  };
-  </script>
+};
+</script>
