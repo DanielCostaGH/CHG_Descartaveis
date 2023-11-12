@@ -5,10 +5,11 @@ import { createVuetify } from 'vuetify'
 import App from './components/App.vue';
 import Home from './pages/Home.vue';
 import '@mdi/font/css/materialdesignicons.css'
-
+import 'vuetify/styles'
 
 const app = createApp();
 app.use(createVuetify())
+
 
 
 // Dashboard
@@ -16,13 +17,13 @@ app.component('app', App);
 
 // Bloco de templates do admin
 import adminLogin from './pages/admin/login.vue';
-import adminIndex from './pages/admin/index.vue'; 
-import adminCreate from './pages/admin/create.vue'; 
+import adminIndex from './pages/admin/index.vue';
+import adminCreate from './pages/admin/create.vue';
 
 // Bloco de templates do user
 import userLogin from './pages/user/login.vue';
-import userIndex from './pages/user/index.vue'; 
-import userCreate from './pages/user/create.vue'; 
+import userIndex from './pages/user/index.vue';
+import userCreate from './pages/user/create.vue';
 
 // Bloco de produtos
 import productsIndex from './pages/products.vue'
@@ -36,14 +37,14 @@ import appearenceIndex from './pages/dashboard/appearence.vue'
 import productCreate from './pages/dashboard/productCreate.vue'
 
 
-app.component('admin-login', adminLogin); 
+app.component('admin-login', adminLogin);
 app.component('admin-index', adminIndex);
 app.component('admin-create', adminCreate);
 
-app.component('user-login', userLogin); 
-app.component('user-index', userIndex); 
-app.component('user-create', userCreate); 
-app.component('home', Home); 
+app.component('user-login', userLogin);
+app.component('user-index', userIndex);
+app.component('user-create', userCreate);
+app.component('home', Home);
 
 app.component('products' , productsIndex);
 app.component('product_details', productDetails);

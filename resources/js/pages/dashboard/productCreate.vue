@@ -20,8 +20,8 @@
                             <label for="productImages" class=" text-gray-700 font-bold mb-2">Imagens</label>
                             <img :src="editedProduct.selectedImage ? editedProduct.selectedImage : defaultImage"
                                 alt="imagem" class="mb-2 mx-auto h-[40vh]" />
-                                <input type="file" id="productImages" name="images[]" class="w-full p-2  rounded" accept="image/*" @change="onImageChange" multiple enctype="multipart/form-data" />
-
+                                <input type="file" id="productImages" class="w-full p-2 border rounded" accept="image/*"
+                                    @change="onImageChange" multiple enctype="multipart/form-data" />
                             <div>
                                 <span class="font-semibold text-gray-700">Imagens do produto:</span>
                                 <ul>
@@ -39,7 +39,7 @@
                                             <img :src="image.url" alt="Imagem do produto"
                                                 class="inline-block w-10 h-10 mx-4 cursor-pointer"
                                                 @click="selectImage(image.url)" />
-                                            <span class="text-gray-800">{{ getImageName(image.url) }}</span>
+                                            <span class="text-gray-800">{{ image.name }}</span>
                                         </div>
 
                                         <div>

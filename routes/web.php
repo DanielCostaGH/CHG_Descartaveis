@@ -18,7 +18,7 @@ Route::group(['prefix' => 'admin'], function () {
         Route::get('/login', [AdminController::class, 'showLoginForm'])->name('admin.login');
         Route::post('/login', [AdminController::class, 'login'])->name('admin.login.post');
     });
-    
+
     Route::post('/logout', [AdminController::class, 'logout'])->name('admin.logout');
 
     Route::group(['midleware' => ['auth:sanctum']], function (){
@@ -54,6 +54,11 @@ Route::group(['prefix' => 'dashboard'], function () {
     Route::get('/appearence', [DashboardController::class, 'appearence'])->name('dashboard.appearence.index');
     Route::get('/create', [DashboardController::class, 'createProduct'])->name('dashboard.products.create');
     Route::post('/store', [DashboardController::class, 'productStore'])->name('dashboard.products.store');
+    Route::put('/update', [DashboardController::class, 'productUpdate'])->name('dashboard.products.update');
 
 });
+
+
+Route::get('/api/products', [DashboardController::class, 'show']);
+
 

@@ -91,18 +91,18 @@ export default {
             prevEl: '.custom-prev',
         };
 
-        
+
         return {
             modules: [Navigation, Pagination, Mousewheel, Keyboard, Autoplay],
             navigationOptions,
-            image1: '/images/1/i1.png',
-            image2: '/images/1/i2.png',
-            image3: '/images/1/i3.png',
-            image4: '/images/1/i4.png',
-            image5: '/images/1/i5.png',
+            image1: '/images/slides/i1.png',
+            image2: '/images/slides/i2.png',
+            image3: '/images/slides/i3.png',
+            image4: '/images/slides/i4.png',
+            image5: '/images/slides/i5.png',
         };
     },
 };
 </script>
-  
+
 

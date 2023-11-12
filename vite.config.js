@@ -2,9 +2,10 @@ import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
 import vue from '@vitejs/plugin-vue'
 import vuetify from 'vite-plugin-vuetify'
+import VueRouter from 'vue-router';
 
 export default defineConfig({
-    
+
     plugins: [
         vue(),
         laravel({
@@ -18,7 +19,7 @@ export default defineConfig({
             vue: 'vue/dist/vue.esm-bundler.js'
         }
     },
-    server: { 
+    server: {
         hmr: {
             host: 'localhost',
         },

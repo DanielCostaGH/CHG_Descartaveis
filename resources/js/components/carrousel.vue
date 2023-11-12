@@ -29,11 +29,11 @@ export default {
     return {
       slides: ['First', 'Second', 'Third', 'Fourth', 'Fifth'],
       images: [
-        '/images/1/i1.png',
-        '/images/1/i2.png',
-        '/images/1/i3.png',
-        '/images/1/i4.png',
-        '/images/1/i5.png',
+        '/images/slides/i1.png',
+        '/images/slides/i2.png',
+        '/images/slides/i3.png',
+        '/images/slides/i4.png',
+        '/images/slides/i5.png',
       ],
     };
   },

@@ -1,99 +1,84 @@
 <template>
-    <div class="container mx-auto flex flex-col my-5 py-3 border-y">
+    <v-container fluid class="my-5 py-3 border-y">
 
-        <!-- MODELO DESKTOP -->
+      <!-- MODELO DESKTOP -->
+      <v-row class="d-none d-lg-flex justify-center align-center text-lg overflow-hidden">
+        <v-col cols="auto" class="text-center">
+          <v-menu open-on-hover offset-y>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn color="#212844" text dark v-bind="attrs" v-on="on">
+                Categorias
+              </v-btn>
+            </template>
 
-        <section class="lg:flex hidden w-full justify-between items-center text-lg overflow-hidden">
+            <v-list>
+              <v-list-item v-for="(item, index) in items" :key="index" link>
+                <v-list-item-content>
+                  <v-list-item-title>{{ item.title }}</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+        </v-col>
 
-            <div class="text-center">
-                <v-menu open-on-hover>
-                    <template v-slot:activator="{ props }">
-                        <button
-                            class="bg-[#212844] text-white rounded-lg py-2 px-5 cursor-pointer shadow hover:text-[#212844] hover:bg-[#D8E1E4] hover:duration-300"
-                            v-bind="props">
-                            Categorias
-                        </button>
-                    </template>
+        <v-col cols="auto" v-for="category in ['Saúde', 'Limpeza', 'Alimentação', 'Utilidade']" :key="category">
+          <v-btn text color="grey lighten-5" class="mx-2">
+            {{ category }}
+          </v-btn>
+        </v-col>
 
-                    <v-list class="h-[100vh] w-[100vh]"> <!-- Definindo largura e altura -->
-                        <v-list-item v-for="(item, index) in items" :key="index">
-                            <v-list-item-title><a href="/{{ item.title }}">{{ item.title }}</a></v-list-item-title>
-                        </v-list-item>
-                    </v-list>
-                </v-menu>
-            </div>
+        <v-col cols="auto">
+          <v-btn text color="grey lighten-5" class="mx-2" :href="'/'">
+            <span class="pr-2">Falar com vendedor</span>
+            <v-icon>
+              mdi-whatsapp
+            </v-icon>
+          </v-btn>
+        </v-col>
+      </v-row>
 
-            <div class="rounded-lg py-2 px-5 cursor-pointer bg-[#F3F9FB] shadow hover hover:bg-[#D8E1E4]">
-                <a class="cursor-pointer" href="#">Saúde</a>
-            </div>
+      <!-- MODELO MOBILE -->
+      <v-row class="d-lg-none justify-center align-center text-lg overflow-x-auto">
+        <v-col cols="12" class="d-flex justify-space-between">
+          <v-menu open-on-hover offset-y>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn color="#212844" text dark v-bind="attrs" v-on="on">
+                Categorias
+              </v-btn>
+            </template>
 
-            <div class="rounded-lg py-2 px-5 cursor-pointer bg-[#F3F9FB] shadow hover hover:bg-[#D8E1E4]">
-                <a class="cursor-pointer" href="#">Limpeza</a>
-            </div>
+            <v-list>
+              <v-list-item v-for="(item, index) in items" :key="index" link>
+                <v-list-item-content>
+                  <v-list-item-title>{{ item.title }}</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+            </v-list>
+          </v-menu>
 
-            <div class="rounded-lg py-2 px-5 cursor-pointer bg-[#F3F9FB] shadow hover hover:bg-[#D8E1E4]">
-                <a class="cursor-pointer" href="#">Alimentação</a>
-            </div>
+          <v-btn text color="grey lighten-5" class="mx-2" :href="'/products'">
+            <span class="pr-2">Whatsapp</span>
+            <v-icon>
+              mdi-whatsapp
+            </v-icon>
+          </v-btn>
+        </v-col>
+      </v-row>
 
-            <div class="rounded-lg py-2 px-5 cursor-pointer bg-[#F3F9FB] shadow hover hover:bg-[#D8E1E4]">
-                <a href="#">Utilidade</a>
-            </div>
+    </v-container>
+  </template>
 
-            <a href="/"
-                class="flex items-center border-2 border-green-600 rounded-lg py-2 px-5 cursor-pointer bg-[#F3F9FB] shadow hover hover:bg-[#D8E1E4]">
-                <span class="px-4" href="#">Falar com vendedor</span>
-                <v-icon>
-                    <img :src="whatsapp" alt="">
-                </v-icon>
-            </a>
-        </section>
-
-
-        <!-- MODELO MOBILE -->
-
-        <section class="flex lg:hidden w-full justify-between items-center text-lg overflow-scroll">
-            <div class="text-center mx-2">
-                <v-menu open-on-hover>
-                    <template v-slot:activator="{ props }">
-                        <button href="/products"
-                            class="bg-[#212844] text-white rounded-lg py-2 px-5 cursor-pointer shadow hover:text-[#212844] hover:bg-[#D8E1E4] hover:duration-300">
-                            Categorias
-                        </button>
-                    </template>
-
-                    <v-list class="h-[100vh] w-[100vh]"> <!-- Definindo largura e altura -->
-                        <v-list-item v-for="(item, index) in items" :key="index">
-                            <v-list-item-title><a href="/{{ item.title }}">{{ item.title }}</a></v-list-item-title>
-                        </v-list-item>
-                    </v-list>
-                </v-menu>
-            </div>
-
-            <a href="/products"
-                class="flex items-center border-2 border-green-600 rounded-lg py-2 px-2 mx-2 cursor-pointer bg-[#F3F9FB] shadow hover hover:bg-[#D8E1E4]">
-                <span class="px-2" href="#">Falar com vendedor</span>
-                <v-icon>
-                    <img :src="whatsapp" alt="">
-                </v-icon>
-            </a>
-        </section>
-
-    </div>
-</template>
-  
-<script>
-export default {
+  <script>
+  export default {
     data() {
-        return {
-            whatsapp: '/images/whatsapp.svg',
-            items: [
-                { title: 'Click Me' },
-                { title: 'Click Me' },
-                { title: 'Click Me' },
-                { title: 'Click Me 2' },
-            ],
-        };
+      return {
+        items: [
+          { title: 'Click Me' },
+          { title: 'Click Me' },
+          { title: 'Click Me' },
+          { title: 'Click Me 2' },
+        ],
+      };
     },
-};
-</script>
-  
+  };
+  </script>
