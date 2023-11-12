@@ -87,14 +87,13 @@ export default {
                 email: this.email,
                 password: this.password
             })
-            .then(response => {
-                console.log('aaaa', response.data.response.token)
-                if (response.data.response.token) {
-                    window.location.href = '/dashboard';
-                } else {
-                    this.emailError = 'Credenciais inválidas';
-                }
-            })
+            // .then(response => {
+            //     if (response.data.response.token) {
+            //         window.location.href = '/dashboard';
+            //     } else {
+            //         this.emailError = 'Credenciais inválidas';
+            //     }
+            // })
             .catch(error => {
                 // Trate os erros do backend aqui, por exemplo, exiba uma mensagem de erro
             });

@@ -33,23 +33,18 @@ class AdminController extends Controller
     {
         $request->validate([
             'email' => 'required|string',
-            'password' => 'required|string'
+            'password' => 'required|string',
         ]);
-        $admin = Admin::where('email', '=', $request->email)->first();
-        if (!$admin || !Hash::check($request->password, $admin->password)) {
-            return response([
-                'message' => 'Credenciais inválidas'
-            ], 401);
+
+        if (Auth::guard('admin')->attempt($request->only('email', 'password'))) {
+            $admin = Admin::where('email', $request->email)->first();
+            $token = $admin->createToken('auth_token')->accessToken;
+
+            $response = ['admin' => $admin, 'token' => $token];
+            return response()->json($response, 200);
         }
-        
 
-        $token = $admin->createToken('auth_token')->plainTextToken;
-
-        $response = [
-            'admin' => $admin,
-            'token' => $token
-        ];
-        return response()->json(['response' => $response]);
+        return redirect()->route('admin.login')->with('message', 'Credenciais inválidas');
     }
 
     
