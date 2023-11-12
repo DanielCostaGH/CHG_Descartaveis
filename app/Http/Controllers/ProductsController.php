@@ -51,15 +51,21 @@ class ProductsController extends Controller
     public function show($id)
     {
         $product = Product::find($id);
-    
+
         if (!$product) {
             abort(404); // Redireciona para a página de erro 404 se o produto não for encontrado.
         }
-    
+
         return view('products.product_details', compact('product'));
     }
 
-    
+
+    public function getAvailableProducts(){
+        $activeProducts = Product::getAvailableProducts();
+        return response()->json($activeProducts);
+    }
+
+
 
     /**
      * Show the form for editing the specified resource.

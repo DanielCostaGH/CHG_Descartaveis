@@ -1,25 +1,4 @@
-<script>
-import navbar from '../components/navbar/navbar.vue';
-import filters from '../components/filters.vue'
-import cards from '../components/card-products.vue'
-import foot from '../components/footer.vue'
 
-export default {
-  data() {
-    return {
-    
-    }
-  },
-  
-  components: {
-   navbar,
-   filters,
-   cards,
-   foot,
-
-  },
-}
-</script>
 
 
 <template>
@@ -33,6 +12,28 @@ export default {
 
 </template>
 
+<script>
+import navbar from '../components/navbar/navbar.vue';
+import filters from '../components/filters.vue'
+import cards from '../components/card-products.vue'
+import foot from '../components/footer.vue'
+
+export default {
+  data() {
+    return {
+
+    }
+  },
+
+  components: {
+   navbar,
+   filters,
+   cards,
+   foot,
+
+  },
+}
+</script>
 
 <style>
 

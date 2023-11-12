@@ -60,5 +60,7 @@ Route::group(['prefix' => 'dashboard'], function () {
 
 
 Route::get('/api/products', [DashboardController::class, 'show']);
+Route::get('/api/products/active', [DashboardController::class, 'show']);
+
 
 
