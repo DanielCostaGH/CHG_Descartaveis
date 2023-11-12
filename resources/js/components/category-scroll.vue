@@ -1,147 +1,152 @@
-
-
 <template>
-    <div class="container mx-auto my-10  hidden lg:block">
-        <div class="container flex justify-between">
-            <span class="text-xl">
-                Principais categorias!
-            </span>
+    <div class="container mx-auto my-10">
+        <!-- Seção para desktop -->
+        <div class="d-none d-lg-flex flex-column">
+            <v-row justify="space-between" align="center">
+                <!-- Use cols="auto" para que esta coluna só tome o espaço necessário -->
+                <v-col cols="auto">
+                    <span class="text-h6 ml-2">Melhores Categorias!</span>
+                </v-col>
+                <!-- Defina a largura da segunda coluna para ocupar o espaço restante -->
+                <v-col cols="auto" class="text-right">
+                    <v-btn class="mx-2" text :href="'/products'">
+                        Ver Todos
+                        <v-icon right>
+                            mdi-arrow-right
+                        </v-icon>
+                    </v-btn>
+                </v-col>
+            </v-row>
+            <hr class="hidden lg:block border-b-2 border-[#212844] w-1/5 rounded-full my-2" />
 
+            <div class="d-flex justify-space-between my-10">
+                <!-- Itens das categorias para desktop -->
+                <div v-for="category in categories" :key="'mobile-' + category.name" class="mx-3 text-center">
+                    <v-sheet class="d-flex justify-center align-center overflow-hidden" tile shaped>
+
+                        <a :href="`products/${category.name}`">
+                            <v-avatar size="208" color="grey-lighten-1 border-lg">
+                                <img :src="category.image" :alt="category.name" class="fill-avatar">
+                            </v-avatar>
+                        </a>
+                    </v-sheet>
+                    <span class="font-weight-bold grey--text">{{ category.name }}</span>
+                </div>
+            </div>
         </div>
-        <hr class="border-b-2 border-[#212844] w-1/5 rounded-full my-3" />
 
-        <div class="flex justify-between my-10 text-xl overflow-hidden">
-            
-            <a class="text-center cursor-pointer mx-3">
-                <div class="w-52 h-52 rounded-full border shadow hover:shadow-lg hover:duration:500 mb-5 overflow-hidden flex justify-center items-center">
-                    <img src="" alt="">
-                </div> 
 
-                <span class="font-bold text-gray-500">Categoria</span>
-            </a>
 
-            <a class="text-center cursor-pointer mx-3">
-                <div
-                    class="w-52 h-52 rounded-full border shadow hover:shadow-lg hover:duration:500 mb-5">
-                </div> 
 
-                <span class="font-bold text-gray-500">Categoria</span>
-            </a>
 
-            <a class="text-center cursor-pointer mx-3">
-                <div
-                    class="w-52 h-52 rounded-full border shadow hover:shadow-lg hover:duration:500 mb-5">
-                </div> 
 
-                <span class="font-bold text-gray-500">Categoria</span>
-            </a>
+        <!-- Seção para mobile -->
+        <div class="d-lg-none">
+            <v-row justify="space-between" align="center">
+                <!-- Use cols="auto" para que esta coluna só tome o espaço necessário -->
+                <v-col cols="auto">
+                    <span class="text-h6 ml-2">Top Categorias!</span>
+                </v-col>
+                <!-- Defina a largura da segunda coluna para ocupar o espaço restante -->
+                <v-col cols="auto" class="text-right">
+                    <v-btn class="mx-2" text :href="'/products'">
+                        Ver Todos
+                        <v-icon right>
+                            mdi-arrow-right
+                        </v-icon>
+                    </v-btn>
+                </v-col>
+            </v-row>
 
-            <a class="text-center cursor-pointer mx-3">
-                <div
-                    class="w-52 h-52 rounded-full border shadow hover:shadow-lg hover:duration:500 mb-5">
-                </div> 
 
-                <span class="font-bold text-gray-500">Categoria</span>
-            </a>
+            <div class="d-flex overflow-x-auto py-8">
+                <!-- Itens das categorias para mobile -->
+                <div v-for="category in categories" :key="'mobile-' + category.name" class="mx-3 text-center">
+                    <v-sheet class="d-flex justify-center align-center overflow-hidden" tile shaped>
 
-            <a class="text-center cursor-pointer mx-3">
-                <div
-                    class="w-52 h-52 rounded-full border shadow hover:shadow-lg hover:duration:500 mb-5">
-                </div> 
-
-                <span class="font-bold text-gray-500">Categoria</span>
-            </a>
-
-            
+                        <a :href="`products/${category.name}`">
+                            <v-avatar size="208" color="grey lighten-4">
+                                <img :src="category.image" :alt="category.name" class="fill-avatar">
+                            </v-avatar>
+                        </a>
+                    </v-sheet>
+                    <span class="font-weight-bold grey--text">{{ category.name }}</span>
+                </div>
+            </div>
         </div>
     </div>
-
-
-
-
-    <!-- MOBILE SECTION -->
-
-    <div class="container mx-auto px-2 lg:hidden">
-        <div class="flex justify-between">
-            <span class="text-xl">
-                Melhores Categorias!
-            </span>
-            <a class="flex items-center cursor-pointer">
-                <span class="px-4">Ver Todos</span>
-                <v-icon><img :src="simple_arrow" alt=""></v-icon>
-            </a>
-        </div>
-        <hr class="border-b-2 border-[#212844] w-3/5 rounded-full my-2" />
-
-        <div class="flex overflow-x-scroll overflow-y-hidden h-[35vh] items-center">
-
-            <a class="text-center cursor-pointer mx-3">
-                <div
-                    class="w-52 h-52 rounded-full border shadow-lg mb-5">
-                </div> 
-
-                <span class="font-bold text-gray-500">Categoria</span>
-            </a>
-
-            <a class="text-center cursor-pointer mx-3">
-                <div
-                    class="w-52 h-52 rounded-full border shadow-lg mb-5">
-                </div> 
-
-                <span class="font-bold text-gray-500">Categoria</span>
-            </a>
-
-            <a class="text-center cursor-pointer mx-3">
-                <div
-                    class="w-52 h-52 rounded-full border shadow-lg mb-5">
-                </div> 
-
-                <span class="font-bold text-gray-500">Categoria</span>
-            </a>
-           
-            <a class="text-center cursor-pointer mx-3">
-                <div
-                    class="w-52 h-52 rounded-full border shadow-lg mb-5">
-                </div> 
-
-                <span class="font-bold text-gray-500">Categoria</span>
-            </a>
-
-            <a class="text-center cursor-pointer mx-3">
-                <div
-                    class="w-52 h-52 rounded-full border shadow-lg mb-5">
-                </div> 
-
-                <span class="font-bold text-gray-500">Categoria</span>
-            </a>
-
-            
-        
-
-
-
-            
-
-            
-
-        
-
-        </div>
-
-
-    </div>
-
-
-
 </template>
 
-
 <script>
-export default{
+export default {
+
+
     data() {
-    return {
-        simple_arrow: '/images/simple_arrow.svg',
-    }
-},
+        return {
+            categories: [
+                { name: 'Tecnologia', image: '/images/Categorias/c1.png' },
+                { name: 'Gastronomia', image: '/images/Categorias/c2.jpg' },
+                { name: 'Esportes', image: '/images/Categorias/c3.jpeg' },
+                { name: 'Moda', image: '/images/Categorias/c4.jpg' },
+                { name: 'Viagem', image: '/images/Categorias/c5.jpeg' },
+            ],
+        };
+
+    },
+    methods: {
+        goToCategory(categoryName) {
+            this.$router.push(`/products/category/${categoryName}`);
+        },
+    },
+
+
 };
 </script>
+
+
+<style>
+.fill-avatar {
+    object-fit: cover;
+    border-radius: 50%;
+    width: 100%;
+    height: 100%;
+    min-width: 100%;
+    min-height: 100%;
+    object-position: center;
+}
+
+
+
+.btn-reset {
+    padding: 0;
+    /* Remove padding */
+    min-width: 0;
+    /* Remove a largura mínima do botão */
+    margin: 0;
+    /* Remove margin */
+    box-shadow: none;
+    /* Remove sombra */
+    border: none;
+    /* Remove borda */
+}
+
+.btn-reset>.v-btn__content {
+    padding: 0 !important;
+    color: transparent;
+    border: none;
+}
+
+.btn-no-hover::before,
+.btn-no-hover::after {
+    background-color: transparent !important;
+}
+
+.btn-no-hover:hover,
+.btn-no-hover:focus,
+.btn-no-hover:active {
+    background-color: transparent !important;
+    box-shadow: none !important;
+    border: none;
+    color: transparent;
+}
+</style>

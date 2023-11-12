@@ -50,7 +50,7 @@ Route::group(['prefix' => 'admin'], function () {
         Route::get('/login', [AdminController::class, 'showLoginForm'])->name('login');
         Route::post('/login', [AdminController::class, 'login'])->name('admin.login.post');
     });
-    
+
     Route::post('/logout', [AdminController::class, 'logout'])->name('admin.logout');
 
     Route::group(['middleware' => ['auth:sanctum']], function (){
@@ -93,10 +93,15 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['adminAuthMiddleware']],
     Route::get('/create', [DashboardController::class, 'createProduct'])->name('dashboard.products.create');
     Route::post('/store', [DashboardController::class, 'productStore'])->name('dashboard.products.store');
     Route::put('/update', [DashboardController::class, 'productUpdate'])->name('dashboard.products.update');
+
 });
 
 
+Route::get('/api/products', [DashboardController::class, 'show']);
 
 Route::get('/get-csrf-token', function () {
     return response()->json(['csrfToken' => csrf_token()]);
 });
+
+
+
