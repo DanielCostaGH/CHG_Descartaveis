@@ -1,30 +1,21 @@
+const defaultTheme = require('tailwindcss/defaultTheme');
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: [
-    "./resources/**/*.blade.php",
-    "./resources/**/*.js",
-    "./resources/**/*.vue",
-  ],
-  theme: {
-    extend: {
+    content: [
+        './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
+        './storage/framework/views/*.php',
+        './resources/views/**/*.blade.php',
+        './resources/js/**/*.vue',
+    ],
 
-      boxShadow: {
-        'xlx':  '1px 0 10px rgba(0, 0, 0, 0.1), 1px 0 10px rgba(0, 0, 0, 0.1)',
-      },
-
-      colors: {
-        'blue_gradient': {
-          'light': '#6BAAFC',
-          'dark': '#305FEC',
+    theme: {
+        extend: {
+            fontFamily: {
+                sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+            },
         },
-        'purple_gradient': {
-          'light': '#D623FE',
-          'dark': '#A530F2',
-        },
-      },
     },
-  },
-  plugins: [],
-}
 
-
+    plugins: [require('@tailwindcss/forms')],
+};
