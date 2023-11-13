@@ -9,7 +9,7 @@
                 </v-col>
                 <!-- Defina a largura da segunda coluna para ocupar o espaço restante -->
                 <v-col cols="auto" class="text-right">
-                    <v-btn class="mx-2" text :href="'/products'">
+                    <v-btn class="mr-2" text :href="'/products'">
                         Ver Todos
                         <v-icon right>
                             mdi-arrow-right
@@ -31,7 +31,6 @@
                         {{ product.rating }} ({{ product.reviewCount }})
                     </div>
 
-                    <v-icon class="ml-15">mdi-heart</v-icon>
                 </v-row>
 
                 <v-img fit height="200" :src="product.image"></v-img>
