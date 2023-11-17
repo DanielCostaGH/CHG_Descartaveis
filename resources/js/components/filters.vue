@@ -10,20 +10,22 @@
             </v-col>
 
             <v-col cols="12" md="3">
-                <v-autocomplete v-model="selectedCategories" :items="categories" label="Categorias" clearable chips
+                <v-autocomplete v-model="selectedCategories" :items="categories" label="Categorias" variant="solo" chips
                     small-chips multiple class="pa-0" :menu-props="{ maxHeight: '300' }" hide-details
                     return-object></v-autocomplete>
             </v-col>
 
             <v-col cols="12" md="3">
-                <v-autocomplete v-model="selectedColors" :items="colors" label="Cor" clearable chips small-chips multiple
+                <v-autocomplete v-model="selectedColors" :items="colors" label="Cor"  variant="solo" chips small-chips multiple
                     class="pa-0" :menu-props="{ maxHeight: '300' }" hide-details return-object></v-autocomplete>
             </v-col>
 
 
 
             <v-col cols="12" md="3">
-                <v-btn color="indigo" dark class="width-100" @click="applyFilter">Pesquisar</v-btn>
+                <v-btn color="indigo" dark class="width-100" @click="applyFilter">
+                    <v-icon class="mr-3">mdi-layers-search</v-icon>
+                    Pesquisar</v-btn>
             </v-col>
         </v-row>
     </div>
@@ -60,13 +62,13 @@
                         </v-col>
 
                         <v-col cols="12" md="3">
-                            <v-autocomplete v-model="selectedCategories" :items="categories" label="Categorias" clearable
+                            <v-autocomplete v-model="selectedCategories" :items="categories" label="Categorias"  variant="solo"
                                 chips small-chips multiple class="pa-0" :menu-props="{ maxHeight: '300' }" hide-details
                                 return-object></v-autocomplete>
                         </v-col>
 
                         <v-col cols="12" md="3">
-                            <v-autocomplete v-model="selectedColors" :items="colors" label="Cor" clearable chips small-chips
+                            <v-autocomplete v-model="selectedColors" :items="colors" label="Cor"  variant="solo"  chips small-chips
                                 multiple class="pa-0" :menu-props="{ maxHeight: '300' }" hide-details
                                 return-object></v-autocomplete>
                         </v-col>

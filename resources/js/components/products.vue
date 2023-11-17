@@ -3,11 +3,9 @@
 
         <div class="mt-10">
             <v-row justify="space-between" align="center">
-                <!-- Use cols="auto" para que esta coluna só tome o espaço necessário -->
                 <v-col cols="auto">
                     <span class="text-h6 ml-2">Melhores produtos!</span>
                 </v-col>
-                <!-- Defina a largura da segunda coluna para ocupar o espaço restante -->
                 <v-col cols="auto" class="text-right">
                     <v-btn class="mr-2" text :href="'/products'">
                         Ver Todos
@@ -40,11 +38,11 @@
                 </v-card-item>
 
                 <v-card-actions class="justify-center">
-                    <v-btn class="my-custom-button" color="indigo" variant="flat">
+                    <v-btn  class="my-custom-button text-white" color="green-accent-4" variant="flat">
                         <v-icon class="mx-2">
-                            mdi-cart
+                            mdi-eye
                         </v-icon>
-                        Adicionar ao carrinho
+                        Ver detahes do produto
                     </v-btn>
                 </v-card-actions>
             </v-card>

@@ -20,11 +20,11 @@
                 </v-card-item>
 
                 <v-card-actions class="justify-center">
-                    <v-btn class="my-custom-button" color="indigo" variant="flat">
+                <v-btn :href="`products/${product.id}`"  class="my-custom-button text-white" color="green-accent-4" variant="flat">
                         <v-icon class="mx-2">
-                            mdi-cart
+                            mdi-eye
                         </v-icon>
-                        Adicionar ao carrinho
+                        Ver Detalhes do Produto
                     </v-btn>
                 </v-card-actions>
             </v-card>
@@ -70,7 +70,7 @@ export default {
                     console.error('There was an error fetching the products:', error);
                 })
                 .finally(() => {
-                    this.loading = false; // Certifique-se de definir 'loading' como false após a conclusão da solicitação
+                    this.loading = false;
                 });
         },
     },

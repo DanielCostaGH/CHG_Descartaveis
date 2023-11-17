@@ -43,9 +43,9 @@
                 <v-card-actions class="justify-center">
                     <v-btn class="my-custom-button" color="indigo" variant="flat">
                         <v-icon class="mx-2">
-                            mdi-cart
+                            mdi-eye
                         </v-icon>
-                        Adicionar ao carrinho
+                        Ver produto
                     </v-btn>
                 </v-card-actions>
             </v-card>
