@@ -83,7 +83,7 @@ export default {
                 return;
             }
 
-            axios.post('/admin/login', {
+            axios.post('/user/login', {
                 email: this.email,
                 password: this.password
             })

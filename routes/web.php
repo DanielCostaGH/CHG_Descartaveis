@@ -32,10 +32,16 @@ Route::group(['prefix' => 'admin'], function () {
 });
 
 
-Route::group(['prefix' => 'user'], function () {
+Route::get('/user/login', [UserController::class, 'showLoginForm'])->name('user.login');
+Route::post('user/login', [UserController::class, 'login'])->name('user.login.post');
+
+
+
+
+Route::group(['prefix' => 'user', 'middleware' => 'UserAuthMiddleware'], function () {
     Route::get('/', [UserController::class, 'index'])->name('user.name');
-    Route::get('/login', [UserController::class, 'showLoginForm'])->name('user.login');
-    Route::post('/login', [UserController::class, 'login'])->name('user.login.post');
+    Route::put('/update_basic/{id}', [UserController::class, 'updateBasic'])->name('user.update_basic');
+    Route::post('/add_address/{id}', [UserController::class, 'addAddress'])->name('user.add_address');
     Route::get('/create', [UserController::class, 'create'])
         ->name('user.create');
     Route::post('/', [UserController::class, 'store'])->name('user.store');

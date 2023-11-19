@@ -87,7 +87,7 @@
 
 
             <section class="w-3/4 h-full">
-                <component :is="selectedComponent" />
+                <component :is="selectedComponent" :user-data="userData" />
             </section>
         </main>
     </div>
@@ -104,7 +104,16 @@ export default {
     data() {
         return {
             selectedComponent: userInfo,
+            userData: {}, 
         };
+    },
+    props: {
+        userData: {
+            type: [Object],
+        },
+        userAddresses: {
+            type: Array,
+        },
     },
     components: {
         navbar,
@@ -112,6 +121,9 @@ export default {
         userAddress,
         userFavorites,
         userRequests,
+    },
+    mounted() {
+        console.log(this.userAddresses);
     },
     methods: {
         selectComponent(componentName) {
