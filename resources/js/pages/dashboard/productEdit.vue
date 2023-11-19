@@ -6,195 +6,158 @@
                 <painel />
             </header>
 
-            <!-- Conteúdo de edição do produto -->
-            <div class="bg-white p-4 rounded shadow max-h-[80vh] overflow-scroll">
-                <h2 class="text-2xl font-bold text-gray-800 mb-4">Editar Produto</h2>
+            <!-- Área Principal -->
+            <v-row class="bg-white rounded-lg">
+                <v-col cols="12">
+                    <h2 class="text-h6">Produto: {{ editedProduct.name }}</h2>
+                </v-col>
 
-                <!-- Formulário de edição do produto -->
-                <form @submit.prevent="updateProduct" action="/dashboard/update" method="PUT" enctype="multipart/form-data">
-                    <div class="flex flex-wrap justify-around">
+                <v-row>
+                    <!-- Coluna Esquerda: Upload e Visualização de Imagem -->
+                    <v-col cols="12" md="6">
+                        <v-card>
+                            <v-img :src="selectedImage" aspect-ratio="1.5"></v-img>
+                            <v-card-actions>
+                                <v-file-input v-model="newImage" label="Escolher imagem" @change="uploadImage"
+                                    outlined></v-file-input>
+                                <v-btn color="primary" @click="addImage" class="ml-2">Adicionar Imagem</v-btn>
+                            </v-card-actions>
 
-                        <!-- CAMPO DA IMAGEM -->
-                        <div class="max-h-[90vh] max-w-[50vh]" style="scrollbar-width: none; -ms-overflow-style: none;">
-                            <label for="productImages" class="block text-gray-700 font-bold mb-2">Imagens</label>
-                            <div v-for="(image, index) in getImageUrls(editedProduct.images)" :key="index">
-                                <img :src="image" alt="Imagem do produto" class="inline-block w-10 h-10 mx-4 cursor-pointer"
-                                    @click="selectImage(image)" />
-                            </div>
-                            <input type="file" id="productImages" class="w-full p-2 border rounded" accept="image/*"
-                                @change="onImageChange" multiple enctype="multipart/form-data" />
-                            <div>
-                                <span class="font-semibold text-gray-700">Imagens do produto:</span>
-                                <ul>
-                                    <li v-for="(image, index) in editedProduct.images" :key="index"
-                                        class="flex items-center justify-between my-3 px-1 py-2 border-b hover hover:shadow">
-                                        <div>
-                                            <button @click="moveImageUp(index)" type="button" class="text-blue-500 mx-1">
-                                                <img :src="up_arrow" alt="seta subir" />
-                                            </button>
+                        </v-card>
+                    </v-col>
 
-                                            <button @click="moveImageDown(index)" type="button" class="text-blue-500 mx-1">
-                                                <img :src="down_arrow" alt="seta descer" />
-                                            </button>
+                    <!-- Coluna Direita: Lista de Imagens Selecionadas -->
+                    <v-col cols="12" md="6">
+                        <v-list dense>
+                            <v-subheader>Imagens Selecionadas</v-subheader>
+                            <v-list-item v-for="(image, index) in images" :key="index" @click="selectImage(image)">
 
-                                            <img :src="image" alt="Imagem do produto"
-                                                class="inline-block w-10 h-10 mx-4 cursor-pointer"
-                                                @click="selectImage(image)" />
-                                            <span class="text-gray-800">{{ getImageName(image) }}</span>
-                                        </div>
+                                <div class="flex justify-between">
+                                    <div class="flex items-center">
+                                        <v-avatar size="80"><v-img :src="image.src"></v-img></v-avatar>
 
-                                        <div>
-                                            <button @click="removeImage(index)" type="button" class="ml-2">
-                                                <img :src="close" alt="" />
-                                            </button>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
+                                        <v-list-item-content class="mx-10">
+                                            <v-list-item-title>{{ image.name }}</v-list-item-title>
+                                        </v-list-item-content>
+                                    </div>
 
-                        <!-- CAMPOS DO FORMULÁRIO -->
-                        <div class="w-2/6">
-                            <div class="mb-4">
-                                <label for="productName" class="block text-gray-700 font-bold mb-2">Nome do Produto</label>
-                                <input type="text" id="productName" v-model="editedProduct.name"
-                                    class="w-full p-2 border rounded" placeholder="Nome do Produto" />
-                            </div>
-
-                            <div class="mb-4">
-                                <label for="productDescription" class="block text-gray-700 font-bold mb-2">Descrição</label>
-                                <textarea id="productDescription" v-model="editedProduct.description"
-                                    class="w-full p-2 border rounded" rows="4"
-                                    placeholder="Descrição do Produto"></textarea>
-                            </div>
-                            <div class="mb-4">
-                                <label for="productPrice" class="block text-gray-700 font-bold mb-2">Preço</label>
-                                <input type="number" step="0.01" id="productPrice" v-model="editedProduct.price"
-                                    class="w-full p-2 border rounded" placeholder="Preço" />
-                            </div>
-
-                            <div class="mb-4">
-                                <label for="productBrand" class="block text-gray-700 font-bold mb-2">Marca</label>
-                                <input type="text" id="productBrand" v-model="editedProduct.brand"
-                                    class="w-full p-2 border rounded" placeholder="Marca" />
-                            </div>
-
-                            <!-- Nova seção para adicionar cores -->
-                            <div class="mb-4">
-                                <label class="block text-gray-700 font-bold mb-2">Cores Disponíveis</label>
-                                <div v-for="(color, index) in editedProduct.colors" :key="index"
-                                    class="flex items-center mb-2 max-h-[10vh] overflow-scroll">
-                                    <div class="w-8 h-8 mr-2" :style="{ backgroundColor: color }"></div>
-                                    <span class="text-gray-800">{{ color }}</span>
-                                    <button @click="removeColor(index)" type="button" class="ml-2 text-red-500">
-                                        <img :src="close" alt="" />
-                                    </button>
+                                    <v-list-item-action class="mx-10">
+                                        <v-btn icon @click="removeImage(index)">
+                                            <v-icon>mdi-delete</v-icon>
+                                        </v-btn>
+                                    </v-list-item-action>
                                 </div>
-                                <button @click="addColor"
-                                    class="bg-blue-500 text-white hover:bg-blue-600 py-2 px-4 rounded">
-                                    Adicionar Cor
-                                </button>
-                            </div>
 
 
-                            <div class="mb-4">
+                            </v-list-item>
+
+                        </v-list>
+                    </v-col>
+                </v-row>
+
+
+                <v-col cols="12 my-15 border-t-2">
+                    <!-- Formulário -->
+                    <v-form @submit.prevent="updateProduct">
+                        <v-row>
+
+                            <!-- Nome do Produto -->
+                            <v-col cols="12" md="6">
+                                <v-text-field label="Nome do Produto" v-model="editedProduct.name" outlined
+                                    placeholder="Nome do Produto">
+                                </v-text-field>
+                            </v-col>
+
+                            <!-- Marca -->
+                            <v-col cols="12" md="6">
+                                <v-text-field label="Marca" v-model="editedProduct.brand" outlined placeholder="Marca">
+                                </v-text-field>
+                            </v-col>
+
+                            <!-- Descrição -->
+                            <v-col cols="12">
+                                <v-textarea label="Descrição" v-model="editedProduct.description" outlined
+                                    placeholder="Descrição do Produto" rows="4">
+                                </v-textarea>
+                            </v-col>
+
+                            <!-- Preço -->
+                            <v-col cols="12" md="6">
+                                <v-text-field label="Preço" v-model="editedProduct.price" type="number" step="0.01" outlined
+                                    placeholder="Preço">
+                                </v-text-field>
+                            </v-col>
+
+                            <!-- Cores Disponíveis (Autocomplete) -->
+                            <v-col cols="12" md="6">
+                                <v-autocomplete v-model="editedProduct.colors" :items="colors" label="Cor" item-title="name"
+                                    variant="solo" chips small-chips multiple class="pa-0"
+                                    :menu-props="{ maxHeight: '300' }" hide-details return-object></v-autocomplete>
+                            </v-col>
+
+                            <!-- Variação -->
+                            <!-- Campo de Input para Variação -->
+                            <v-col cols="12" md="6">
+                                <v-text-field label="Variação" v-model="newVariation" outlined
+                                    placeholder="Variação"></v-text-field>
                                 <div>
-                                    <label for="productVariation"
-                                        class="block text-gray-700 font-bold mb-2">Variação</label>
-                                    <div class="flex justify-between">
-                                        <input type="text" id="productVariation" v-model="newVariation"
-                                            class="p-2 border rounded" placeholder="Variação" />
-                                        <button @click="addVariation"
-                                            class="bg-blue-500 text-white hover:bg-blue-600 py-2 px-4 rounded">
-                                            Adicionar Variação
-                                        </button>
+                                    <div class="flex justify-between my-3 max-h-[10vh] overflow-auto" v-for="(variation, index) in productVariations" :key="index">
+                                        {{ variation }}
+                                        <!-- Botão para remover variação (opcional) -->
+                                        <v-btn small @click="removeVariation(index)">Remover</v-btn>
                                     </div>
                                 </div>
 
-                                <!-- Lista de Variações -->
-                                <div class="mt-4">
-                                    <ul class="border-b w-4/6 ">
-                                        <li class="flex justify-between p-2" v-for="(variation, index) in productVariations"
-                                            :key="index">
-                                            {{ variation }}
-                                            <!-- Botão para remover a variação -->
-                                            <button @click="removeVariation(index)" class="text-red-500 ml-2">
-                                                <img :src="close" alt="" />
-                                            </button>
-                                        </li>
-                                    </ul>
-                                </div>
+                                <!-- Botão Adicionar Variação -->
+                                <v-btn @click="addVariation" color="blue" dark>Adicionar Variação</v-btn>
+                            </v-col>
 
-                            </div>
 
-                            <div class="mb-4">
-                                <label for="productQuantity" class="block text-gray-700 font-bold mb-2">Quantidade</label>
-                                <input type="number" id="productQuantity" v-model="editedProduct.quantity"
-                                    class="w-full p-2 border rounded" placeholder="Quantidade" />
-                            </div>
+                            <!-- Quantidade -->
+                            <v-col cols="12" md="6">
+                                <v-text-field label="Quantidade" v-model="editedProduct.quantity" type="number" outlined
+                                    placeholder="Quantidade">
+                                </v-text-field>
+                            </v-col>
 
-                            <div class="mb-4">
-                                <label for="productStatus" class="block text-gray-700 font-bold mb-2">Status</label>
-                                <select id="productStatus" v-model="editedProduct.status" class="w-full p-2 border rounded">
-                                    <option value="active">Ativo</option>
-                                    <option value="inactive">Inativo</option>
-                                    <option value="out_of_stock">Sem Estoque</option>
-                                </select>
-                            </div>
-                            <div class="flex my-10 justify-center">
-                                <button type="submit" class="bg-blue-500 text-white hover:bg-blue-600 py-2 px-4 rounded">
+                            <!-- Status -->
+                            <v-col cols="12" md="6">
+                                <v-select label="Status" v-model="editedProduct.status"
+                                    :items="['active', 'inactive', 'out_of_stock']" outlined>
+                                </v-select>
+                            </v-col>
+
+                            <!-- Botão Salvar Alterações -->
+                            <v-col cols="12">
+                                <v-btn @click="updateProduct" color="blue" dark large>
                                     Salvar Alterações
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
+                                </v-btn>
+                            </v-col>
+
+                        </v-row>
+                    </v-form>
+                </v-col>
+            </v-row>
+
+            <!-- Área de Imagens -->
+            <v-row>
+                <v-col cols="12" md="6">
+                    <!-- Visualização e Upload de Imagem -->
+                    <!-- ... -->
+                </v-col>
+                <v-col cols="12" md="6">
+                    <!-- Lista de Imagens Selecionadas -->
+                    <!-- ... -->
+                </v-col>
+            </v-row>
         </main>
-    </div>
-
-
-    <!-- Modal para adicionar cores -->
-    <div v-if="showModal" class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-        <div class="bg-white p-6 rounded shadow-md w-1/3">
-            <h3 class="text-xl font-semibold mb-4">Adicionar Cores</h3>
-
-            <!-- Valor especifico -->
-            <div class="mb-4">
-                <label for="hexColor" class="block text-gray-700 font-bold mb-2">Cor Específica</label>
-                <input type="text" id="hexColor" v-model="hexValue" class="w-full p-2 border rounded"
-                    placeholder="#999999" />
-            </div>
-
-            <!-- Lista de cores -->
-            <div class="mb-4 max-h-[40vh] overflow-scroll">
-                <label class="block text-gray-700 font-bold mb-2">Cores</label>
-                <div v-for="(color, index) in colors" :key="index" class="flex items-center mb-2 w-2/5 justify-between">
-                    <div class="flex">
-                        <div class="w-8 h-8 mr-2" :style="{ backgroundColor: color.code }"></div>
-                        <span class="text-gray-800">{{ color.name }}</span>
-                    </div>
-                    <input type="checkbox" v-model="selectedColors" :value="color.code" class="ml-2" />
-                </div>
-            </div>
-
-            <!-- Adicione o botão "Adicionar" aqui -->
-            <div class="flex justify-end mt-4">
-                <button @click="closeModal" class="bg-gray-300 text-gray-700 hover:bg-gray-400 px-4 py-2 rounded">
-                    Fechar
-                </button>
-                <button @click="addSelectedColorsAndInput"
-                    class="bg-blue-500 text-white hover:bg-blue-600 px-4 py-2 ml-2 rounded">
-                    Adicionar
-                </button>
-            </div>
-        </div>
     </div>
 </template>
 
 <script>
 import sidebar from '../../components/side-bar-dashboard.vue'
 import painel from '../../components/painel-bar.vue'
+import axios from 'axios';
 
 export default {
     data() {
@@ -202,33 +165,9 @@ export default {
             down_arrow: '/images/down_arrow.svg',
             up_arrow: '/images/up_arrow.svg',
             defaultImage: '/images/empty.png',
-            close: '/images/close.svg',
-            showModal: false,
-            hexValue: '',
-            colors: [
-                { name: 'Vermelho', code: '#FF0000' },
-                { name: 'Verde', code: '#00FF00' },
-                { name: 'Azul', code: '#0000FF' },
-                { name: 'Amarelo', code: '#FFFF00' },
-                { name: 'Preto', code: '#000000' },
-                { name: 'Branco', code: '#FFFFFF' },
-                { name: 'Laranja', code: '#FFA500' },
-                { name: 'Roxo', code: '#800080' },
-                { name: 'Rosa', code: '#FFC0CB' },
-                { name: 'Marrom', code: '#8B4513' },
-                { name: 'Verde Limão', code: '#32CD32' },
-                { name: 'Turquesa', code: '#40E0D0' },
-                { name: 'Dourado', code: '#FFD700' },
-                { name: 'Prateado', code: '#C0C0C0' },
-                { name: 'Aqua', code: '#00FFFF' },
-                { name: 'Salmon', code: '#FA8072' },
-                { name: 'Azul Marinho', code: '#000080' },
-                { name: 'Verde Oliva', code: '#808000' },
-                { name: 'Roxo Escuro', code: '#9400D3' },
-                { name: 'Violeta', code: '#EE82EE' },
-                { name: 'Cinza Claro', code: '#D3D3D3' },
-            ],
-            selectedColors: [],
+            newImage: '',
+            selectedImage: '',
+            images: [],
             editedProduct: {
                 name: '',
                 description: '',
@@ -243,12 +182,14 @@ export default {
             },
             newVariation: '',
             productVariations: [],
+            colors: []
         };
     },
     created() {
         // Verifique se selectedProduct está disponível e carregado corretamente
         if (this.$props.product) {
             const product = this.$props.product;
+            this.editedProduct.id = product.id;
             this.editedProduct.name = product.name;
             this.editedProduct.description = product.description;
             this.editedProduct.price = product.price;
@@ -259,126 +200,118 @@ export default {
             this.editedProduct.variation = product.variation;
             this.editedProduct.quantity = product.quantity;
             this.editedProduct.status = product.status;
+            console.log("ID do produto após carregar:", this.editedProduct.id);
+        }
+        if (this.$props.product) {
+            const product = this.$props.product;
+            // ...outras atribuições...
+            this.editedProduct.images = product.images;
+
+            // Dividindo a string de imagens e criando a lista de imagens
+            this.images = product.images.split(';').filter(imgName => imgName).map(imgName => {
+                return {
+                    src: `/images/products/${product.id}/${imgName.trim()}`,
+                    name: imgName.trim()
+                };
+            });
+
+            // Se houver imagens, defina a primeira como a imagem selecionada
+            if (this.images.length > 0) {
+                this.selectedImage = this.images[0].src;
+            }
         }
     },
     methods: {
 
-        async updateProduct() {
-            try {
-                await axios.put(`/api/products/${this.productId}`, this.editedProduct);
-                this.$router.push({ name: 'dashboard.products.index' });
-                this.$notify.success('Produto atualizado com sucesso!');
-            } catch (error) {
-                console.error('Erro ao atualizar o produto:', error);
-                this.$notify.error('Erro ao atualizar o produto.');
+        addImage() {
+            if (this.newImage && this.newImage.length > 0) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    this.images.push({
+                        src: event.target.result,
+                        name: this.newImage[0].name
+                    });
+                    this.newImage = '';
+                };
+                reader.readAsDataURL(this.newImage[0]);
+            } else {
+                console.error("Nenhuma imagem selecionada!");
             }
         },
-        moveImageUp(index) {
-            if (index > 0) {
-                const tempImage = this.editedProduct.images[index];
-                this.editedProduct.images[index] = this.editedProduct.images[index - 1];
-                this.editedProduct.images[index - 1] = tempImage;
-            }
-        },
-        moveImageDown(index) {
-            if (index < this.editedProduct.images.length - 1) {
-                const tempImage = this.editedProduct.images[index];
-                this.editedProduct.images[index] = this.editedProduct.images[index + 1];
-                this.editedProduct.images[index + 1] = tempImage;
-            }
-        },
-        onImageChange(event) {
-            const files = event.target.files;
 
-            if (files && files.length > 0) {
-                const novasImagens = [];
-
-                for (let i = 0; i < files.length; i++) {
-                    const nomeImagem = files[i].name;
-                    const urlImagem = URL.createObjectURL(files[i]);
-                    const infoImagem = {
-                        nome: nomeImagem,
-                        url: urlImagem,
-                        file: files[i],
-                    };
-
-                    novasImagens.push(infoImagem);
-                }
-
-                if (!this.editedProduct.selectedImage && novasImagens.length > 0) {
-                    this.editedProduct.selectedImage = novasImagens[0].url;
-                }
-
-                this.editedProduct.images = this.editedProduct.images.concat(novasImagens);
-                console.log(this.editedProduct.images);
-            }
-        },
-        getImageUrls(imagePaths, productId) {
-            // Divida o campo de imagens em uma lista usando ponto e vírgula como delimitador
-            const paths = imagePaths.split(';');
-
-            // Construa as URLs completas
-            const imageUrls = paths.map(path => `/images/products/${productId}/${path}`);
-            console.log(imageUrls);
-            return imageUrls;
-        },
-
-        removeImage(index) {
-            this.editedProduct.images.splice(index, 1);
-            if (this.editedProduct.selectedImage === this.editedProduct.images[index]) {
-                this.editedProduct.selectedImage = '';
-            }
+        uploadImage() {
         },
         selectImage(image) {
-            this.editedProduct.selectedImage = image;
+            console.log("Imagem selecionada:", image.src);
+            this.selectedImage = image.src;
         },
-        getImageName(imageUrl) {
-            const parts = imageUrl.split('/');
-            return parts[parts.length - 1];
-        },
-        addColor() {
-            this.showModal = true;
-        },
-        removeColor(index) {
-            this.editedProduct.colors.splice(index, 1);
-        },
-        openModal() {
-            this.showModal = true;
-        },
-        closeModal() {
-            this.showModal = false;
-            this.hexValue = '';
-        },
-        // Método para adicionar cores selecionadas e/ou a cor específica
-        addSelectedColorsAndInput() {
-            // Adicionar cores selecionadas
-            if (this.selectedColors.length > 0) {
-                this.selectedColors.forEach(color => {
-                    this.editedProduct.colors.push(color);
-                });
-                this.selectedColors = [];
-            }
-
-            // Adicionar a cor específica se houver um valor
-            if (this.hexValue) {
-                this.editedProduct.colors.push(this.hexValue);
-                this.hexValue = ''; // Limpar o valor após adicionar a cor
-            }
-
-            this.closeModal();
+        removeImage(index) {
+            this.images.splice(index, 1);
         },
 
         // Método para adicionar uma variação à lista de variações
         addVariation() {
             if (this.newVariation.trim() !== '') {
                 this.productVariations.push(this.newVariation);
-                this.newVariation = ''; // Limpar o campo de entrada após adicionar a variação
+                this.newVariation = ''; // Limpa o campo de entrada após adicionar a variação
             }
         },
+
 
         removeVariation(index) {
             this.productVariations.splice(index, 1);
         },
+
+        updateProducts() {
+            const formData = new FormData();
+
+            formData.append('name', this.editedProduct.name);
+            formData.append('description', this.editedProduct.description);
+            formData.append('price', this.editedProduct.price);
+            formData.append('brand', this.editedProduct.brand);
+            formData.append('quantity', this.editedProduct.quantity);
+            formData.append('status', this.editedProduct.status);
+            formData.append('variation', this.editedProduct.variation);
+
+            this.editedProduct.colors.forEach(color => {
+                formData.append('colors[]', color);
+            });
+
+            if (Array.isArray(this.editedProduct.images)) {
+                this.editedProduct.images.forEach(imageInfo => {
+                    if (imageInfo.file) {
+                        formData.append('images[]', imageInfo.file);
+                    }
+                });
+            }
+
+            axios.put(`/dashboard/update/${this.editedProduct.id}`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            })
+                .then(response => {
+                    this.product = response.data;
+                })
+                .catch(error => {
+                    console.error('Erro ao atualizar produto', error);
+                });
+        },
+
+        fetchColors() {
+            axios.get('/api/colors')
+                .then(response => {
+                    this.colors = response.data
+                })
+                .catch(error => {
+                    console.error("Erro ao buscar cores", error)
+                });
+        }
+
+    },
+
+    mounted() {
+        this.fetchColors();
     },
 
     components: {
@@ -386,7 +319,7 @@ export default {
         painel,
     },
     props: {
-        product: Object, // Propriedade para passar os dados do produto para o componente
+        product: Object,
     },
 };
 </script>
