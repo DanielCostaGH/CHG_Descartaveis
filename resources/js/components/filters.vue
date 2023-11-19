@@ -10,14 +10,14 @@
             </v-col>
 
             <v-col cols="12" md="3">
-                <v-autocomplete v-model="selectedCategories" :items="categories" label="Categorias" variant="solo" chips
-                    small-chips multiple class="pa-0" :menu-props="{ maxHeight: '300' }" hide-details
-                    return-object></v-autocomplete>
+                <v-autocomplete v-model="selectedCategories" :items="categories" item-title="name" item-value="id"
+                    label="Categorias" variant="solo" chips small-chips multiple class="pa-0"
+                    :menu-props="{ maxHeight: '300' }" hide-details return-object></v-autocomplete>
             </v-col>
 
             <v-col cols="12" md="3">
-                <v-autocomplete v-model="selectedColors" :items="colors" label="Cor"  variant="solo" chips small-chips multiple
-                    class="pa-0" :menu-props="{ maxHeight: '300' }" hide-details return-object></v-autocomplete>
+                <v-autocomplete v-model="selectedColors" :items="colors" label="Cor" item-title="name" variant="solo" chips small-chips
+                    multiple class="pa-0" :menu-props="{ maxHeight: '300' }" hide-details return-object></v-autocomplete>
             </v-col>
 
 
@@ -62,14 +62,14 @@
                         </v-col>
 
                         <v-col cols="12" md="3">
-                            <v-autocomplete v-model="selectedCategories" :items="categories" label="Categorias"  variant="solo"
-                                chips small-chips multiple class="pa-0" :menu-props="{ maxHeight: '300' }" hide-details
-                                return-object></v-autocomplete>
+                            <v-autocomplete v-model="selectedCategories" :items="categories" item-title="name" label="Categorias"
+                                variant="solo" chips small-chips multiple class="pa-0" :menu-props="{ maxHeight: '300' }"
+                                hide-details return-object></v-autocomplete>
                         </v-col>
 
                         <v-col cols="12" md="3">
-                            <v-autocomplete v-model="selectedColors" :items="colors" label="Cor"  variant="solo"  chips small-chips
-                                multiple class="pa-0" :menu-props="{ maxHeight: '300' }" hide-details
+                            <v-autocomplete v-model="selectedColors" :items="colors" label="Cor" item-title="name" variant="solo" chips
+                                small-chips multiple class="pa-0" :menu-props="{ maxHeight: '300' }" hide-details
                                 return-object></v-autocomplete>
                         </v-col>
 
@@ -92,23 +92,53 @@ export default {
         return {
             selectedCategories: [],
             selectedColors: [],
-            categories: ['Eletrônicos', 'Livros', 'Casa', 'Moda', 'Brinquedos'],
-            colors: ['Vermelho', 'Azul', 'Verde', 'Amarelo', 'Preto'],
+            categories: [],
+            colors: [],
             priceSort: null,
             dialog: false,
         };
     },
     methods: {
         applyFilter() {
-            console.log(`Filters applied with:
-                     Categories - ${this.selectedCategories},
-                     Colors - ${this.selectedColors},
-                     Sort - ${this.priceSort}`);
-            this.dialog = false;
+            console.log(this.selectedCategories);
+            const filters = {
+                selectedCategories: this.selectedCategories.map(cat => cat.id),
+                selectedColors: this.selectedColors.map(cat => cat.id),
+                priceSort: this.priceSort,
+            };
 
+            this.$emit('filter-applied', filters);
+            this.dialog = false;
         },
 
 
+        fetchCategory() {
+            axios.get('/api/category')
+                .then(response => {
+                    this.categories = response.data
+                })
+                .catch(error => {
+                    console.error('Erro ao buscar categorias:', error);
+                });
+        },
+
+        fetchColors(){
+            axios.get('/api/colors')
+            .then(response => {
+                this.colors = response.data
+            })
+            .catch(error =>{
+                console.error("Erro ao buscar cores", error)
+            });
+        }
     },
+
+    mounted() {
+        this.fetchCategory();
+        this.fetchColors();
+    },
+
 };
 </script>
+
+

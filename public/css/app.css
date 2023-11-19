@@ -9,15 +9,14 @@
     background-color: #f1f1f1; /* Cor de fundo da barra de rolagem */
     border-radius: 3px; /* Raio da borda da barra de rolagem */
   }
-  
+
   /* Editando o thumb (a alça de arrasto) da barra de rolagem */
   ::-webkit-scrollbar-thumb {
     background-color: #888; /* Cor do thumb da barra de rolagem */
     border-radius: 3px; /* Raio da borda do thumb da barra de rolagem */
   }
-  
+
   /* Estilize o thumb quando estiver em hover */
   ::-webkit-scrollbar-thumb:hover {
     background-color: #212844; /* Cor do thumb da barra de rolagem em hover */
   }
-  

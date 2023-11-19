@@ -1,5 +1,5 @@
 <template>
-    <div class="container mx-auto hidden lg:block container mx-auto w-full my-10 py-10 z-20">
+    <div class="container mx-auto hidden lg:block container mx-auto w-full   z-20">
         <div class="mt-10">
             <v-row justify="space-between" align="center">
                 <v-col cols="auto">
