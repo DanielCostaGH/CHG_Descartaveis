@@ -72,6 +72,7 @@ Route::group(['prefix' => 'api'], function(){
     Route::get('/products', [ProductsController::class, 'getProducts']);
     Route::get('/category', [CategoryController::class, 'index']);
     Route::get('/colors', [ColorsController::class, 'listColors']);
+    Route::get('/products/search',  [ProductsController::class, 'search']);
 
 });
 

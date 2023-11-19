@@ -11,12 +11,20 @@
             <!-- Barra de pesquisa -->
 
             <div class="w-5/6 md:w-3/6 px-4 mt-4 md:mt-0 relative">
-                <input type="text"
+                <img class="absolute left-4 top-1/2 transform -translate-y-1/2 px-4" :src="search" alt="icon">
+                <input type="text" v-model="searchQuery" @input="fetchSuggestions"
                     class="rounded-lg bg-[#F3F9FB] shadow-md p-4 pl-12 w-full focus:border-2 focus:outline-none focus:border-gray-400 text-lg"
                     placeholder="Pesquise o que procura" />
-                    <button @click="redirectToProducts">
-                        <img class="absolute right-4 top-1/2 transform -translate-y-1/2 px-4" :src="search" alt="icon">
-                    </button>
+
+                <div v-if="suggestions.length > 0" class="absolute z-10 w-5/6 bg-white border-b mt-1 rounded-lg">
+                    <ul>
+                        <li v-for="suggestion in suggestions" :key="suggestion.id"
+                            class="p-4 hover:bg-gray-100 cursor-pointer" @click="redirectToProduct(suggestion.id)">
+                            {{ suggestion.name }}
+                        </li>
+
+                    </ul>
+                </div>
             </div>
 
             <!-- Links (exibidos apenas em telas grandes) -->
@@ -92,6 +100,7 @@ export default {
     data() {
         return {
             searchQuery: '',
+            suggestions: [],
             logo_light: '/images/logo_light.svg',
             search: '/images/search.svg',
             user: '/images/user.svg',
@@ -106,21 +115,25 @@ export default {
             this.menuOpen = !this.menuOpen;
         },
 
-        fetchProducts() {
-            axios.get('/api/products')
-                .then(response => {
-                    this.products = response.data;
-                })
-                .catch(error => {
-                    console.error('Erro ao buscar produtos:', error);
-                });
-        },
-
-        redirectToProducts() {
-            if (this.searchQuery) {
-                this.$router.push({ path: '/products', query: { productName: this.searchQuery } });
+        fetchSuggestions() {
+            if (this.searchQuery.length > 1) {
+                axios.get(`/api/products/search?query=${encodeURIComponent(this.searchQuery)}`)
+                    .then(response => {
+                        this.suggestions = response.data;
+                        console.log(response.data);
+                    })
+                    .catch(error => {
+                        console.error('Erro ao buscar sugestões:', error);
+                    });
+            } else {
+                this.suggestions = [];
             }
         },
+
+        redirectToProduct(productId) {
+        window.location.href = `/products/${productId}`;
+    },
+
     }
 
 }

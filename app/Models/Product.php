@@ -26,4 +26,11 @@ class Product extends Model
     {
         return $this->belongsTo(Color::class, 'color_id');
     }
+
+
+    public static function searchByName($query){
+        return self::where('name', 'LIKE', "%{$query}%")
+            ->limit(7)
+            ->get();
+    }
 }

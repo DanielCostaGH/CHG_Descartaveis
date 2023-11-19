@@ -11,8 +11,9 @@ class ProductFilterService
         $query = Product::query();
 
         if (isset($parameters['productName'])) {
-            $query = $this->applyNameFilter($query, $parameters['productName']);
+            $query->where('name', 'like', '%' . $parameters['productName'] . '%');
         }
+        // dd($query->toSql(), $query->getBindings());
 
         if (isset($parameters['priceSort'])) {
             $query = $this->applyPriceSort($query, $parameters['priceSort']);
@@ -28,6 +29,7 @@ class ProductFilterService
 
         return $query->get();
     }
+
 
 
     protected function applyNameFilter($query, $productName)
