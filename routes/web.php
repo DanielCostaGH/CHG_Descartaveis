@@ -6,6 +6,8 @@ use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ColorsController;
 
 
 
@@ -64,6 +66,14 @@ Route::group(['prefix' => 'dashboard', 'middleware' => 'AdminAuthMiddleware'], f
 });
 
 
-Route::get('/api/products', [DashboardController::class, 'show']);
+Route::group(['prefix' => 'api'], function(){
+    Route::get('/products', [DashboardController::class, 'show']);
+    Route::get('/products/active', [DashboardController::class, 'show']);
+    Route::get('/products', [ProductsController::class, 'getProducts']);
+    Route::get('/category', [CategoryController::class, 'index']);
+    Route::get('/colors', [ColorsController::class, 'listColors']);
+
+});
+
 
 

@@ -21,9 +21,9 @@
                 </v-menu>
             </v-col>
 
-            <v-col cols="auto" v-for="category in ['Saúde', 'Limpeza', 'Alimentação', 'Utilidade']" :key="category">
-                <v-btn text color="blue-grey-lighten-4" class="mx-2">
-                    {{ category }}
+            <v-col cols="auto" v-for="category in categorys" :key="category.name">
+                <v-btn :href="`products/${category.name}`" text color="blue-grey-lighten-4" class="mx-2">
+                    {{ category.name }}
                 </v-btn>
             </v-col>
 
@@ -56,7 +56,7 @@
                     </v-list>
                 </v-menu>
 
-                <v-btn text color="green-accent-4" class="mx-2 white--text" :href="'/products'">
+                <v-btn text color="green-accent-4" class="mx-2 white--text" :href="'/'">
                     <span class="pr-2 text-white">Whatsapp</span>
                     <v-icon class="text-white">
                         mdi-whatsapp
@@ -78,6 +78,12 @@ export default {
                 { title: 'Click Me' },
                 { title: 'Click Me 2' },
             ],
+            categorys: [
+                { name: 'Saúde'},
+                { name: 'Limpeza'},
+                { name: 'Alimentação'},
+                { name: 'Utilidade'},
+            ]
         };
     },
 };

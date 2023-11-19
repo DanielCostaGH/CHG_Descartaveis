@@ -9,7 +9,7 @@
       <div id="product_images" class="overflow-scroll h-5/6">
         <div v-for="(image, index) in productImages" :key="index" @click="displayImage(image)"
           class="bg-white border-2 border-gray-500 hover hover:border-blue-500 rounded h-[12vh] w-[12vh] mx-auto my-5 cursor-pointer flex items-center justify-center">
-          <img class="h-5/6 w-5/6" :src="`/images/${product.id}/${image}`" :alt="image">
+          <img class="h-5/6 w-5/6" :src="`/images/products/${product.id}/${image}`" :alt="image">
         </div>
       </div>
 
@@ -30,7 +30,7 @@ export default {
     return {
       up_arrow: '/images/up_arrow.svg',
       down_arrow: '/images/down_arrow.svg',
-      selectedImage: '', 
+      selectedImage: '',
     };
   },
   props: {
@@ -38,17 +38,17 @@ export default {
   },
   computed: {
     productImages() {
-      return this.product.images.split(';').filter(image => image !== ''); 
+      return this.product.images.split(';').filter(image => image !== '');
     },
   },
   mounted() {
     if (this.productImages.length > 0) {
-      this.selectedImage = `/images/${this.product.id}/${this.productImages[0]}`;
+      this.selectedImage = `/images/products/${this.product.id}/${this.productImages[0]}`;
     }
   },
   methods: {
     displayImage(image) {
-      this.selectedImage = `/images/${this.product.id}/${image}`;
+      this.selectedImage = `/images/products/${this.product.id}/${image}`;
     },
   },
 };
