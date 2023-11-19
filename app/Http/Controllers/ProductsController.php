@@ -23,7 +23,7 @@ class ProductsController extends Controller
 
     public function index()
     {
-        return(
+        return (
             view('products.product_list')
         );
     }
@@ -42,7 +42,15 @@ class ProductsController extends Controller
 
     protected function hasFilters(Request $request)
     {
-        return $request->hasAny(['priceSort', 'selectedCategories', 'selectedColors']);
+        return $request->hasAny(['productName', 'priceSort', 'selectedCategories', 'selectedColors']);
+    }
+
+    public function search(Request $request)
+    {
+        $query = $request->get('query');
+        $products = Product::searchByName($query);
+        
+        return response()->json($products);
     }
 
 
@@ -53,7 +61,7 @@ class ProductsController extends Controller
      */
     public function create()
     {
-        return(
+        return (
             view('products.create')
         );
     }
@@ -87,7 +95,8 @@ class ProductsController extends Controller
     }
 
 
-    public function getAvailableProducts(){
+    public function getAvailableProducts()
+    {
         $activeProducts = Product::getAvailableProducts();
         return response()->json($activeProducts);
     }
@@ -117,15 +126,15 @@ class ProductsController extends Controller
         //
     }
 
-//     public function getDescription($id)
-// {
-//     $product = Product::where('id', $id)->first();
+    //     public function getDescription($id)
+    // {
+    //     $product = Product::where('id', $id)->first();
 
-//     if (!$product) {
-//         return response()->json(['error' => 'Produto não encontrado'], 404);
-//     }
-//     return response()->json(['description' => $product->description]);
-// }
+    //     if (!$product) {
+    //         return response()->json(['error' => 'Produto não encontrado'], 404);
+    //     }
+    //     return response()->json(['description' => $product->description]);
+    // }
 
 
 
