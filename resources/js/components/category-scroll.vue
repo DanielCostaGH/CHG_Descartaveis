@@ -1,5 +1,5 @@
 <template>
-    <div class="container mx-auto my-10">
+    <div class="container mx-auto mt-10">
         <!-- Seção para desktop -->
         <div class="d-none d-lg-flex flex-column">
             <v-row justify="space-between" align="center">

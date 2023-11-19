@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Services\ProductFilterService;
 use Illuminate\Http\Request;
 
 class ProductsController extends Controller
@@ -12,12 +13,38 @@ class ProductsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    protected $filterService;
+
+    public function __construct(ProductFilterService $filterService)
+    {
+        $this->filterService = $filterService;
+    }
+
+
     public function index()
     {
         return(
             view('products.product_list')
         );
     }
+
+
+    public function getProducts(Request $request)
+    {
+        if ($this->hasFilters($request)) {
+            $products = $this->filterService->filter($request->all());
+        } else {
+            $products = Product::getAvailableProducts();
+        }
+
+        return response()->json($products);
+    }
+
+    protected function hasFilters(Request $request)
+    {
+        return $request->hasAny(['priceSort', 'selectedCategories', 'selectedColors']);
+    }
+
 
     /**
      * Show the form for creating a new resource.
@@ -51,15 +78,21 @@ class ProductsController extends Controller
     public function show($id)
     {
         $product = Product::find($id);
-    
+
         if (!$product) {
             abort(404); // Redireciona para a página de erro 404 se o produto não for encontrado.
         }
-    
+
         return view('products.product_details', compact('product'));
     }
 
-    
+
+    public function getAvailableProducts(){
+        $activeProducts = Product::getAvailableProducts();
+        return response()->json($activeProducts);
+    }
+
+
 
     /**
      * Show the form for editing the specified resource.

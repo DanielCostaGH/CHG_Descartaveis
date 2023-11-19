@@ -15,16 +15,17 @@ class CreateProductTable extends Migration
             $table->text('description');
             $table->decimal('price');
             $table->string('images');
-            $table->foreignId('category_id');
+            $table->foreignId('category_id')->nullable()->constrained('categories')->onDelete('set null');
             $table->string('brand');
-            $table->string('color');
+            $table->foreignId('color_id')->nullable()->constrained('colors')->onDelete('set null');
             $table->string('variation');
             $table->integer('quantity');
             $table->enum('status', ['active', 'inactive', 'out_of_stock']);
             $table->timestamps();
         });
 
-        // Insira os dados na tabela
+
+        // Produto teste (opicional)
         DB::table('product')->insert([
             'SKU' => 'ABC127',
             'name' => 'Apple iPhone 14 Pro Max',
@@ -33,7 +34,7 @@ class CreateProductTable extends Migration
             'images' => "i1.png;i2.png;i3.png;i4.png;i5.png",
             'category_id' => 1,
             'brand' => 'Apple',
-            'color' => 'Preto',
+            'color_id' => 1,
             'variation' => '256GB;500GB;',
             'quantity' => 100,
             'status' => 'active',
