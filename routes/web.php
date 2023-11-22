@@ -23,7 +23,7 @@ Route::group(['prefix' => 'admin'], function () {
 
     Route::post('/logout', [AdminController::class, 'logout'])->name('admin.logout');
 
-    Route::group(['midleware' => ['auth:sanctum']], function (){
+    Route::group(['midleware' => ['auth:sanctum']], function () {
         Route::get('/', [AdminController::class, 'index'])->name('admin.index');
         Route::post('/', [AdminController::class, 'store'])->name('admin.store');
     });
@@ -49,7 +49,7 @@ Route::group(['prefix' => 'user', 'middleware' => 'UserAuthMiddleware'], functio
     Route::post('/', [UserController::class, 'store'])->name('user.store');
 });
 
-Route::group(['prefix' => 'products' ], function() {
+Route::group(['prefix' => 'products'], function () {
     Route::get('/', [ProductsController::class, 'index'])->name('product.name');
     Route::get('/{id}', [ProductsController::class, 'show'])->name('product.show');
 });
@@ -66,15 +66,13 @@ Route::group(['prefix' => 'dashboard', 'middleware' => 'AdminAuthMiddleware'], f
 });
 
 
-Route::group(['prefix' => 'api'], function(){
+Route::group(['prefix' => 'api'], function () {
     Route::get('/products', [DashboardController::class, 'show']);
     Route::get('/products/active', [DashboardController::class, 'show']);
     Route::get('/products', [ProductsController::class, 'getProducts']);
     Route::get('/category', [CategoryController::class, 'index']);
     Route::get('/colors', [ColorsController::class, 'listColors']);
     Route::get('/products/search',  [ProductsController::class, 'search']);
-
+    Route::get('/products/count', [ProductsController::class, 'countProducts']);
+    Route::get('/categories/count', [CategoryController::class, 'countCategories']);
 });
-
-
-

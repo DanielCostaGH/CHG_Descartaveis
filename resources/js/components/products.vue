@@ -102,7 +102,6 @@ export default {
 <style scoped>
 .container {
     width: 100%;
-    overflow-x: auto;
 }
 
 .flex {

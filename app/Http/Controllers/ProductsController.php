@@ -49,7 +49,7 @@ class ProductsController extends Controller
     {
         $query = $request->get('query');
         $products = Product::searchByName($query);
-        
+
         return response()->json($products);
     }
 
@@ -100,6 +100,12 @@ class ProductsController extends Controller
         $activeProducts = Product::getAvailableProducts();
         return response()->json($activeProducts);
     }
+
+    public function countProducts()
+{
+    $count = Product::count();
+    return response()->json($count);
+}
 
 
 

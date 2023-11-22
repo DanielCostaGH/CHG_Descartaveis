@@ -12,4 +12,10 @@ class CategoryController extends Controller
         $categorys = Category::getAvailableCategorys();
         return response()->json($categorys);
     }
+
+    public function countCategories()
+{
+    $count = Category::count();
+    return response()->json($count);
+}
 }

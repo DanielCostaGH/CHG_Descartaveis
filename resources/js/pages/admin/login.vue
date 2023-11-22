@@ -2,7 +2,7 @@
     <div class="container mx-auto">
         <div class="lg:flex justify-around items-center h-screen w-full bg-red-">
             <div class="w-full text-center">
-                    <img class="w-[55vh] mx-auto" :src="logo_light" alt="Logo">
+                <img class="w-[55vh] mx-auto" :src="logo_light" alt="Logo">
                 <div class="mb-5">
                     <a href="/" class="text-blue-500 ">Voltar para pagina inicial?</a>
                 </div>
@@ -15,9 +15,11 @@
                     </div>
 
                     <div class="relative">
-                        <input v-model="email" class="bg-[#ECECEC] w-full h-[5vh] my-2 p-5 rounded" type="text" placeholder="E-mail" :class="{ 'border-red-500': emailError }">
+                        <input v-model="email" class="bg-[#ECECEC] w-full h-[5vh] my-2 p-5 rounded" type="text"
+                            placeholder="E-mail" :class="{ 'border-red-500': emailError }">
                         <div class="text-red-500">{{ emailError }}</div>
-                        <input v-model="password" class="bg-[#ECECEC] w-full h-[5vh] my-3 p-5 rounded" type="password" placeholder="Senha" :class="{ 'border-red-500': passwordError }">
+                        <input v-model="password" class="bg-[#ECECEC] w-full h-[5vh] my-3 p-5 rounded" type="password"
+                            placeholder="Senha" :class="{ 'border-red-500': passwordError }">
                         <div class="text-red-500">{{ passwordError }}</div>
                     </div>
 
@@ -25,7 +27,7 @@
                         <div class="flex items-center w-full lg:w-auto">
                             <div class="switch mr-3">
                                 <input type="checkbox" class="sr-only">
-                                <div :class="{'slider': true, 'checked': isSwitchChecked}" @click="toggleSwitch"></div>
+                                <div :class="{ 'slider': true, 'checked': isSwitchChecked }" @click="toggleSwitch"></div>
                             </div>
                             <a class="text-[#1A1A1A]" href="#"> Salvar senha</a>
                         </div>
@@ -35,12 +37,15 @@
                     </div>
 
                     <div class="text-center text-white">
-                        <button @click="submitForm" class="bg-[#007AFF] w-full h-[6vh] mt-10 rounded" type="button">Entrar</button>
+                        <button @click="submitForm" class="bg-[#007AFF] w-full h-[6vh] mt-10 rounded"
+                            type="button">Entrar</button>
                     </div>
 
 
                     <div class="text-center">
-                        <button class="bg-[#F3F3F3] text-[#1A1A1A] w-full h-[6vh] my-4 rounded flex justify-center items-center" type="submit">
+                        <button
+                            class="bg-[#F3F3F3] text-[#1A1A1A] w-full h-[6vh] my-4 rounded flex justify-center items-center"
+                            type="submit">
                             <v-icon class="p-4"><img :src="google_icon" alt=""></v-icon> Entre com sua conta Google</button>
                     </div>
                 </form>
@@ -87,16 +92,15 @@ export default {
                 email: this.email,
                 password: this.password
             })
-            // .then(response => {
-            //     if (response.data.response.token) {
-            //         window.location.href = '/dashboard';
-            //     } else {
-            //         this.emailError = 'Credenciais inválidas';
-            //     }
-            // })
-            .catch(error => {
-                // Trate os erros do backend aqui, por exemplo, exiba uma mensagem de erro
-            });
+                .then(response => {
+                    if (response.data.token) {
+                        window.location.href = '/dashboard';
+                    } else {
+                        this.emailError = 'Credenciais inválidas';
+                    }
+                })
+                .catch(error => {
+                });
         }
     }
 }
@@ -131,10 +135,9 @@ export default {
 
 .slider.checked {
     transform: translateX(20px);
-    background-color: #007AFF; 
+    background-color: #007AFF;
 }
 
 .switch-label {
     margin-right: 10px;
-}
-</style>
+}</style>

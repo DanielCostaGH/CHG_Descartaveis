@@ -91,7 +91,7 @@
                             <!-- Cores Disponíveis (Autocomplete) -->
                             <v-col cols="12" md="6">
                                 <v-autocomplete v-model="editedProduct.colors" :items="colors" label="Cor" item-title="name"
-                                    variant="solo" chips small-chips multiple class="pa-0"
+                                     chips small-chips multiple class="pa-0"
                                     :menu-props="{ maxHeight: '300' }" hide-details return-object></v-autocomplete>
                             </v-col>
 
