@@ -55,18 +55,36 @@
 
 
 <script>
+import axios from 'axios';
+
 export default {
     data() {
         return {
             simple_arrow: '/images/simple_arrow.svg',
 
-            brands: [
-                { name: "Brand 1", image: "/images/Brands/b1.png" },
-                { name: "Brand 2", image: "/images/Brands/b1.png" },
-                { name: "Brand 3", image: "/images/Brands/b1.png" },
-            ],
+            brands: [],
         };
     },
+
+
+    methods:{
+        fetchBrands(){
+            axios.get('/api/brands/get')
+            .then(response =>{
+                this.brands = response.data.map(brand => ({
+                    ...brand,
+                    image: `/images/brands/${brand.images}`
+                }));
+            })
+            .catch((error) => {
+                console.log(error)
+            });
+        }
+    },
+
+    mounted(){
+        this.fetchBrands();
+    }
 };
 
 </script>

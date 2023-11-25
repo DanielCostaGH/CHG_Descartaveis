@@ -95,7 +95,7 @@ class DashboardController extends Controller
         $product->brand = $request->input('brand');
         $deletedImages = $request->input('deletedImages');
 
-        
+
         $product->variation = implode(';', $request->variation);
         $product->quantity = $request->input('quantity');
 
@@ -191,7 +191,7 @@ class DashboardController extends Controller
         $newPaths = array_diff($imagePaths, $deletedImages);
 
         foreach ($deletedImages as $deletedImage) {
-            Storage::delete("/images/products/$product->id/$deletedImage");
+            Storage::disk('public')->delete("/images/products/{$product->id}/{$deletedImage}");
         }
 
         $product->images = implode(';', $newPaths);

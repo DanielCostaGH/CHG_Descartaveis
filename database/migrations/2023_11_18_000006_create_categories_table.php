@@ -27,7 +27,43 @@ class CreateCategoriesTable extends Migration
         DB::table('categories')->insert([
             'name' => 'Categoria1',
             'description' => 'e . ',
-            'images' => "i1.png",
+            'images' => "c1.png",
+            'status' => 'active',
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+
+        DB::table('categories')->insert([
+            'name' => 'Categoria2',
+            'description' => 'desc',
+            'images' => "c2.jpg",
+            'status' => 'active',
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+
+        DB::table('categories')->insert([
+            'name' => 'Categoria3',
+            'description' => 'desc',
+            'images' => "c3.jpeg",
+            'status' => 'active',
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+
+        DB::table('categories')->insert([
+            'name' => 'Categoria4',
+            'description' => 'desc',
+            'images' => "c4.jpg",
+            'status' => 'active',
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+
+        DB::table('categories')->insert([
+            'name' => 'Categoria5',
+            'description' => 'desc',
+            'images' => "c5.jpeg",
             'status' => 'active',
             'created_at' => now(),
             'updated_at' => now()

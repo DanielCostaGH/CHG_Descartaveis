@@ -8,6 +8,7 @@ use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ColorsController;
+use App\Http\Controllers\BrandsController;
 
 
 
@@ -78,6 +79,7 @@ Route::group(['prefix' => 'api'], function () {
     Route::get('/categories/count', [CategoryController::class, 'countCategories']);
     Route::post('/main-categories/update', [CategoryController::class, 'addMainCategories']);
     Route::get('/main-categories/get', [CategoryController::class, 'getMainCategories']);
-
-
+    Route::post('/brands/update', [BrandsController::class, 'store']);
+    Route::get('/brands/get', [BrandsController::class, 'getBrands']);
+    Route::delete('/brands/{id}', [BrandsController::class, 'destroy']);
 });
