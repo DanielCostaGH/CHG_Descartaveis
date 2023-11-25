@@ -7,7 +7,7 @@
         <main class="w-4/5 p-6 bg-gray-100">
             <!-- Header -->
             <header>
-                <painel/>
+                <painel />
             </header>
 
             <div class="p-4 w-full h-screen overflow-y-scroll">

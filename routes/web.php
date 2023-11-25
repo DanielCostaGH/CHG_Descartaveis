@@ -75,4 +75,8 @@ Route::group(['prefix' => 'api'], function () {
     Route::get('/products/search',  [ProductsController::class, 'search']);
     Route::get('/products/count', [ProductsController::class, 'countProducts']);
     Route::get('/categories/count', [CategoryController::class, 'countCategories']);
+    Route::post('/main-categories/update', [CategoryController::class, 'addMainCategories']);
+    Route::get('/main-categories/get', [CategoryController::class, 'getMainCategories']);
+
+
 });
