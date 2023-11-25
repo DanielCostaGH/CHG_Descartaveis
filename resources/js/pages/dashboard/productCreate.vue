@@ -58,7 +58,7 @@
 
                 <v-col cols="12 my-15 border-t-2">
                     <!-- Formulário -->
-                    <v-form @submit.prevent="updateProduct">
+                    <v-form @submit.prevent="storeProduct">
                         <v-row>
 
                             <!-- Nome do Produto -->
@@ -129,7 +129,7 @@
 
                             <!-- Botão Salvar Alterações -->
                             <v-col cols="12">
-                                <v-btn @click="updateProduct" color="blue" dark large>
+                                <v-btn @click="storeProduct" color="blue" dark large>
                                     Salvar Produto
                                 </v-btn>
                             </v-col>
@@ -182,7 +182,8 @@ export default {
             },
             newVariation: '',
             productVariations: [],
-            colors: []
+            colors: [],
+            newImages: [],
         };
     },
     created() {
@@ -200,7 +201,6 @@ export default {
             this.editedProduct.variation = product.variation;
             this.editedProduct.quantity = product.quantity;
             this.editedProduct.status = product.status;
-            console.log("ID do produto após carregar:", this.editedProduct.id);
         }
         if (this.$props.product) {
             const product = this.$props.product;
@@ -227,11 +227,16 @@ export default {
             if (this.newImage && this.newImage.length > 0) {
                 const reader = new FileReader();
                 reader.onload = (event) => {
-                    this.images.push({
-                        src: event.target.result,
-                        name: this.newImage[0].name
-                    });
-                    this.newImage = '';
+                const newImageFile = this.newImage[0];
+
+                this.images.push({
+                    src: event.target.result,
+                    name: newImageFile.name,
+                    file: newImageFile  
+                });
+
+                this.editedProduct.images = [...this.images];
+                this.newImage = '';
                 };
                 reader.readAsDataURL(this.newImage[0]);
             } else {
@@ -242,18 +247,17 @@ export default {
         uploadImage() {
         },
         selectImage(image) {
-            console.log("Imagem selecionada:", image.src);
             this.selectedImage = image.src;
         },
         removeImage(index) {
             this.images.splice(index, 1);
         },
 
-        // Método para adicionar uma variação à lista de variações
         addVariation() {
             if (this.newVariation.trim() !== '') {
+                this.editedProduct.variation = this.newVariation; 
                 this.productVariations.push(this.newVariation);
-                this.newVariation = ''; // Limpa o campo de entrada após adicionar a variação
+                this.newVariation = '';
             }
         },
 
@@ -262,7 +266,7 @@ export default {
             this.productVariations.splice(index, 1);
         },
 
-        updateProducts() {
+        storeProduct() {
             const formData = new FormData();
 
             formData.append('name', this.editedProduct.name);
@@ -271,13 +275,17 @@ export default {
             formData.append('brand', this.editedProduct.brand);
             formData.append('quantity', this.editedProduct.quantity);
             formData.append('status', this.editedProduct.status);
-            formData.append('variation', this.editedProduct.variation);
 
-            this.editedProduct.colors.forEach(color => {
-                formData.append('colors[]', color);
+            this.productVariations.forEach((variation, index) => {
+                formData.append(`variation[${index}]`, variation);
             });
 
-            if (Array.isArray(this.editedProduct.images)) {
+            const selectedColorIds = this.editedProduct.colors.map(color => color.id);
+            selectedColorIds.forEach(colorId => {
+                formData.append('colors[]', colorId);
+            });
+
+            if (Array.isArray(this.images)) {
                 this.editedProduct.images.forEach(imageInfo => {
                     if (imageInfo.file) {
                         formData.append('images[]', imageInfo.file);
@@ -285,13 +293,17 @@ export default {
                 });
             }
 
-            axios.put(`/dashboard/update/${this.editedProduct.id}`, formData, {
+            axios.post(`/dashboard/store`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
             })
                 .then(response => {
                     this.product = response.data;
+                    if (response.data) {
+                        window.location.href = '/dashboard/products';
+                    }
+                    alert('deu ruim')
                 })
                 .catch(error => {
                     console.error('Erro ao atualizar produto', error);

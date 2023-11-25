@@ -11,7 +11,6 @@
                 <v-col cols="12">
                     <h2 class="text-h6">Produto: {{ editedProduct.name }}</h2>
                 </v-col>
-
                 <v-row>
                     <!-- Coluna Esquerda: Upload e Visualização de Imagem -->
                     <v-col cols="12" md="6">
@@ -90,13 +89,24 @@
 
                             <!-- Cores Disponíveis (Autocomplete) -->
                             <v-col cols="12" md="6">
-                                <v-autocomplete v-model="editedProduct.colors" :items="colors" label="Cor" item-title="name"
-                                     chips small-chips multiple class="pa-0"
-                                    :menu-props="{ maxHeight: '300' }" hide-details return-object></v-autocomplete>
+                                <v-autocomplete
+                                    v-model="editedProduct.colors"
+                                    :items="colors"
+                                    label="Cor"
+                                    item-title="name"
+                                    chips
+                                    small-chips
+                                    multiple
+                                    class="pa-0"
+                                    :menu-props="{ maxHeight: '300' }"
+                                    hide-details
+                                    return-object
+                                ></v-autocomplete>
                             </v-col>
 
                             <!-- Variação -->
                             <!-- Campo de Input para Variação -->
+                            
                             <v-col cols="12" md="6">
                                 <v-text-field label="Variação" v-model="newVariation" outlined
                                     placeholder="Variação"></v-text-field>
@@ -182,30 +192,34 @@ export default {
             },
             newVariation: '',
             productVariations: [],
-            colors: []
+            colors: [],
+            deletedImages: [],
         };
     },
     created() {
-        // Verifique se selectedProduct está disponível e carregado corretamente
+        this.fetchColors();
         if (this.$props.product) {
             const product = this.$props.product;
             this.editedProduct.id = product.id;
             this.editedProduct.name = product.name;
             this.editedProduct.description = product.description;
             this.editedProduct.price = product.price;
-            this.editedProduct.images = product.images;
+            this.editedProduct.images = product.images.split(';').filter(imgName => imgName.trim());
             this.editedProduct.selectedImage = product.selectedImage;
             this.editedProduct.brand = product.brand;
-            this.editedProduct.colors = product.colors;
+            if (product.colors) {
+                this.editedProduct.colors = product.colors.split(';').map(colorId => {
+                    return { id: parseInt(colorId.trim()) };
+                });
+            }
             this.editedProduct.variation = product.variation;
             this.editedProduct.quantity = product.quantity;
             this.editedProduct.status = product.status;
-            console.log("ID do produto após carregar:", this.editedProduct.id);
         }
         if (this.$props.product) {
             const product = this.$props.product;
             // ...outras atribuições...
-            this.editedProduct.images = product.images;
+            this.editedProduct.images = product.images.split(';').filter(imgName => imgName.trim());
 
             // Dividindo a string de imagens e criando a lista de imagens
             this.images = product.images.split(';').filter(imgName => imgName).map(imgName => {
@@ -226,11 +240,16 @@ export default {
         addImage() {
             if (this.newImage && this.newImage.length > 0) {
                 const reader = new FileReader();
-                reader.onload = (event) => {
+                    reader.onload = (event) => {
+                    const newImageFile = this.newImage[0];
+
                     this.images.push({
                         src: event.target.result,
-                        name: this.newImage[0].name
+                        name: newImageFile.name,
+                        file: newImageFile  
                     });
+
+                    this.editedProduct.images = [...this.images];
                     this.newImage = '';
                 };
                 reader.readAsDataURL(this.newImage[0]);
@@ -242,18 +261,23 @@ export default {
         uploadImage() {
         },
         selectImage(image) {
-            console.log("Imagem selecionada:", image.src);
             this.selectedImage = image.src;
         },
         removeImage(index) {
+            const deletedImageName = this.editedProduct.images[index];
+
             this.images.splice(index, 1);
+            this.editedProduct.images.splice(index, 1);
+
+            this.deletedImages.push(deletedImageName);
         },
+
 
         // Método para adicionar uma variação à lista de variações
         addVariation() {
             if (this.newVariation.trim() !== '') {
                 this.productVariations.push(this.newVariation);
-                this.newVariation = ''; // Limpa o campo de entrada após adicionar a variação
+                this.newVariation = ''; 
             }
         },
 
@@ -262,7 +286,7 @@ export default {
             this.productVariations.splice(index, 1);
         },
 
-        updateProducts() {
+        updateProduct() {
             const formData = new FormData();
 
             formData.append('name', this.editedProduct.name);
@@ -271,47 +295,91 @@ export default {
             formData.append('brand', this.editedProduct.brand);
             formData.append('quantity', this.editedProduct.quantity);
             formData.append('status', this.editedProduct.status);
-            formData.append('variation', this.editedProduct.variation);
-
-            this.editedProduct.colors.forEach(color => {
-                formData.append('colors[]', color);
+            
+            this.productVariations.forEach((variation, index) => {
+                formData.append(`variation[${index}]`, variation);
             });
+
+            if (Array.isArray(this.editedProduct.colors)) {
+                const selectedColorIds = this.editedProduct.colors.map(color => color.id);
+                selectedColorIds.forEach(colorId => {
+                    formData.append('colors[]', colorId);
+                });
+            }
+
+            // Lógica para manter as imagens antigas que nao foram removidas
 
             if (Array.isArray(this.editedProduct.images)) {
                 this.editedProduct.images.forEach(imageInfo => {
+                    if (!imageInfo.toBeDeleted && !imageInfo.file) {
+                        formData.append('images[]', imageInfo.src);
+                    }
+                });
+            } else if (this.editedProduct.images) {
+                formData.append('images[]', this.editedProduct.images);
+            }
+
+            // Lógica para adição de novas imagens
+            if (Array.isArray(this.images)) {
+                this.editedProduct.images.forEach(imageInfo => {
                     if (imageInfo.file) {
-                        formData.append('images[]', imageInfo.file);
+                        formData.append('newImages[]', imageInfo.file);
                     }
                 });
             }
 
-            axios.put(`/dashboard/update/${this.editedProduct.id}`, formData, {
+            // Lógica para a deleção de imagens antigas
+            if (Array.isArray(this.deletedImages)) {
+                this.deletedImages.forEach(deletedImage => {
+                    formData.append('deletedImages[]', deletedImage);
+                });
+            }
+
+            axios.post(`/dashboard/update/${this.editedProduct.id}`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
             })
-                .then(response => {
-                    this.product = response.data;
-                })
-                .catch(error => {
-                    console.error('Erro ao atualizar produto', error);
-                });
+            .then(response => {
+                this.product = response.data;
+                this.$router.push('/dashboard');
+            })
+            .catch(error => {
+                console.error('Erro ao atualizar produto', error);
+            });
         },
+
+
 
         fetchColors() {
             axios.get('/api/colors')
                 .then(response => {
-                    this.colors = response.data
+                this.colors = response.data;
+
+                if (this.$props.product && this.$props.product.colors) {
+                    const selectedColorIds = this.$props.product.colors.split(';').map(colorId => parseInt(colorId.trim()));
+                    this.editedProduct.colors = this.colors.filter(color => selectedColorIds.includes(color.id));
+                }
                 })
                 .catch(error => {
                     console.error("Erro ao buscar cores", error)
                 });
-        }
+        },
+        fetchVariations() {
+            axios.get(`/api/variations/${this.editedProduct.id}`)
+                .then(response => {
+                    this.productVariations = response.data;
+                })
+                .catch(error => {
+                    console.error("Erro ao buscar variações", error);
+                });
+            },
 
     },
 
     mounted() {
         this.fetchColors();
+        this.fetchVariations();
     },
 
     components: {
