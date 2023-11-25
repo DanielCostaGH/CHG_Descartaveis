@@ -15,6 +15,10 @@ class Category extends Model
         return $this->hasMany('App\Models\Product', 'category_id');
     }
 
+    public function mainCategories() {
+        return $this->hasMany(MainCategory::class, 'category_id');
+    }
+
     public static function getAvailableCategorys()
     {
         return self::where('status', 'active')->get();
