@@ -1,105 +1,253 @@
 <template>
-    <section class="w-full">
-      <div class="bg-white p-8 rounded-lg shadow-md w-full group hover:shadow-lg">
-        <div class="flex justify-between cursor-pointer" @click="toggleSection">
-                <h3 class="text-xl font-semibold text-gray-500 mb-4 " >Principais Marcas</h3>
+    <v-expansion-panels>
+        <v-expansion-panel v-model="isOpen">
+            <v-expansion-panel-title>
+                <div class="flex justify-between">
+                    <h3 class="text-xl font-semibold text-gray-500 mb-4 pt-4">Principais Marcas</h3>
+                </div>
+            </v-expansion-panel-title>
 
-                <img :src="down_arrow" alt="">
-            </div>
-        <!-- Lista de Marcas Atuais -->
-        <div v-if="isOpen" class="flex flex-wrap -mx-2 border-t pt-5">
-          <div v-for="(brand, index) in editedBrands" :key="index" class="w-full mb-4">
-            <div class="flex items-center justify-between mb-2">
-              <!-- Campo de Seleção de Marca -->
-              <select
-                v-model="editedBrands[index].selectedBrand"
-                class="w-2/6 p-2 border bg-white rounded-l focus:outline-none focus:ring focus:border-blue-500"
-              >
-                <option value="" disabled>Selecione uma marca</option>
-                <option v-for="(option, optionIndex) in brandOptions" :key="optionIndex" :value="option.id">
-                  {{ option.name }}
-                </option>
-              </select>
-  
-              <!-- Campo de Imagem da Marca -->
-              <input
-                type="file"
-                @change="onBrandImageInputChange($event, index)"
-                class="w-3/6 p-2 border border-gray-300 rounded-r focus:outline-none focus:ring focus:border-blue-500"
-              />
-            </div>
-          </div>
-          <!-- Botão para Salvar Alterações -->
-          <button @click="saveChanges" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-4">
-            Salvar Alterações
-          </button>
-        </div>
-      </div>
-    </section>
-  </template>
-  
-  <script>
-  export default {
+            <v-expansion-panel-text>
+                <!-- Formulário para adicionar uma nova marca -->
+                <div class="flex w-full py-5">
+                    <v-text-field label="Nome da Marca" v-model="newBrandName"></v-text-field>
+                    <v-file-input label="Insira a imagem" @change="handleFileUpload"></v-file-input>
+
+                    <v-btn class="ml-5" @click="addBrand">
+                        Adicionar Marca
+                    </v-btn>
+                </div>
+
+                <!-- Lista de Marcas a serem adicionadas -->
+                <v-list-item v-if="editedBrands.length > 0" v-for="(brand, index) in editedBrands" :key="index">
+                    <div class="flex justify-between">
+                        <div class="flex items-center">
+                            <v-avatar size="80">
+                                <v-img :src="getImagePath(brand)"></v-img>
+                            </v-avatar>
+
+                            <v-list-item-content class="mx-10">
+                                <v-list-item-title>{{ brand.name }}</v-list-item-title>
+                            </v-list-item-content>
+                        </div>
+
+                        <v-list-item-action class="mx-10">
+                            <v-btn icon @click="openDialog(index, false)">
+                                <v-icon>mdi-delete</v-icon>
+                            </v-btn>
+                        </v-list-item-action>
+                    </div>
+                </v-list-item>
+
+                <!-- Lista de Marcas Atuais -->
+                <v-list-item v-if="computedBrands.length > 0" v-for="(brand, index) in computedBrands" :key="index">
+                    <div class="flex justify-between">
+                        <div class="flex items-center">
+                            <v-avatar size="80">
+                                <v-img :src="getImagePath(brand)"></v-img>
+                            </v-avatar>
+
+                            <v-list-item-content class="mx-10">
+                                <v-list-item-title>{{ brand.name }}</v-list-item-title>
+                            </v-list-item-content>
+                        </div>
+
+                        <v-list-item-action class="mx-10">
+                            <v-btn icon @click="openDialog(index, true)">
+                                <v-icon>mdi-delete</v-icon>
+                            </v-btn>
+                        </v-list-item-action>
+                    </div>
+                </v-list-item>
+
+                <!-- Botão para Salvar Alterações -->
+                <v-btn @click="saveChanges" color="primary" class="mt-10 px-4 py-2 rounded">
+                    Salvar Alterações
+                </v-btn>
+
+
+
+                <v-dialog v-model="dialog" persistent max-width="290" v-if="brandToDelete">
+                    <v-card>
+                        <v-card-title class="text-h5">Confirmar Exclusão</v-card-title>
+                        <v-card-text>
+                            Tem certeza que deseja excluir a marca: {{ brandToDelete.name }}?
+                        </v-card-text>
+                        <v-card-actions>
+                            <v-spacer></v-spacer>
+                            <v-btn color="blue darken-1" text @click="closeDialog">Cancelar</v-btn>
+                            <v-btn color="blue darken-1" text @click="confirmDelete">Confirmar</v-btn>
+                        </v-card-actions>
+                    </v-card>
+                </v-dialog>
+
+
+
+            </v-expansion-panel-text>
+        </v-expansion-panel>
+    </v-expansion-panels>
+
+    <v-alert class="alert-container text-xl" v-model="alert.show" :type="alert.type" dismissible>
+        {{ alert.text }}
+    </v-alert>
+</template>
+
+<script>
+export default {
     data() {
-      return {
-        down_arrow: '/images/down_arrow.svg',
-        isOpen: false,
-        brands: [], 
-        editedBrands: [], 
-        brandOptions: [], 
-      };
-    },
-    created() {
-      // Simular o carregamento das marcas atuais do banco de dados
-      this.loadBrands();
-      // Simular o carregamento das opções de marcas do banco de dados
-      this.loadBrandOptions();
+        return {
+            isOpen: false,
+            brands: [],
+            editedBrands: [],
+            computedBrands: [],
+            newBrandName: '',
+            newBrandImage: null,
+            dialog: false,
+            brandToDelete: null,
+            alert: {
+                show: false,
+                text: '',
+                type: '' // 'success' para sucesso e 'error' para erro
+            },
+        };
     },
     methods: {
-      toggleSection() {
-        this.isOpen = !this.isOpen;
-      },
-      loadBrands() {
-      // Troca essa parte aqui pela lógica real do backend pra buscar no banco de dados
+        fetchBrands() {
+            axios.get('/api/brands/get')
+                .then(response => {
+                    this.computedBrands = response.data;
+                })
+                .catch(error => {
+                    console.error('Erro ao buscar marcas:', error);
+                });
+        },
 
-        this.brands = [
-          { selectedBrand: null, image: null },
-          { selectedBrand: null, image: null },
-          { selectedBrand: null, image: null },
-          { selectedBrand: null, image: null },
-          { selectedBrand: null, image: null },
-        ];
-        this.editedBrands = this.brands.map(brand => ({ ...brand }));
-      },
-      loadBrandOptions() {
-      // Troca essa parte aqui pela lógica real do backend pra buscar no banco de dados
+        addBrand() {
+            if (this.computedBrands.length + this.editedBrands.length >= 3) {
+                // Mostra uma mensagem de aviso (pode usar v-snackbar ou alert)
+                this.showAlert('Máximo de 3 marcas permitidas.', 'warning');
+            } else if (this.newBrandName && this.newBrandImage) {
+                let newBrand = {
+                    name: this.newBrandName,
+                    images: this.newBrandImage,
+                };
+                this.editedBrands.push(newBrand);
+                this.newBrandName = '';
+                this.newBrandImage = null;
+            }
+        },
 
-        this.brandOptions = [
-          { id: 1, name: 'Marca A' },
-          { id: 2, name: 'Marca B' },
-          { id: 3, name: 'Marca C' },
-          { id: 4, name: 'Marca D' },
-          { id: 5, name: 'Marca E' },
-        ];
-      },
-      onBrandImageInputChange(event, index) {
-        const file = event.target.files[0];
-        if (file) {
-          // Manipular a seleção de imagem da marca pelo usuário
-          this.editedBrands[index].image = URL.createObjectURL(file);
-        } else {
-          // Limpar a imagem se o usuário remover a seleção
-          this.editedBrands[index].image = null;
+        handleFileUpload(event) {
+            this.newBrandImage = event.target.files[0];
+        },
+
+        getImagePath(brand) {
+            let path = `/images/brands/${brand.images}`;
+            return path;
+        },
+
+        saveChanges() {
+            let formData = new FormData();
+
+            this.editedBrands.forEach((brand, index) => {
+                formData.append(`brands[${index}][name]`, brand.name);
+
+                // Se 'images' é um objeto File, adicione-o ao FormData
+                if (brand.images instanceof File) {
+                    formData.append(`brands[${index}][images]`, brand.images, brand.images.name);
+                }
+
+            });
+
+            axios.post('/api/brands/update', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            })
+                .then(response => {
+                    console.log(response.data);
+                    this.fetchBrands(); // Recarrega as marcas
+                    this.showAlert('Marcas salvas com sucesso!', 'success');
+
+                })
+                .catch(error => {
+                    console.error('Erro ao salvar marcas:', error);
+                    this.showAlert('Erro ao salvar marcas.', 'error');
+
+                });
+
+            // Reset os campos do formulário
+            this.editedBrands = [];
+            this.newBrandName = '';
+            this.newBrandImage = null;
+        },
+
+        openDialog(index, isComputed = false) {
+            this.brandToDelete = isComputed ? this.computedBrands[index] : this.editedBrands[index];
+            this.dialog = true;
+        },
+
+        closeDialog() {
+            this.dialog = false;
+            this.brandToDelete = null;
+        },
+
+        confirmDelete() {
+            if (this.brandToDelete) {
+                axios.delete(`/api/brands/${this.brandToDelete.id}`)
+                    .then(response => {
+                        console.log(response.data);
+                        this.fetchBrands();
+                        this.closeDialog();
+                        this.showAlert('Marca excluída com sucesso!', 'success');
+
+                    })
+                    .catch(error => {
+                        console.error('Erro ao excluir a marca:', error);
+                        this.closeDialog();
+                        this.showAlert('Erro ao excluir a marca.', 'error');
+
+                    });
+            }
+        },
+
+        showAlert(text, type) {
+            this.alert.text = text;
+            this.alert.type = type;
+            this.alert.show = true;
+
+            setTimeout(() => {
+                this.alert.show = false;
+            }, 2000); // 3000 milissegundos = 3 segundos
         }
-      },
-      saveChanges() {
-      // Enviar as marcas editadas de volta ao servidor
-      // Troca essa parte aqui pela lógica real do backend pra buscar no banco de dados
-        console.log('Marcas editadas:', this.editedBrands);
-        alert('Alterações salvas com sucesso!');
-      },
+
     },
-  };
-  </script>
-  
-  
+
+    mounted() {
+        this.fetchBrands();
+    }
+};
+</script>
+
+
+
+
+<style scoped>
+.alert-container {
+    position: fixed;
+    top: 10%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 4vh;
+}
+
+.v-alert {
+    max-width: 600px;
+    /* ajuste conforme necessário */
+}
+</style>

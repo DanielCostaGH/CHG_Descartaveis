@@ -59,6 +59,10 @@
             </v-expansion-panel-text>
         </v-expansion-panel>
     </v-expansion-panels>
+
+    <v-alert class="alert-container text-xl" v-model="alert.show" :type="alert.type" dismissible>
+        {{ alert.text }}
+    </v-alert>
 </template>
 
 
@@ -71,6 +75,11 @@ export default {
             categories: [],
             editedCategories: [],
             selectedCategories: [],
+            alert: {
+                show: false,
+                text: '',
+                type: '' // 'success' para sucesso e 'error' para erro
+            },
         };
     },
     methods: {
@@ -125,13 +134,23 @@ export default {
             axios.post('/api/main-categories/update', { categories: this.editedCategories })
                 .then(response => {
                     console.log(response.data);
-                    alert('Alterações salvas com sucesso!');
+                    this.showAlert('Principais categorias atualizadas com sucesso!', 'success');
                 })
                 .catch(error => {
                     console.error('Erro ao salvar categorias:', error);
+                    this.showAlert('Erro ao atualizar categorias', 'error');
                 });
-        }
+        },
 
+        showAlert(text, type) {
+            this.alert.text = text;
+            this.alert.type = type;
+            this.alert.show = true;
+
+            setTimeout(() => {
+                this.alert.show = false;
+            }, 2000); // 3000 milissegundos = 3 segundos
+        }
 
 
     },
@@ -142,3 +161,24 @@ export default {
     }
 };
 </script>
+
+
+
+<style scoped>
+.alert-container {
+    position: fixed;
+    top: 10%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 4vh;
+}
+
+.v-alert {
+    max-width: 600px;
+}
+</style>

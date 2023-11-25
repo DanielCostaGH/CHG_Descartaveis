@@ -42,7 +42,7 @@
             <v-col cols="12" class="d-flex justify-space-between">
                 <v-menu open-on-hover offset-y>
                     <template v-slot:activator="{ on, attrs }">
-                        <v-btn color="#212844" text dark v-bind="attrs" v-on="on">
+                        <v-btn href="/products" color="#212844" text dark v-bind="attrs" v-on="on">
                             Ver Produtos
                         </v-btn>
                     </template>

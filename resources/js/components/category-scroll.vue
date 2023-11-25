@@ -83,20 +83,33 @@ export default {
 
     data() {
         return {
-            categories: [
-                { name: 'Tecnologia', image: '/images/Categorias/c1.png' },
-                { name: 'Gastronomia', image: '/images/Categorias/c2.jpg' },
-                { name: 'Esportes', image: '/images/Categorias/c3.jpeg' },
-                { name: 'Moda', image: '/images/Categorias/c4.jpg' },
-                { name: 'Viagem', image: '/images/Categorias/c5.jpeg' },
-            ],
+            categories: [],
         };
 
     },
     methods: {
+
+        fetchCategories() {
+            axios.get('/api/main-categories/get')
+                .then(response => {
+                    this.categories = response.data.map(category => ({
+                        ...category,
+                        image: `/images/categories/${category.id}/${category.images}`
+                    }));
+                })
+                .catch(error => {
+                    console.error("Erro ao buscar categorias:", error);
+                });
+        },
+
+
         goToCategory(categoryName) {
             this.$router.push(`/products/category/${categoryName}`);
         },
+    },
+
+    mounted() {
+        this.fetchCategories();
     },
 
 
