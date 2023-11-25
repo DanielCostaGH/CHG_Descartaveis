@@ -63,7 +63,7 @@ Route::group(['prefix' => 'dashboard', 'middleware' => 'AdminAuthMiddleware'], f
     Route::get('/appearence', [DashboardController::class, 'appearence'])->name('dashboard.appearence.index');
     Route::get('/create', [DashboardController::class, 'createProduct'])->name('dashboard.products.create');
     Route::post('/store', [DashboardController::class, 'productStore'])->name('dashboard.products.store');
-    Route::put('/update/{id}', [DashboardController::class, 'productUpdate'])->name('dashboard.products.update');
+    Route::post('/update/{id}', [DashboardController::class, 'productUpdate'])->name('dashboard.products.update');
 });
 
 
@@ -72,7 +72,8 @@ Route::group(['prefix' => 'api'], function () {
     Route::get('/products/active', [DashboardController::class, 'show']);
     Route::get('/products', [ProductsController::class, 'getProducts']);
     Route::get('/category', [CategoryController::class, 'index']);
-    Route::get('/colors', [ColorsController::class, 'listColors']);
+    Route::get('/colors', [GetApiDataController::class, 'listColors']);
+    Route::get('/variations/{id}', [GetApiDataController::class, 'listVariations']);
     Route::get('/products/search',  [ProductsController::class, 'search']);
     Route::get('/products/count', [ProductsController::class, 'countProducts']);
     Route::get('/categories/count', [CategoryController::class, 'countCategories']);
