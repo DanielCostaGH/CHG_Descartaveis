@@ -12,9 +12,9 @@
 
             <div class="p-4 w-full h-screen overflow-y-scroll">
 
-                <section class="my-10 ">
+                <!-- <section class="my-10 ">
                     <topics />
-                </section>
+                </section> -->
 
                 <section class="my-10">
                     <carousel />
@@ -28,9 +28,9 @@
                     <top_marcas />
                 </section>
 
-                <section class="my-10">
+                <!-- <section class="my-10">
                     <about />
-                </section>
+                </section> -->
 
                 <section class="my-10">
                     <foot />

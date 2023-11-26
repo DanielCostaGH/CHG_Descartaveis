@@ -91,8 +91,8 @@
                             <!-- Cores Disponíveis (Autocomplete) -->
                             <v-col cols="12" md="6">
                                 <v-autocomplete v-model="editedProduct.colors" :items="colors" label="Cor" item-title="name"
-                                     chips small-chips multiple class="pa-0"
-                                    :menu-props="{ maxHeight: '300' }" hide-details return-object></v-autocomplete>
+                                    chips small-chips multiple class="pa-0" :menu-props="{ maxHeight: '300' }" hide-details
+                                    return-object></v-autocomplete>
                             </v-col>
 
                             <!-- Variação -->
@@ -101,7 +101,8 @@
                                 <v-text-field label="Variação" v-model="newVariation" outlined
                                     placeholder="Variação"></v-text-field>
                                 <div>
-                                    <div class="flex justify-between my-3 max-h-[10vh] overflow-auto" v-for="(variation, index) in productVariations" :key="index">
+                                    <div class="flex justify-between my-3 max-h-[10vh] overflow-auto"
+                                        v-for="(variation, index) in productVariations" :key="index">
                                         {{ variation }}
                                         <!-- Botão para remover variação (opcional) -->
                                         <v-btn small @click="removeVariation(index)">Remover</v-btn>
@@ -152,6 +153,21 @@
             </v-row>
         </main>
     </div>
+
+    <v-dialog v-model="dialog" persistent max-width="50%">
+        <v-card color="success">
+            <v-card-text class="white--text text-h5 pt-15">
+                <v-row align="center" justify="center">
+                    <v-icon class="mr-2" size="x-large">mdi-check-circle</v-icon>
+                    O produto foi cadastrado com sucesso.
+                </v-row>
+            </v-card-text>
+            <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="white" class="text-h6" text @click="confirmProductCreation">OK</v-btn>
+            </v-card-actions>
+        </v-card>
+    </v-dialog>
 </template>
 
 <script>
@@ -184,6 +200,7 @@ export default {
             productVariations: [],
             colors: [],
             newImages: [],
+            dialog: false,
         };
     },
     created() {
@@ -227,16 +244,16 @@ export default {
             if (this.newImage && this.newImage.length > 0) {
                 const reader = new FileReader();
                 reader.onload = (event) => {
-                const newImageFile = this.newImage[0];
+                    const newImageFile = this.newImage[0];
 
-                this.images.push({
-                    src: event.target.result,
-                    name: newImageFile.name,
-                    file: newImageFile  
-                });
+                    this.images.push({
+                        src: event.target.result,
+                        name: newImageFile.name,
+                        file: newImageFile
+                    });
 
-                this.editedProduct.images = [...this.images];
-                this.newImage = '';
+                    this.editedProduct.images = [...this.images];
+                    this.newImage = '';
                 };
                 reader.readAsDataURL(this.newImage[0]);
             } else {
@@ -255,7 +272,7 @@ export default {
 
         addVariation() {
             if (this.newVariation.trim() !== '') {
-                this.editedProduct.variation = this.newVariation; 
+                this.editedProduct.variation = this.newVariation;
                 this.productVariations.push(this.newVariation);
                 this.newVariation = '';
             }
@@ -299,11 +316,12 @@ export default {
                 },
             })
                 .then(response => {
-                    this.product = response.data;
-                    if (response.data) {
-                        window.location.href = '/dashboard/products';
+                    for (const key in response.data) {
+                        this.$set(this.product, key, response.data[key]);
                     }
-                    alert('deu ruim')
+
+                    this.dialog = true;
+
                 })
                 .catch(error => {
                     console.error('Erro ao atualizar produto', error);
@@ -318,7 +336,12 @@ export default {
                 .catch(error => {
                     console.error("Erro ao buscar cores", error)
                 });
-        }
+        },
+
+        confirmProductCreation() {
+            this.dialog = false; // Fecha o diálogo
+            window.location.href = '/dashboard/products'; // Redireciona o usuário
+        },
 
     },
 
