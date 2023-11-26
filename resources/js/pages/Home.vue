@@ -2,7 +2,6 @@
     <v-app>
         <navbar />
         <topics />
-        <!-- <carrousel/> -->
         <slides />
         <products />
         <category_scroll />
@@ -22,7 +21,6 @@
 <script>
 import navbar from '../components/navbar/navbar.vue';
 import topics from '../components/topics.vue';
-import carrousel from '../components/carrousel.vue';
 import products from '../components/products.vue';
 import category_scroll from '../components/category-scroll.vue';
 import top_marcas from '../components/top-marcas.vue';
@@ -39,7 +37,6 @@ export default {
     components: {
         navbar,
         topics,
-        carrousel,
         products,
         category_scroll,
         top_marcas,

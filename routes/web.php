@@ -7,8 +7,10 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\ColorsController;
+use App\Http\Controllers\FooterController;
 use App\Http\Controllers\BrandsController;
+use App\Http\Controllers\SlidesController;
+
 
 
 
@@ -86,4 +88,8 @@ Route::group(['prefix' => 'api'], function () {
     Route::post('/brands/update', [BrandsController::class, 'store']);
     Route::get('/brands/get', [BrandsController::class, 'getBrands']);
     Route::delete('/brands/{id}', [BrandsController::class, 'destroy']);
+    Route::post('/footer', [FooterController::class, 'updateFooter']);
+    Route::get('/footer/get', [FooterController::class, 'getFooter']);
+    Route::post('/slides', [SlidesController::class, 'updateSlides']);
+    Route::get('/slides/get', [SlidesController::class, 'getSlides']);
 });

@@ -1,107 +1,126 @@
 <template>
-    <section class="w-full">
-        <div class="bg-white p-8 rounded-lg shadow-md w-full group hover:shadow-lg">
-            <div class="flex justify-between cursor-pointer" @click="toggleSection">
-                <h3 class="text-xl font-semibold text-gray-500 mb-4 " >Editar Rodapé</h3>
-
-                <img :src="down_arrow" alt="">
-            </div>
-            <div v-if="isOpen" class="border-t pt-5">
-                <div class="grid grid-cols-2 gap-4">
-                    <!-- Campo de Whatsapp -->
-                    <div class="mb-4">
-                        <label for="whatsapp" class="block text-gray-700">Whatsapp:</label>
-                        <input type="text" id="whatsapp" v-model="whatsapp"
-                            class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:border-blue-500" />
-                    </div>
-
-                    <!-- Campo de Telefone -->
-                    <div class="mb-4">
-                        <label for="phone" class="block text-gray-700">Telefone:</label>
-                        <input type="text" id="phone" v-model="phone"
-                            class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:border-blue-500" />
-                    </div>
-
-                    <!-- Campo de Instagram -->
-                    <div class="mb-4">
-                        <label for="instagram" class="block text-gray-700">Instagram:</label>
-                        <input type="text" id="instagram" v-model="instagram"
-                            class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:border-blue-500" />
-                    </div>
-
-                    <!-- Campo de Email -->
-                    <div class="mb-4">
-                        <label for="email" class="block text-gray-700">Email:</label>
-                        <input type="text" id="email" v-model="email"
-                            class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:border-blue-500" />
-                    </div>
+    <v-expansion-panels>
+        <v-expansion-panel>
+            <v-expansion-panel-title>
+                <div class="flex justify-between">
+                    <h3 class="text-xl font-semibold text-gray-500 mb-4 pt-4">Editar Rodapé</h3>
                 </div>
+            </v-expansion-panel-title>
 
-                <!-- Campo de Imagem da Logo -->
-                <div class="mb-4">
-                    <label for="logo" class="block text-gray-700">Logo (Imagem):</label>
-                    <input type="file" @change="onLogoInputChange($event)" id="logo"
-                        class="w-1/2 p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:border-blue-500" />
+            <v-expansion-panel-text>
+                <div class="my-5">
+                    <v-row>
+                        <v-col cols="12" sm="6">
+                            <v-text-field label="Whatsapp" v-model="whatsapp" outlined dense>{{this.whatsapp}}</v-text-field>
+                        </v-col>
+                        <v-col cols="12" sm="6">
+                            <v-text-field label="Telefone" v-model="phone" outlined dense></v-text-field>
+                        </v-col>
+                        <v-col cols="12" sm="6">
+                            <v-text-field label="Instagram" v-model="instagram" outlined dense></v-text-field>
+                        </v-col>
+                        <v-col cols="12" sm="6">
+                            <v-text-field label="Email" v-model="email" outlined dense></v-text-field>
+                        </v-col>
+                    </v-row>
+
+                    <v-file-input label="Logo (Imagem)" @change="onLogoInputChange" outlined dense></v-file-input>
+
+                    <div v-if="logoImagePreview" class="mb-4">
+                        <label class="block text-gray-700">Pré-visualização da Logo:</label>
+                        <v-img :src="logoImagePreview" class="h-[30vh] p-5 border" alt="Logo"></v-img>
+                    </div>
+
+                    <v-btn color="blue" @click="saveChanges" class="mt-4">
+                        Salvar Alterações
+                    </v-btn>
                 </div>
+            </v-expansion-panel-text>
 
-                <!-- Pré-visualização da imagem da Logo -->
-                <div class="mb-4" v-if="logoImage">
-                    <label class="block text-gray-700">Pré-visualização da Logo:</label>
-                    <img :src="logoImage" alt="Logo" class="h-[30vh] p-5 border" />
-                </div>
-
-                <!-- Botão para Salvar Alterações -->
-                <button @click="saveChanges" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-4">
-                    Salvar Alterações
-                </button>
-            </div>
-            
-
-        </div>
-    </section>
+        </v-expansion-panel>
+    </v-expansion-panels>
 </template>
-  
+
 <script>
 export default {
     data() {
         return {
-            isOpen: false,
-            whatsapp: '', 
-            phone: '', 
-            instagram: '', 
-            email: '', 
-            logoImage: null, 
-            down_arrow: '/images/down_arrow.svg',
+            whatsapp: '',
+            phone: '',
+            instagram: '',
+            email: '',
+            logoImage: null,
+            logoImageName: '',
+            logoImagePreview: '',
         };
     },
     methods: {
-        toggleSection() {
-            this.isOpen = !this.isOpen;
+
+        fetchFooterData() {
+            axios.get('/api/footer/get')
+                .then(response => {
+                    console.log(response.data);
+                    const footerData = response.data[0];
+                    if (footerData) {
+                        this.whatsapp = footerData.whatsapp_num;
+                        this.phone = footerData.call_num;
+                        this.instagram = footerData.instagram;
+                        this.email = footerData.email;
+                        this.logoImageName = footerData.image;
+                        this.logoImagePreview = footerData.image ? `/images/footer/${footerData.image}` : null;
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro ao buscar dados do rodapé:', error);
+                });
         },
+
+
         onLogoInputChange(event) {
             const file = event.target.files[0];
             if (file) {
-                // Manipular a seleção de imagem da logo pelo usuário
-                this.logoImage = URL.createObjectURL(file);
+                this.logoImage = file; // Armazene o arquivo real
+                this.logoImageName = file.name;
+                this.logoImagePreview = URL.createObjectURL(file); // Para pré-visualização
             } else {
-                // Limpar a imagem se o usuário remover a seleção
                 this.logoImage = null;
+                this.logoImageName = null;
+                this.logoImagePreview = null; // Reset
             }
         },
-        saveChanges() {
-        // Enviar os valores editados do Footer de volta ao servidor
-        // Troca essa parte aqui pela lógica real do backend pra buscar no banco de dados
 
-            const data = {
-                whatsapp: this.whatsapp,
-                phone: this.phone,
-                instagram: this.instagram,
-                email: this.email,
-                logoImage: this.logoImage,
-            };
-            alert('Alterações salvas com sucesso!');
+        saveChanges() {
+            const formData = new FormData();
+            formData.append('whatsapp_num', this.whatsapp);
+            formData.append('call_num', this.phone);
+            formData.append('instagram', this.instagram);
+            formData.append('email', this.email);
+            formData.append('image_name', this.logoImageName);
+
+
+            // Supondo que 'this.logoImage' seja um objeto File
+            if (this.logoImage) {
+                formData.append('image', this.logoImage);
+            }
+
+            axios.post('/api/footer', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            })
+                .then(response => {
+                    console.log(response);
+                    alert('Alterações salvas com sucesso!');
+                })
+                .catch(error => {
+                    console.error('Erro ao salvar as alterações:', error);
+                });
         },
+
+    },
+
+    mounted() {
+        this.fetchFooterData();
     },
 };
 </script>
-  
