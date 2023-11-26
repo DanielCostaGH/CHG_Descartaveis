@@ -10,20 +10,12 @@
                             Todos os Produtos
                         </v-btn>
                     </template>
-
-                    <v-list>
-                        <v-list-item v-for="(item, index) in items" :key="index" link>
-                            <v-list-item-content>
-                                <v-list-item-title>{{ item.title }}</v-list-item-title>
-                            </v-list-item-content>
-                        </v-list-item>
-                    </v-list>
                 </v-menu>
             </v-col>
 
-            <v-col cols="auto" v-for="category in categorys" :key="category.name">
-                <v-btn :href="`products/${category.name}`" text color="blue-grey-lighten-4" class="mx-2">
-                    {{ category.name }}
+            <v-col cols="auto" v-for="topics in topicOptions" :key="topics.name">
+                <v-btn :href="`products/${topics.name}`" text color="blue-grey-lighten-4" class="mx-2">
+                    {{ topics.name }}
                 </v-btn>
             </v-col>
 
@@ -72,19 +64,23 @@
 export default {
     data() {
         return {
-            items: [
-                { title: 'Click Me' },
-                { title: 'Click Me' },
-                { title: 'Click Me' },
-                { title: 'Click Me 2' },
-            ],
-            categorys: [
-                { name: 'Saúde'},
-                { name: 'Limpeza'},
-                { name: 'Alimentação'},
-                { name: 'Utilidade'},
-            ]
+            topicOptions: []
         };
     },
+
+    methods:{
+        async loadTopicOptions() {
+            try {
+                const response = await axios.get('/api/category');
+                this.topicOptions = response.data.slice(0, 4); // Ajuste conforme a estrutura da sua resposta
+            } catch (error) {
+                console.error(error);
+            }
+        },
+    },
+
+    mounted(){
+        this.loadTopicOptions();
+    }
 };
 </script>

@@ -20,29 +20,22 @@
 
 
         <div class="flex overflow-x-scroll py-8">
-            <v-card v-for="(product, index) in products" :key="index" :loading="loading" class="mx-4" max-width="300">
+            <v-card v-for="(product, index) in products" :key="index" :loading="loading" class="card my-4" width="320">
 
-                <v-row align="center" class="mx-2 my-3">
-                    <v-rating :model-value="product.rating" color="amber" density="compact" half-increments readonly
-                        size="small"></v-rating>
-                    <div class="text-grey ms-4">
-                        {{ product.rating }} ({{ product.reviewCount }})
-                    </div>
-
-                </v-row>
-
-                <v-img fit height="200" :src="product.image"></v-img>
+                <v-img :src="product.imagePath" fit height="200"></v-img>
 
                 <v-card-item class="border-top my-2">
-                    <v-card-title class="text-h6 overflow-hidden text--secondary">{{ product.title }}</v-card-title>
+                    <v-card-title class="text-h6 overflow-hidden text--secondary">{{ product.name }}</v-card-title>
+                    <span class="font-weight-bold" style="color: #38a169;">{{ product.price }}</span>
                 </v-card-item>
 
                 <v-card-actions class="justify-center">
-                    <v-btn  class="my-custom-button text-white" color="green-accent-4" variant="flat">
+                    <v-btn :href="`products/${product.id}`" class="my-custom-button text-white" color="green-accent-4"
+                        variant="flat">
                         <v-icon class="mx-2">
                             mdi-eye
                         </v-icon>
-                        Ver detahes do produto
+                        Ver Detalhes do Produto
                     </v-btn>
                 </v-card-actions>
             </v-card>
@@ -54,39 +47,7 @@
 export default {
     data: () => ({
         loading: false,
-        products: [
-            {
-                title: 'Produto 1',
-                image: '/images/products/1/i1.png',
-                rating: 4.5,
-                reviewCount: 413,
-            },
-            {
-                title: 'Produto 2',
-                image: '/images/products/1/i2.png',
-                rating: 3.5,
-                reviewCount: 413,
-            },
-            {
-                title: 'Produto 3',
-                image: '/images/products/1/i3.png',
-                rating: 4.5,
-                reviewCount: 413,
-            },
-            {
-                title: 'Produto 4',
-                image: '/images/products/1/i4.png',
-                rating: 4.5,
-                reviewCount: 413,
-            },
-            {
-                title: 'Produto 5',
-                image: '/images/products/1/i5.png',
-                rating: 4.5,
-                reviewCount: 413,
-            },
-
-        ],
+        products: [],
     }),
 
     methods: {
@@ -95,7 +56,27 @@ export default {
 
             setTimeout(() => (this.loading = false), 2000);
         },
+
+        fetchProducts(filters = {}) {
+        axios.get('/api/products', { params: filters })
+            .then(response => {
+                this.products = response.data.map(product => {
+                    const firstImage = product.images.split(';')[0];
+                    const imagePath = `/images/products/${product.id}/${firstImage}`;
+                    return { ...product, imagePath };
+                });
+                this.products = this.products.slice(0, 5);
+            })
+            .catch(error => {
+                console.error('Erro ao buscar produtos:', error);
+            });
     },
+
+    },
+
+    mounted() {
+        this.fetchProducts();
+    }
 };
 </script>
 
