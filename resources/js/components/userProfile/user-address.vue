@@ -97,7 +97,6 @@ export default {
 
                 axios.post(`/add_address/${enderecoSelecionado.user_id}`, enderecoSelecionado)
                     .then(response => {
-                        console.log('Resposta do servidor:', response.data);
                     })
                     .catch(error => {
                         console.error('Erro ao enviar a solicitação:', error);

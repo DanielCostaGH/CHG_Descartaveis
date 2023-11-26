@@ -120,7 +120,6 @@ export default {
                 axios.get(`/api/products/search?query=${encodeURIComponent(this.searchQuery)}`)
                     .then(response => {
                         this.suggestions = response.data;
-                        console.log(response.data);
                     })
                     .catch(error => {
                         console.error('Erro ao buscar sugestões:', error);

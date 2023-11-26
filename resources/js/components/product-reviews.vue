@@ -126,7 +126,6 @@ export default {
         },
         rateProduct(index) {
             // Implemente a lógica para enviar a avaliação do produto para o servidor
-            console.log('Avaliação:', index);
         },
     },
 };

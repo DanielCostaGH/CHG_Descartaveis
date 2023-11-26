@@ -165,7 +165,6 @@ export default {
                 }
             })
                 .then(response => {
-                    console.log(response.data);
                     this.fetchBrands(); // Recarrega as marcas
                     this.showAlert('Marcas salvas com sucesso!', 'success');
 
@@ -196,7 +195,6 @@ export default {
             if (this.brandToDelete) {
                 axios.delete(`/api/brands/${this.brandToDelete.id}`)
                     .then(response => {
-                        console.log(response.data);
                         this.fetchBrands();
                         this.closeDialog();
                         this.showAlert('Marca excluída com sucesso!', 'success');

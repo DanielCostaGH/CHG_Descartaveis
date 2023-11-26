@@ -100,7 +100,6 @@ export default {
     },
     methods: {
         applyFilter() {
-            console.log(this.selectedCategories);
             const filters = {
                 selectedCategories: this.selectedCategories.map(cat => cat.id),
                 selectedColors: this.selectedColors.map(cat => cat.id),

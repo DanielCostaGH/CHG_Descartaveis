@@ -53,7 +53,6 @@
   
           axios.put(`/user/update_basic/${this.formData.id}`, this.formData)
             .then(response => {
-              console.log('Resposta do servidor:', response.data);
             })
             .catch(error => {
               console.error('Erro ao enviar a solicitação:', error);

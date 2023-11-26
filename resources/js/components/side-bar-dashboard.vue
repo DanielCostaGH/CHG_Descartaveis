@@ -28,6 +28,13 @@
         </li>
 
         <li class="mb-4 mx-5">
+          <a href="/dashboard/categories" class="flex items-center p-5 rounded-lg hover:bg-[#F3F4F5] hover:shadow-lg active:bg-gray-200">
+            <img class="pr-6" :src="appearance" alt="">
+            <span>Categorias</span>
+          </a>
+        </li>
+
+        <li class="mb-4 mx-5">
           <a class="flex items-center text-[#99A8CB] p-5 rounded-lg hover:bg-[#F3F4F5] hover:shadow-lg active:bg-gray-200">
             <img class="pr-6" :src="order_pending" alt="">
             <span>Pedidos pendentes</span>

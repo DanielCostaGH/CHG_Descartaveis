@@ -88,7 +88,6 @@ export default {
                 password: this.password
             })
             .then(response => {
-                console.log('aaaa', response.data.response.token)
                 if (response.data.response.token) {
                     window.location.href = '/dashboard';
                 } else {

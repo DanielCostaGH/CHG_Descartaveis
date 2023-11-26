@@ -99,7 +99,6 @@ export default {
                 email: this.email,
                 logoImage: this.logoImage,
             };
-            console.log('Valores editados do Footer:', data);
             alert('Alterações salvas com sucesso!');
         },
     },

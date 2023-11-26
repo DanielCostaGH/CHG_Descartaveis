@@ -24,19 +24,18 @@ Route::group(['prefix' => 'admin'], function () {
 
     Route::post('/logout', [AdminController::class, 'logout'])->name('admin.logout');
 
-    Route::group(['midleware' => ['auth:sanctum']], function () {
+    Route::group(['middleware' => 'AdminAuthMiddleware'], function () {
         Route::get('/', [AdminController::class, 'index'])->name('admin.index');
         Route::post('/', [AdminController::class, 'store'])->name('admin.store');
-    });
-
-    Route::middleware(['auth:sanctum', 'checkAdminEmail'])->group(function () {
         Route::get('/create', [AdminController::class, 'create'])->name('admin.create');
     });
 });
 
 
 Route::get('/user/login', [UserController::class, 'showLoginForm'])->name('user.login');
-Route::post('user/login', [UserController::class, 'login'])->name('user.login.post');
+Route::post('/user/login', [UserController::class, 'login'])->name('user.login.post');
+Route::get('/user/create', [UserController::class, 'create'])->name('user.create');
+Route::post('/', [UserController::class, 'store'])->name('user.store');
 
 
 
@@ -45,9 +44,6 @@ Route::group(['prefix' => 'user', 'middleware' => 'UserAuthMiddleware'], functio
     Route::get('/', [UserController::class, 'index'])->name('user.name');
     Route::put('/update_basic/{id}', [UserController::class, 'updateBasic'])->name('user.update_basic');
     Route::post('/add_address/{id}', [UserController::class, 'addAddress'])->name('user.add_address');
-    Route::get('/create', [UserController::class, 'create'])
-        ->name('user.create');
-    Route::post('/', [UserController::class, 'store'])->name('user.store');
 });
 
 Route::group(['prefix' => 'products'], function () {
@@ -59,11 +55,19 @@ Route::group(['prefix' => 'products'], function () {
 Route::group(['prefix' => 'dashboard', 'middleware' => 'AdminAuthMiddleware'], function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
     Route::get('/products', [DashboardController::class, 'showProducts'])->name('dashboard.products.index');
-    Route::get('/products/edit/{id}', [DashboardController::class, 'editProduct'])->name('dashboard.products.edit');
-    Route::get('/appearence', [DashboardController::class, 'appearence'])->name('dashboard.appearence.index');
     Route::get('/create', [DashboardController::class, 'createProduct'])->name('dashboard.products.create');
     Route::post('/store', [DashboardController::class, 'productStore'])->name('dashboard.products.store');
+    Route::get('/products/edit/{id}', [DashboardController::class, 'editProduct'])->name('dashboard.products.edit');
     Route::post('/update/{id}', [DashboardController::class, 'productUpdate'])->name('dashboard.products.update');
+    Route::delete('/delete/{id}', [DashboardController::class, 'productDelete'])->name('dashboard.products.delete');
+    Route::get('/appearence', [DashboardController::class, 'appearence'])->name('dashboard.appearence.index');
+    Route::get('/categories', [CategoryController::class, 'showCategories'])->name('dashboard.categories.index');
+    Route::get('/categories/create', [CategoryController::class, 'createCategory'])->name('dashboard.categories.create');
+    Route::post('/categories/store', [CategoryController::class, 'categoryStore'])->name('dashboard.category.store');
+    Route::get('/categories/edit/{id}', [CategoryController::class, 'editCategory'])->name('dashboard.categories.edit');
+    Route::post('/category/update/{id}', [CategoryController::class, 'categoryUpdate'])->name('dashboard.category.update');
+    Route::delete('/category/delete/{id}', [CategoryController::class, 'categoryDelete'])->name('dashboard.category.delete');
+
 });
 
 

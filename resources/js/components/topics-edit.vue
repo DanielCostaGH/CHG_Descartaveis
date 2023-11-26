@@ -60,7 +60,6 @@ export default {
         },
         saveChanges() {
             // Implemente a lógica para salvar as alterações
-            console.log('Tópicos editados:', this.editedTopics);
             alert('Alterações salvas com sucesso!');
         },
     },

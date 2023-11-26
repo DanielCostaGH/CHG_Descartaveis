@@ -106,7 +106,6 @@ export default {
 
         addCategory() {
             if (this.selectedCategories) {
-                console.log("Categoria selecionada:", this.selectedCategories);
 
                 this.editedCategories.push({
                     ...this.selectedCategories,
@@ -133,7 +132,6 @@ export default {
         saveChanges() {
             axios.post('/api/main-categories/update', { categories: this.editedCategories })
                 .then(response => {
-                    console.log(response.data);
                     this.showAlert('Principais categorias atualizadas com sucesso!', 'success');
                 })
                 .catch(error => {

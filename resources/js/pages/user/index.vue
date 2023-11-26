@@ -123,7 +123,6 @@ export default {
         userRequests,
     },
     mounted() {
-        console.log(this.userAddresses);
     },
     methods: {
         selectComponent(componentName) {

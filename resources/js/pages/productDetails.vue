@@ -198,7 +198,6 @@ export default {
         },
 
         rateProduct(starCount) {
-            console.log(`Rated ${starCount} stars`);
         },
     },
 

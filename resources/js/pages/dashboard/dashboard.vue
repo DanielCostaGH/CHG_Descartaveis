@@ -141,7 +141,6 @@ export default {
             try {
                 const response = await axios.get('/api/products');
                 this.products = response.data;
-                console.log(response.data);
             } catch (error) {
                 console.error(error);
             }

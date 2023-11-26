@@ -19,7 +19,6 @@ export default {
     };
   },
   // created() {
-  //   console.log(`/api/product/details/${this.productId}/description`);
   //   axios.get(`/api/product/details/${this.productId}/description`)
 
   //     .then((response) => {

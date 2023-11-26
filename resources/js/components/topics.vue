@@ -22,7 +22,7 @@
             </v-col>
 
             <v-col cols="auto" v-for="category in categorys" :key="category.name">
-                <v-btn :href="`products/${category.name}`" text color="blue-grey-lighten-4" class="mx-2">
+                <v-btn :href="`products/filter/${category.name}`" text color="blue-grey-lighten-4" class="mx-2">
                     {{ category.name }}
                 </v-btn>
             </v-col>
