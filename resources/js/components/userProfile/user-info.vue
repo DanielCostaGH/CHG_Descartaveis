@@ -24,7 +24,7 @@
       </v-card>
     </div>
   </template>
-  
+
   <script>
   export default {
     props: {
@@ -50,7 +50,7 @@
       salvar() {
         if (this.$refs.form.validate()) {
           this.formData.id = this.userData.id;
-  
+
           axios.put(`/user/update_basic/${this.formData.id}`, this.formData)
             .then(response => {
             })
@@ -62,4 +62,3 @@
     },
   };
   </script>
-  

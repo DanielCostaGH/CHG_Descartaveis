@@ -3,8 +3,7 @@
         <section class="flex w-full items-center text-lg">
             <span>Filtros de pesquisa:</span>
 
-           
-            <!-- dropdown -->
+
             <div class="relative">
                 <button @click="isOpen = !isOpen" class="flex items-center rounded-lg py-2 px-5 mx-10 cursor-pointer bg-[#F3F9FB] shadow hover hover:bg-[#D8E1E4]">
                     <span>Categorias </span>
@@ -16,8 +15,6 @@
                     <a href="#" class="block px-4 py-2 hover hover:bg-gray-100">Item 3</a>
                 </div>
             </div>
-
-            <!-- end dropdown -->
 
 
 
@@ -53,7 +50,7 @@
         </div>
     </div>
 </template>
-  
+
 <script>
 
 export default {
@@ -79,4 +76,3 @@ export default {
     },
 };
 </script>
-  

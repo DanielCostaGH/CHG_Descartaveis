@@ -92,4 +92,6 @@ Route::group(['prefix' => 'api'], function () {
     Route::get('/footer/get', [FooterController::class, 'getFooter']);
     Route::post('/slides', [SlidesController::class, 'updateSlides']);
     Route::get('/slides/get', [SlidesController::class, 'getSlides']);
+    Route::delete('/slides/{id}', [SlidesController::class, 'destroy']);
+
 });

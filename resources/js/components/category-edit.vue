@@ -106,7 +106,6 @@ export default {
 
         addCategory() {
             if (this.selectedCategories) {
-
                 this.editedCategories.push({
                     ...this.selectedCategories,
                     category_id: this.selectedCategories.id

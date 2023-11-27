@@ -14,33 +14,59 @@
                         <v-card>
                             <v-img :src="selectedImage" aspect-ratio="1.5"></v-img>
                             <v-card-actions>
-                                <v-file-input v-model="newImage" accept="image/*" label="Escolher imagem"
+                                <v-file-input v-model="newImage" label="Escolher imagem" @change="uploadImage"
                                     outlined></v-file-input>
                                 <v-btn color="primary" @click="addImage" class="ml-2">Adicionar Imagem</v-btn>
                             </v-card-actions>
+
                         </v-card>
                     </v-col>
 
-                    <!-- Coluna Direita: Lista de Imagens editadas -->
-                    <v-col cols="12" md="6">
-                        <v-list v-if="editedImages" dense>
-                            <v-subheader>Novas imagens</v-subheader>
-                            <v-list-item v-for="(image, index) in editedImages" :key="index" @click="selectImage(image)">
-                                <!-- Conteúdo do Item da Lista -->
-                            </v-list-item>
-                        </v-list>
-                        <!-- Coluna Direita: Lista de Imagens computadas -->
-
+                    <!-- Coluna Direita: Lista de Imagens Selecionadas -->
+                    <v-col cols="12" md="6" class="overflow-y-scroll max-h-[55vh]">
                         <v-list dense>
-                            <v-subheader>Imagens do slide</v-subheader>
-                            <v-list-item v-for="(image, index) in computedImages" :key="index" @click="selectImage(image)">
-                                <!-- Conteúdo do Item da Lista -->
+                            <v-subheader>Imagens Selecionadas</v-subheader>
+                            <v-list-item v-for="(image, index) in images" :key="index" @click="selectImage(image)">
+                                <div class="flex justify-between">
+                                    <div class="flex items-center">
+                                        <v-avatar size="80"><v-img :src="image.src"></v-img></v-avatar>
+
+                                        <v-list-item-content class="mx-10">
+                                            <v-list-item-title>{{ image.name }}</v-list-item-title>
+                                        </v-list-item-content>
+                                    </div>
+
+                                    <v-list-item-action class="mx-10">
+                                        <v-btn icon @click="removeImage(index)">
+                                            <v-icon>mdi-delete</v-icon>
+                                        </v-btn>
+                                    </v-list-item-action>
+                                </div>
                             </v-list-item>
                         </v-list>
 
+                        <v-list>
+                            <v-title>Imagens existentes</v-title>
+                            <v-list-item v-for="(image, index) in computedImages" :key="index" @click="selectImage(image)">
+                                <div class="flex justify-between">
+                                    <div class="flex items-center">
+                                        <v-avatar size="80"><v-img :src="getImagePath(image)"></v-img></v-avatar>
+
+                                        <v-list-item-content class="mx-10">
+                                            <v-list-item-title>{{ image.name }}</v-list-item-title>
+                                        </v-list-item-content>
+                                    </div>
+
+                                    <v-list-item-action class="mx-10">
+                                        <v-btn icon @click="openDialog(index)">
+                                            <v-icon>mdi-delete</v-icon>
+                                        </v-btn>
+                                    </v-list-item-action>
+                                </div>
+                            </v-list-item>
+                        </v-list>
                     </v-col>
                 </v-row>
-                <!-- Botão para Salvar Alterações -->
                 <v-btn @click="uploadNewImages" color="primary" class="mt-10 px-4 py-2 rounded">
                     Salvar Imagens
                 </v-btn>
@@ -48,7 +74,20 @@
         </v-expansion-panel>
     </v-expansion-panels>
 
-    <!-- Alerta para feedback -->
+    <v-dialog v-model="dialog" persistent max-width="290" v-if="slideToDelete">
+        <v-card>
+            <v-card-title class="text-h5">Confirmar Exclusão</v-card-title>
+            <v-card-text>
+                Tem certeza que deseja excluir o slide: {{ slideToDelete.name }}?
+            </v-card-text>
+            <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="blue darken-1" text @click="closeDialog">Cancelar</v-btn>
+                <v-btn color="blue darken-1" text @click="confirmDelete">Confirmar</v-btn>
+            </v-card-actions>
+        </v-card>
+    </v-dialog>
+
     <v-alert class="alert-container text-xl" v-model="alert.show" :type="alert.type" dismissible>
         {{ alert.text }}
     </v-alert>
@@ -60,10 +99,12 @@ export default {
     data() {
         return {
             isOpen: false,
-            computedImages: [], // Imagens já existentes
-            editedImages: [],   // Imagens recém-adicionadas
-            newImage: null,     // Imagem selecionada para adição
-            maxImages: 8,       // Máximo de imagens permitidas
+            computedImages: [],
+            images: [],
+            newImages: [],
+            selectedImage: '',
+            slideToDelete: null,
+            dialog: false,
             alert: {
                 show: false,
                 text: '',
@@ -81,41 +122,51 @@ export default {
             axios.get('/api/slides/get')
                 .then(response => {
                     this.computedImages = response.data;
-                    console.log(response.data);
                 })
                 .catch(error => {
-                    console.error('Erro ao buscar imagens', error);
                 });
         },
 
-        addImage() {
-            if (this.computedImages.length + this.editedImages.length >= this.maxImages) {
-                this.showAlert(`Máximo de ${this.maxImages} imagens permitidas.`, 'warning');
-                return;
-            }
+        getImagePath(image) {
+            let path = `/images/slides/${image.images}`;
+            return path;
+        },
 
-            if (this.newImage && this.newImage) {
-                let newImage = {
-                    name: this.newImage.name,
-                    file: this.newImage
+        selectImage(image) {
+            this.selectedImage = this.getImagePath(image);
+        },
+
+        addImage() {
+            if (this.computedImages.length + this.images.length >= 8) {
+                this.showAlert('Máximo de 8 imagens permitidas.', 'warning');
+            } else if (this.newImage && this.newImage.length > 0) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    const newImageFile = this.newImage[0];
+
+                    this.images.push({
+                        src: event.target.result,
+                        name: newImageFile.name,
+                        file: newImageFile
+                    });
+
+                    this.newImage = '';
                 };
-                this.editedImages.push(newImage);
-                this.newImage = null;
+                reader.readAsDataURL(this.newImage[0]);
             } else {
-                this.showAlert("Nenhuma imagem válida selecionada!", 'error');
+                console.error("Nenhuma imagem selecionada!");
             }
         },
 
-
         uploadNewImages() {
-            if (this.editedImages.length === 0) {
+            if (this.images.length === 0) {
                 this.showAlert("Nenhuma imagem nova para enviar!", 'warning');
                 return;
             }
 
-            this.editedImages.forEach(image => {
+            this.images.forEach(image => {
                 const formData = new FormData();
-                formData.append('image', image.file);
+                formData.append('images', image.file);
 
                 axios.post('/api/slides', formData, {
                     headers: {
@@ -123,31 +174,56 @@ export default {
                     },
                 })
                     .then(response => {
-                        console.log('Imagem enviada com sucesso', response);
-                        this.computedImages.push(image);
                         this.showAlert("Imagem(ns) enviada(s) com sucesso!", 'success');
+                        this.fetchImages();
                     })
                     .catch(error => {
                         console.error('Erro ao enviar imagem', error);
-                        this.showAlert("Erro ao enviar imagem(ns)!", 'error');
+                        this.showAlert("Erro ao enviar imagem!", 'error');
                     });
+
+
             });
 
-            // Limpa a lista de imagens editadas após o envio
-            this.editedImages = [];
+            this.images = [];
         },
 
-
-        selectImage(image) {
-            this.selectedImage = image.src;
+        confirmDelete() {
+            if (this.slideToDelete) {
+                axios.delete(`/api/slides/${this.slideToDelete.id}`)
+                    .then(response => {
+                        this.fetchImages();
+                        this.closeDialog();
+                        this.showAlert('Slide excluído com sucesso!', 'success');
+                    })
+                    .catch(error => {
+                        console.error('Erro ao excluir o slide:', error);
+                        this.closeDialog();
+                        this.showAlert('Erro ao excluir o slide.', 'error');
+                    });
+            }
         },
+
 
         removeImage(index) {
-            if (this.selectedImage === this.computedImages[index].src) {
+            if (this.selectedImage === this.images[index].src) {
                 this.selectedImage = '';
             }
-            this.computedImages.splice(index, 1);
+            this.images.splice(index, 1);
         },
+
+
+        openDialog(index) {
+            this.slideToDelete = this.computedImages[index];
+            this.dialog = true;
+        },
+
+
+        closeDialog() {
+            this.dialog = false;
+            this.slideToDelete = null;
+        },
+
 
         showAlert(text, type) {
             this.alert.text = text;
@@ -166,7 +242,6 @@ export default {
 
 
 <style scoped>
-/* Seus estilos existentes */
 .alert-container {
     position: fixed;
     top: 10%;

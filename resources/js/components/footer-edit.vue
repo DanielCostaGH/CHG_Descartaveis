@@ -11,7 +11,7 @@
                 <div class="my-5">
                     <v-row>
                         <v-col cols="12" sm="6">
-                            <v-text-field label="Whatsapp" v-model="whatsapp" outlined dense>{{this.whatsapp}}</v-text-field>
+                            <v-text-field label="Whatsapp" v-model="whatsapp" outlined dense></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="6">
                             <v-text-field label="Telefone" v-model="phone" outlined dense></v-text-field>
@@ -59,7 +59,6 @@ export default {
         fetchFooterData() {
             axios.get('/api/footer/get')
                 .then(response => {
-                    console.log(response.data);
                     const footerData = response.data[0];
                     if (footerData) {
                         this.whatsapp = footerData.whatsapp_num;
@@ -109,7 +108,6 @@ export default {
                 }
             })
                 .then(response => {
-                    console.log(response);
                     alert('Alterações salvas com sucesso!');
                 })
                 .catch(error => {
