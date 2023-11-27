@@ -1,13 +1,13 @@
-{{-- @extends('master')
+@extends('master')
 
 @section('content')
     <admin-create></admin-create>
-@endsection --}}
+@endsection
 
 
 
 
-@extends('layouts.app')
+{{-- @extends('layouts.app')
 @section('title', 'Página de criação dos administradores')
 @section('content')
 <h1>tela de criação dos administradores</h1>
@@ -25,4 +25,4 @@
 
     <button type="submit">Create Admin</button>
 </form>
-@endsection
+@endsection --}}

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ProductRequest;
 use App\Http\Requests\ProductUpdateRequest;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Models\Product; // Importe a model Product
 use App\Models\ProductColors;
@@ -203,4 +204,13 @@ class DashboardController extends Controller
         return view('dashboard.appearence.index');
     }
 
+    public function productDelete($id) {
+        $product = Product::find($id);
+        $product->delete();
+        
+        $productColors = ProductColors::where('product_id', $id)->get();
+        foreach ($productColors as $color) {
+            $color->delete();
+        }
+    }    
 }

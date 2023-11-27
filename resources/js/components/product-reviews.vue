@@ -83,7 +83,7 @@
 export default {
     data() {
         return {
-            ratedStars: 0, 
+            ratedStars: 0,
             reviews: [
                 {
                     id: 1,

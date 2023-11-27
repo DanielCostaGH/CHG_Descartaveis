@@ -1,11 +1,11 @@
-{{-- @extends('master')
+@extends('master')
 
 @section('content')
     <user-create></user-create>
-@endsection --}}
+@endsection
 
 
-@extends('layouts.app')
+{{-- @extends('layouts.app')
 @section('title', 'Página de criação dos usuários')
 @section('content')
 <h1>tela de criação dos usuários</h1>
@@ -29,4 +29,4 @@
 
     <button type="submit">Create User</button>
 </form>
-@endsection
+@endsection --}}

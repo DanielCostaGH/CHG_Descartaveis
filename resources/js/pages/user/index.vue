@@ -122,7 +122,7 @@ export default {
         userFavorites,
         userRequests,
     },
-   
+
     methods: {
         selectComponent(componentName) {
             this.selectedComponent = componentName;

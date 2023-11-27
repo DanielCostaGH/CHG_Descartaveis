@@ -55,9 +55,7 @@ class AdminController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create()
-    {
-        $this->authorize('create', Admin::class);
-        
+    {        
         return view('admin.create');
     }
 

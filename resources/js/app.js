@@ -32,9 +32,12 @@ import productDetails from './pages/productDetails.vue';
 // Bloco dashboard
 import dashboardIndex from './pages//dashboard/dashboard.vue';
 import productEdit from './pages/dashboard/productEdit.vue';
+import categoryEdit from './pages/dashboard/categoryEdit.vue';
 import productsList from './pages/dashboard/productsList.vue';
 import appearenceIndex from './pages/dashboard/appearence.vue'
+import categoriesIndex from './pages/dashboard/categories.vue'
 import productCreate from './pages/dashboard/productCreate.vue'
+import categoryCreate from './pages/dashboard/categoryCreate.vue'
 
 
 app.component('admin-login', adminLogin);
@@ -53,8 +56,11 @@ app.component('product_details', productDetails);
 app.component('dashboard-index', dashboardIndex);
 app.component('products-edit-list', productsList);
 app.component('product-edit', productEdit);
+app.component('category-edit', categoryEdit);
 app.component('appearence-index', appearenceIndex);
+app.component('categories-index', categoriesIndex);
 app.component('product-create', productCreate);
+app.component('category-create', categoryCreate);
 
 
 
