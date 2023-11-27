@@ -8,7 +8,6 @@
             </v-expansion-panel-title>
 
             <v-expansion-panel-text>
-                <!-- Formulário para adicionar uma nova marca -->
                 <div class="flex w-full py-5">
                     <v-text-field label="Nome da Marca" v-model="newBrandName"></v-text-field>
                     <v-file-input label="Insira a imagem" @change="handleFileUpload"></v-file-input>
@@ -60,7 +59,6 @@
                     </div>
                 </v-list-item>
 
-                <!-- Botão para Salvar Alterações -->
                 <v-btn @click="saveChanges" color="primary" class="mt-10 px-4 py-2 rounded">
                     Salvar Alterações
                 </v-btn>
@@ -107,7 +105,7 @@ export default {
             alert: {
                 show: false,
                 text: '',
-                type: '' // 'success' para sucesso e 'error' para erro
+                type: ''
             },
         };
     },
@@ -124,7 +122,6 @@ export default {
 
         addBrand() {
             if (this.computedBrands.length + this.editedBrands.length >= 3) {
-                // Mostra uma mensagem de aviso (pode usar v-snackbar ou alert)
                 this.showAlert('Máximo de 3 marcas permitidas.', 'warning');
             } else if (this.newBrandName && this.newBrandImage) {
                 let newBrand = {
@@ -152,7 +149,6 @@ export default {
             this.editedBrands.forEach((brand, index) => {
                 formData.append(`brands[${index}][name]`, brand.name);
 
-                // Se 'images' é um objeto File, adicione-o ao FormData
                 if (brand.images instanceof File) {
                     formData.append(`brands[${index}][images]`, brand.images, brand.images.name);
                 }
@@ -165,8 +161,7 @@ export default {
                 }
             })
                 .then(response => {
-                    console.log(response.data);
-                    this.fetchBrands(); // Recarrega as marcas
+                    this.fetchBrands();
                     this.showAlert('Marcas salvas com sucesso!', 'success');
 
                 })
@@ -176,7 +171,7 @@ export default {
 
                 });
 
-            // Reset os campos do formulário
+
             this.editedBrands = [];
             this.newBrandName = '';
             this.newBrandImage = null;
@@ -196,7 +191,6 @@ export default {
             if (this.brandToDelete) {
                 axios.delete(`/api/brands/${this.brandToDelete.id}`)
                     .then(response => {
-                        console.log(response.data);
                         this.fetchBrands();
                         this.closeDialog();
                         this.showAlert('Marca excluída com sucesso!', 'success');
@@ -218,7 +212,7 @@ export default {
 
             setTimeout(() => {
                 this.alert.show = false;
-            }, 2000); // 3000 milissegundos = 3 segundos
+            }, 2000);
         }
 
     },
@@ -248,6 +242,5 @@ export default {
 
 .v-alert {
     max-width: 600px;
-    /* ajuste conforme necessário */
 }
 </style>

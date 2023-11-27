@@ -90,15 +90,14 @@ export default {
                 password: this.password
             })
             .then(response => {
-                console.log('aaaa', response.data.response.token)
-                if (response.data.response.token) {
+                if (response.data.token) {
                     window.location.href = '/dashboard';
                 } else {
                     this.emailError = 'Credenciais inválidas';
                 }
             })
             .catch(error => {
-                // Trate os erros do backend aqui, por exemplo, exiba uma mensagem de erro
+
             });
         }
     }
@@ -134,7 +133,7 @@ export default {
 
 .slider.checked {
     transform: translateX(20px);
-    background-color: #007AFF; 
+    background-color: #007AFF;
 }
 
 .switch-label {

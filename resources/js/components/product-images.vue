@@ -1,11 +1,9 @@
 <template>
   <div class="bg-white w-full h-[70vh] flex">
 
-    <!-- div cards -->
     <div class="h-full w-3/12 my-5">
       <div class=""><img class="mx-auto my-5" :src="up_arrow" alt="seta"></div>
 
-      <!-- cards -->
       <div id="product_images" class="overflow-scroll h-5/6">
         <div v-for="(image, index) in productImages" :key="index" @click="displayImage(image)"
           class="bg-white border-2 border-gray-500 hover hover:border-blue-500 rounded h-[12vh] w-[12vh] mx-auto my-5 cursor-pointer flex items-center justify-center">

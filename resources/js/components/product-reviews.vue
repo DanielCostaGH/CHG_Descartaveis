@@ -32,20 +32,19 @@
                                 </clipPath>
                             </defs>
                         </svg>
-                    </span> <!-- Estrelas -->
+                    </span>
                 </div>
             </div>
 
             <!-- Avaliações dos Clientes -->
             <h2 class="text-2xl font-semibold mb-4">Avaliações dos Clientes</h2>
             <div class="max-h-[60vh] overflow-y-scroll">
-                
+
                 <div v-for="review in reviews" :key="review.id"
                     class="mb-4 p-4 bg-white rounded-lg shadow-md ">
                     <div class="text-xl font-semibold">{{ review.title }}</div>
                     <div class="text-gray-500">Por: {{ review.author }}</div>
                     <p class="mt-2">{{ review.comment }}</p>
-                    <!-- Você pode exibir a avaliação do cliente aqui -->
                     <div class="mt-2">
                         <span v-for="i in review.rating" :key="i">
                             <svg v-if="i <= review.rating" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
@@ -79,12 +78,12 @@
         </div>
     </div>
 </template>
-  
+
 <script>
 export default {
     data() {
         return {
-            ratedStars: 0, // Estrelas destacadas ao passar o mouse
+            ratedStars: 0, 
             reviews: [
                 {
                     id: 1,
@@ -125,10 +124,7 @@ export default {
             this.ratedStars = 0;
         },
         rateProduct(index) {
-            // Implemente a lógica para enviar a avaliação do produto para o servidor
-            console.log('Avaliação:', index);
         },
     },
 };
 </script>
-  

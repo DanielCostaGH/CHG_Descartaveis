@@ -3,11 +3,9 @@
         <!-- Seção para desktop -->
         <div class="d-none d-lg-flex flex-column">
             <v-row justify="space-between" align="center">
-                <!-- Use cols="auto" para que esta coluna só tome o espaço necessário -->
                 <v-col cols="auto">
                     <span class="text-h6 ml-2">Melhores Categorias!</span>
                 </v-col>
-                <!-- Defina a largura da segunda coluna para ocupar o espaço restante -->
                 <v-col cols="auto" class="text-right">
                     <v-btn class="mx-2" text :href="'/products'">
                         Ver Todos
@@ -20,7 +18,6 @@
             <hr class="hidden lg:block border-b-2 border-[#212844] w-1/5 rounded-full my-2" />
 
             <div class="d-flex justify-space-between my-10">
-                <!-- Itens das categorias para desktop -->
                 <div v-for="category in categories" :key="'mobile-' + category.name" class="mx-3 text-center">
                     <v-sheet class="d-flex justify-center align-center overflow-hidden" tile shaped>
 
@@ -43,11 +40,9 @@
         <!-- Seção para mobile -->
         <div class="d-lg-none">
             <v-row justify="space-between" align="center">
-                <!-- Use cols="auto" para que esta coluna só tome o espaço necessário -->
                 <v-col cols="auto">
                     <span class="text-h6 ml-2">Top Categorias!</span>
                 </v-col>
-                <!-- Defina a largura da segunda coluna para ocupar o espaço restante -->
                 <v-col cols="auto" class="text-right">
                     <v-btn class="mx-2" text :href="'/products'">
                         Ver Todos
@@ -60,7 +55,6 @@
 
 
             <div class="d-flex overflow-x-auto py-8">
-                <!-- Itens das categorias para mobile -->
                 <div v-for="category in categories" :key="'mobile-' + category.name" class="mx-3 text-center">
                     <v-sheet class="d-flex justify-center align-center overflow-hidden" tile shaped>
 
@@ -132,15 +126,10 @@ export default {
 
 .btn-reset {
     padding: 0;
-    /* Remove padding */
     min-width: 0;
-    /* Remove a largura mínima do botão */
     margin: 0;
-    /* Remove margin */
     box-shadow: none;
-    /* Remove sombra */
     border: none;
-    /* Remove borda */
 }
 
 .btn-reset>.v-btn__content {

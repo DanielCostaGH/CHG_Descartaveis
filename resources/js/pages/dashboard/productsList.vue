@@ -1,18 +1,14 @@
 <template>
     <div class="flex">
-        <!-- Barra lateral -->
         <sidebar />
 
-        <!-- Conteúdo principal -->
         <main class="w-4/5 p-6 bg-gray-100">
-            <!-- Header -->
             <header>
                 <painel />
             </header>
 
             <div>
                 <dashboard_filters />
-                <!-- Lista de Produtos -->
 
                 <section class="bg-white h-[75vh] overflow-y-scroll">
                     <div>

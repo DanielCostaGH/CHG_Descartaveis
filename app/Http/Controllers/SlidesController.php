@@ -30,7 +30,7 @@ class SlidesController extends Controller
 
             // Cria uma nova instância de Slide e salva no banco
             $slide = new Slide();
-            $slide->image = $filename; // Supondo que 'image' seja o nome da coluna no banco de dados
+            $slide->images = $filename; // Supondo que 'image' seja o nome da coluna no banco de dados
             $slide->save();
 
             return response()->json(['message' => 'Imagem adicionada com sucesso!', 'slide_id' => $slide->id], 200);
@@ -45,5 +45,21 @@ class SlidesController extends Controller
     {
         $slides = Slide::all();
         return response()->json($slides);
+    }
+
+
+    public function destroy($id)
+    {
+        $slide = Slide::findOrFail($id);
+
+        $imagePath = 'images/slides/' . $slide->images;
+
+        if (Storage::disk('public')->exists($imagePath)) {
+            Storage::disk('public')->delete($imagePath);
+        }
+
+        $slide->delete();
+
+        return response()->json(['message' => 'Slide excluído com sucesso']);
     }
 }

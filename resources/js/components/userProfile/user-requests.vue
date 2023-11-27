@@ -46,11 +46,9 @@
     methods: {
       avaliarPedido(index) {
         // Lógica para avaliar o pedido
-        console.log('Avaliar pedido:', this.pedidos[index]);
       },
       comprarNovamente(index) {
         // Lógica para comprar o mesmo produto novamente
-        console.log('Comprar novamente:', this.pedidos[index]);
       },
     },
   };

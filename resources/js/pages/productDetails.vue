@@ -36,7 +36,7 @@
                             </defs>
                         </svg>
 
-                    </span> <!-- Estrelas -->
+                    </span>
 
                     <a href="#" class="mx-3 text-blue-600">Avaliações desse produto</a>
                 </div>
@@ -51,10 +51,10 @@
 
                         <section id="product_side" class="w-4/6 h-screen">
                             <div>
-                                
+
                                 <product_images :product="product"/>
                             </div>
-                            
+
                             <product_description :product="product"/>
                         </section>
 
@@ -120,7 +120,7 @@
                             </defs>
                         </svg>
 
-                    </span> <!-- Estrelas -->
+                    </span>
 
                     <a href="#" class="mx-3 text-blue-600">Avaliações desse produto</a>
                 </div>
@@ -135,10 +135,10 @@
 
                         <section id="product_side" class="w-full">
                             <div>
-                                
+
                                 <product_images :product="product"/>
                             </div>
-                            
+
                         </section>
 
                         <section id="side_bar" class="w-full ">
@@ -164,8 +164,8 @@
         </footer>
     </div>
 </template>
-  
-  
+
+
 
 <script>
 import navbar from '../components/navbar/navbar.vue';
@@ -198,7 +198,6 @@ export default {
         },
 
         rateProduct(starCount) {
-            console.log(`Rated ${starCount} stars`);
         },
     },
 
@@ -213,6 +212,5 @@ export default {
     },
 };
 </script>
-  
 
-  
+

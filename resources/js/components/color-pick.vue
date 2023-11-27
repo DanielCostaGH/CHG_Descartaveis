@@ -19,14 +19,12 @@
     <div v-if="showModal" class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
         <div class="bg-white p-6 rounded shadow-md w-1/3">
             <h3 class="text-xl font-semibold mb-4">Adicionar Cores</h3>
-            <!-- Valor especifico -->
             <div class="mb-4">
                 <label for="hexColor" class="block text-gray-700 font-bold mb-2">Cor
                     Específica</label>
                 <input type="text" id="hexColor" v-model="hexValue" class="w-full p-2 border rounded"
                     placeholder="#RRGGBB" />
             </div>
-            <!-- Lista de cores -->
             <div class="mb-4 max-h-[40vh] overflow-scroll">
                 <label class="block text-gray-700 font-bold mb-2">Cores</label>
                 <div v-for="(color, index) in colors" :key="index" class="flex items-center mb-2 w-2/5 justify-between">
@@ -82,8 +80,8 @@ export default {
                 { name: 'Cinza Claro', code: '#D3D3D3' },
             ],
             selectedColors: [],
-            editedProduct: {    
-                colors: [], 
+            editedProduct: {
+                colors: [],
             },
         };
     },

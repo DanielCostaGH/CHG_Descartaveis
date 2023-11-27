@@ -6,7 +6,6 @@
                 <painel />
             </header>
 
-            <!-- Área Principal -->
             <v-row class="bg-white rounded-lg">
                 <v-col cols="12">
                     <h2 class="text-h6">Produto: {{ editedProduct.name }}</h2>
@@ -57,46 +56,37 @@
 
 
                 <v-col cols="12 my-15 border-t-2">
-                    <!-- Formulário -->
                     <v-form @submit.prevent="storeProduct">
                         <v-row>
-
-                            <!-- Nome do Produto -->
                             <v-col cols="12" md="6">
                                 <v-text-field label="Nome do Produto" v-model="editedProduct.name" outlined
                                     placeholder="Nome do Produto">
                                 </v-text-field>
                             </v-col>
 
-                            <!-- Marca -->
                             <v-col cols="12" md="6">
                                 <v-text-field label="Marca" v-model="editedProduct.brand" outlined placeholder="Marca">
                                 </v-text-field>
                             </v-col>
 
-                            <!-- Descrição -->
                             <v-col cols="12">
                                 <v-textarea label="Descrição" v-model="editedProduct.description" outlined
                                     placeholder="Descrição do Produto" rows="4">
                                 </v-textarea>
                             </v-col>
 
-                            <!-- Preço -->
                             <v-col cols="12" md="6">
                                 <v-text-field label="Preço" v-model="editedProduct.price" type="number" step="0.01" outlined
                                     placeholder="Preço">
                                 </v-text-field>
                             </v-col>
 
-                            <!-- Cores Disponíveis (Autocomplete) -->
                             <v-col cols="12" md="6">
                                 <v-autocomplete v-model="editedProduct.colors" :items="colors" label="Cor" item-title="name"
                                     chips small-chips multiple class="pa-0" :menu-props="{ maxHeight: '300' }" hide-details
                                     return-object></v-autocomplete>
                             </v-col>
 
-                            <!-- Variação -->
-                            <!-- Campo de Input para Variação -->
                             <v-col cols="12" md="6">
                                 <v-text-field label="Variação" v-model="newVariation" outlined
                                     placeholder="Variação"></v-text-field>
@@ -104,31 +94,26 @@
                                     <div class="flex justify-between my-3 max-h-[10vh] overflow-auto"
                                         v-for="(variation, index) in productVariations" :key="index">
                                         {{ variation }}
-                                        <!-- Botão para remover variação (opcional) -->
                                         <v-btn small @click="removeVariation(index)">Remover</v-btn>
                                     </div>
                                 </div>
 
-                                <!-- Botão Adicionar Variação -->
                                 <v-btn @click="addVariation" color="blue" dark>Adicionar Variação</v-btn>
                             </v-col>
 
 
-                            <!-- Quantidade -->
                             <v-col cols="12" md="6">
                                 <v-text-field label="Quantidade" v-model="editedProduct.quantity" type="number" outlined
                                     placeholder="Quantidade">
                                 </v-text-field>
                             </v-col>
 
-                            <!-- Status -->
                             <v-col cols="12" md="6">
                                 <v-select label="Status" v-model="editedProduct.status"
                                     :items="['active', 'inactive', 'out_of_stock']" outlined>
                                 </v-select>
                             </v-col>
 
-                            <!-- Botão Salvar Alterações -->
                             <v-col cols="12">
                                 <v-btn @click="storeProduct" color="blue" dark large>
                                     Salvar Produto
@@ -140,15 +125,10 @@
                 </v-col>
             </v-row>
 
-            <!-- Área de Imagens -->
             <v-row>
                 <v-col cols="12" md="6">
-                    <!-- Visualização e Upload de Imagem -->
-                    <!-- ... -->
                 </v-col>
                 <v-col cols="12" md="6">
-                    <!-- Lista de Imagens Selecionadas -->
-                    <!-- ... -->
                 </v-col>
             </v-row>
         </main>
@@ -261,8 +241,6 @@ export default {
             }
         },
 
-        uploadImage() {
-        },
         selectImage(image) {
             this.selectedImage = image.src;
         },

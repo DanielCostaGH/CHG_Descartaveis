@@ -196,7 +196,6 @@ export default {
         fetchFooterData() {
             axios.get('/api/footer/get')
                 .then(response => {
-                    console.log(response.data);
                     const footerData = response.data[0];
                     if (footerData) {
                         this.whatsappNum = footerData.whatsapp_num;

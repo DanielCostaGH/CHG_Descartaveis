@@ -32,7 +32,6 @@ export default {
         },
 
         handleFilterApplied(filters) {
-            console.log('Filtros aplicados:', filters);
             this.fetchProducts(filters);
         },
     },
