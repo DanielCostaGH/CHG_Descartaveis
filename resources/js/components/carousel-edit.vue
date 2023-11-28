@@ -1,13 +1,14 @@
 <template>
     <v-expansion-panels>
-        <v-expansion-panel v-model="isOpen">
+        <v-expansion-panel v-model="isOpen" >
+            
             <v-expansion-panel-title>
                 <div class="flex justify-between cursor-pointer">
                     <h3 class="text-xl font-semibold text-gray-500 mb-4 pt-4">Carrossel de Imagens</h3>
                 </div>
             </v-expansion-panel-title>
 
-            <v-expansion-panel-text class="mt-5">
+            <v-expansion-panel-text class="mt-5" >
                 <v-row>
                     <!-- Coluna Esquerda: Upload e Visualização de Imagem -->
                     <v-col cols="12" md="6">
@@ -74,21 +75,21 @@
         </v-expansion-panel>
     </v-expansion-panels>
 
-    <v-dialog v-model="dialog" persistent max-width="290" v-if="slideToDelete">
-        <v-card>
-            <v-card-title class="text-h5">Confirmar Exclusão</v-card-title>
+    <v-dialog v-model="dialog" persistent max-width="300" v-if="slideToDelete">
+        <v-card height="200">
+            <v-card-title class="text-red font-weight-bold flex items-center"> <v-icon class="mr-2">mdi-delete</v-icon>
+                Confirmar Exclusão</v-card-title>
             <v-card-text>
-                Tem certeza que deseja excluir o slide: {{ slideToDelete.name }}?
+                Tem certeza que deseja excluir o slide: {{ slideToDelete.id }}?
             </v-card-text>
-            <v-card-actions>
-                <v-spacer></v-spacer>
+            <v-card-actions class="justify-center">
                 <v-btn color="blue darken-1" text @click="closeDialog">Cancelar</v-btn>
-                <v-btn color="blue darken-1" text @click="confirmDelete">Confirmar</v-btn>
+                <v-btn color="red darken-1" text @click="confirmDelete">Confirmar</v-btn>
             </v-card-actions>
         </v-card>
     </v-dialog>
 
-    <v-alert class="alert-container text-xl" v-model="alert.show" :type="alert.type" dismissible>
+    <v-alert class="alert-container text-xl elevation-5 custom-border " v-model="alert.show" :type="alert.type" dismissible>
         {{ alert.text }}
     </v-alert>
 </template>
@@ -98,7 +99,7 @@
 export default {
     data() {
         return {
-            isOpen: false,
+            isOpen: true,
             computedImages: [],
             images: [],
             newImages: [],
@@ -122,6 +123,9 @@ export default {
             axios.get('/api/slides/get')
                 .then(response => {
                     this.computedImages = response.data;
+                    if (this.computedImages.length > 0) {
+                        this.selectImage(this.computedImages[0]);
+                    }
                 })
                 .catch(error => {
                 });
@@ -232,7 +236,7 @@ export default {
 
             setTimeout(() => {
                 this.alert.show = false;
-            }, 3000);
+            }, 2000);
         },
     },
 };
@@ -244,7 +248,7 @@ export default {
 <style scoped>
 .alert-container {
     position: fixed;
-    top: 10%;
+    top: 25%;
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 1000;
@@ -254,5 +258,9 @@ export default {
 
 .v-alert {
     max-width: 600px;
+}
+
+.custom-border {
+    border: 2px solid white;
 }
 </style>

@@ -8,63 +8,62 @@
             </header>
 
             <div>
-                <dashboard_filters />
+                <div class="bg-white">
+                    <filters @filter-applied="handleFilterApplied" />
+                </div>
 
                 <section class="bg-white h-[75vh] overflow-y-scroll">
-                    <div>
-                        <div class="bg-white p-4 shadow-md rounded-lg">
-                            <h2 class="text-xl font-medium">Lista de Produtos</h2>
-                            <div class="flex flex-wrap">
-                                <div v-for="(product, index) in products" :key="index" class="p-4">
-                                    <div class="">
-                                        <div class="bg-white border shadow-md rounded-lg p-4 w-[40vh] h-[45vh]">
-                                            <div class="overflow-x-hidden">
-                                                <h3 class="text-lg font-medium mt-2">{{ product.name }}</h3>
-                                            </div>
-
-                                            <div class="h-4/6 flex justify-center items-center">
-                                                <img class="object-contain h-full" :src="getFirstImage(product)" alt="Product Image">
-                                            </div>
-
-                                            <div class="mt-4 h-2/6 pb-5 flex justify-around items-center">
-
-                                                <a class="flex items-center border-2 border-blue-600 text-blue-600 hover hover:text-white hover:bg-blue-600 py-3 px-4 rounded"
-                                                    :href="'/dashboard/products/edit/' + product.id">
-
-                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                                        stroke-width="1.5" stroke="currentColor" class="w-6 h-6 mr-3">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
-                                                    </svg>
-
+                    <v-row>
+                        <v-col>
+                            <v-card class="pa-4 shadow-md rounded-lg">
+                                <v-card-title class="text-h5 font-medium">Lista de Produtos</v-card-title>
+                                <v-row>
+                                    <v-col v-for="(product, index) in products" :key="index" cols="12" md="6" lg="4">
+                                        <v-card class="pa-4 shadow-md rounded-lg">
+                                            <v-card-title class="text-h6 font-medium mt-2">{{ product.name }}</v-card-title>
+                                            <v-img :src="getFirstImage(product)" class="my-4" aspect-ratio="2.0"
+                                                contain></v-img>
+                                            <v-card-actions class="justify-around px-5">
+                                                <v-btn :href="'/dashboard/products/edit/' + product.id" prepend-icon="mdi-pencil" color="indigo" size="large" rounded="lg" class="px-5">
                                                     Editar
-                                                </a>
+                                                </v-btn>
 
-                                                <a @click="confirmDelete(product.id)" class="flex items-center border-2 cursor-pointer border-red-600 text-red-600 hover hover:text-white hover:bg-red-600 py-3 px-4 rounded ml-2">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 mr-3">
-                                                    <!-- Seu ícone 'Excluir' -->
-                                                    </svg>
+                                                <v-btn @click="confirmDelete(product.id)" prepend-icon="mdi-delete" color="red" size="large" rounded="lg" class="px-5">
                                                     Excluir produto
-                                                </a>
-                                            </div>
-
-                                            <div v-if="products.length === 0" class="text-center py-10">
-                                                Nenhum produto encontrado.
-                                            </div>
+                                                </v-btn>
+                                            </v-card-actions>
+                                        </v-card>
+                                        <div v-if="products.length === 0" class="text-center py-10">
+                                            Nenhum produto encontrado.
                                         </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                                    </v-col>
+                                </v-row>
+                            </v-card>
+                        </v-col>
+                    </v-row>
                 </section>
             </div>
         </main>
     </div>
+
+    <v-dialog v-model="dialog" persistent max-width="50%">
+        <v-card color="success">
+            <v-card-text class="white--text text-h5 pt-15">
+                <v-row align="center" justify="center">
+                    <v-icon class="mr-2" size="x-large">mdi-check-circle</v-icon>
+                    O produto foi cadastrado com sucesso.
+                </v-row>
+            </v-card-text>
+            <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="white" class="text-h6" text @click="confirmProductCreation">OK</v-btn>
+            </v-card-actions>
+        </v-card>
+    </v-dialog>
 </template>
 
 <script>
-import dashboard_filters from '../../components/dashboard-filters.vue'
+import filters from '../../components/filters.vue'
 import sidebar from '../../components/side-bar-dashboard.vue'
 import painel from '../../components/painel-bar.vue'
 import axios from 'axios';
@@ -85,7 +84,7 @@ export default {
     },
 
     components: {
-        dashboard_filters,
+        filters,
         sidebar,
         painel,
     },
@@ -95,16 +94,20 @@ export default {
     },
 
     methods: {
-        async fetchProducts() {
-            try {
-                const response = await axios.get('/api/products');
-                this.products = response.data;
-            } catch (error) {
-                console.error('Erro ao buscar produtos:', error);
-                alert("Houve um erro ao carregar os produtos. Por favor, tente novamente.");
-            }
+        fetchProducts(filters = {}) {
+            axios.get('/api/products', { params: filters })
+                .then(response => {
+                    this.products = response.data;
+                })
+                .catch(error => {
+                    console.error('Erro ao buscar produtos:', error);
+                });
         },
-        
+
+        handleFilterApplied(filters) {
+            this.fetchProducts(filters);
+        },
+
         async confirmDelete(productId) {
             if (confirm('Tem certeza que deseja excluir este produto?')) {
                 await this.deleteProduct(productId);

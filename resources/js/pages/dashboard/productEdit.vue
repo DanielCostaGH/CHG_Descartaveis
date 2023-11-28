@@ -82,26 +82,17 @@
                             </v-col>
 
                             <v-col cols="12" md="6">
-                                <v-autocomplete
-                                    v-model="editedProduct.colors"
-                                    :items="colors"
-                                    label="Cor"
-                                    item-title="name"
-                                    chips
-                                    small-chips
-                                    multiple
-                                    class="pa-0"
-                                    :menu-props="{ maxHeight: '300' }"
-                                    hide-details
-                                    return-object
-                                ></v-autocomplete>
+                                <v-autocomplete v-model="editedProduct.colors" :items="colors" label="Cor" item-title="name"
+                                    chips small-chips multiple class="pa-0" :menu-props="{ maxHeight: '300' }" hide-details
+                                    return-object></v-autocomplete>
                             </v-col>
 
                             <v-col cols="12" md="6">
                                 <v-text-field label="Variação" v-model="newVariation" outlined
                                     placeholder="Variação"></v-text-field>
                                 <div>
-                                    <div class="flex justify-between my-3 max-h-[10vh] overflow-auto" v-for="(variation, index) in productVariations" :key="index">
+                                    <div class="flex justify-between my-3 max-h-[10vh] overflow-auto"
+                                        v-for="(variation, index) in productVariations" :key="index">
                                         {{ variation }}
                                         <v-btn small @click="removeVariation(index)">Remover</v-btn>
                                     </div>
@@ -133,15 +124,23 @@
                     </v-form>
                 </v-col>
             </v-row>
-
-            <v-row>
-                <v-col cols="12" md="6">
-                </v-col>
-                <v-col cols="12" md="6">
-                </v-col>
-            </v-row>
         </main>
     </div>
+
+    <v-dialog v-model="dialog" persistent max-width="50%">
+        <v-card color="success">
+            <v-card-text class="white--text text-h5 pt-15">
+                <v-row align="center" justify="center">
+                    <v-icon class="mr-2" size="x-large">mdi-check-circle</v-icon>
+                    O produto foi editado com sucesso.
+                </v-row>
+            </v-card-text>
+            <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="white" class="text-h6" text @click="confirmProductCreation">OK</v-btn>
+            </v-card-actions>
+        </v-card>
+    </v-dialog>
 </template>
 
 <script>
@@ -174,6 +173,7 @@ export default {
             productVariations: [],
             colors: [],
             deletedImages: [],
+            dialog: false,
         };
     },
     created() {
@@ -217,7 +217,7 @@ export default {
         addImage() {
             if (this.newImage && this.newImage.length > 0) {
                 const reader = new FileReader();
-                    reader.onload = (event) => {
+                reader.onload = (event) => {
                     const newImageFile = this.newImage[0];
 
                     this.images.push({
@@ -313,26 +313,29 @@ export default {
                     'Content-Type': 'multipart/form-data',
                 },
             })
-            .then(response => {
-                this.product = response.data;
-                this.$router.push('/dashboard');
-            })
-            .catch(error => {
-                console.error('Erro ao atualizar produto', error);
-            });
+                .then(response => {
+                    this.product = response.data;
+                    this.dialog = true;
+                })
+                .catch(error => {
+                    console.error('Erro ao atualizar produto', error);
+                });
         },
 
-
+        confirmProductCreation() {
+            this.dialog = false; // Fecha o diálogo
+            window.location.href = '/dashboard/products'; // Redireciona o usuário
+        },
 
         fetchColors() {
             axios.get('/api/colors')
                 .then(response => {
-                this.colors = response.data;
+                    this.colors = response.data;
 
-                if (this.$props.product && this.$props.product.colors) {
-                    const selectedColorIds = this.$props.product.colors.split(';').map(colorId => parseInt(colorId.trim()));
-                    this.editedProduct.colors = this.colors.filter(color => selectedColorIds.includes(color.id));
-                }
+                    if (this.$props.product && this.$props.product.colors) {
+                        const selectedColorIds = this.$props.product.colors.split(';').map(colorId => parseInt(colorId.trim()));
+                        this.editedProduct.colors = this.colors.filter(color => selectedColorIds.includes(color.id));
+                    }
                 })
                 .catch(error => {
                     console.error("Erro ao buscar cores", error)
@@ -346,7 +349,7 @@ export default {
                 .catch(error => {
                     console.error("Erro ao buscar variações", error);
                 });
-            },
+        },
 
     },
 

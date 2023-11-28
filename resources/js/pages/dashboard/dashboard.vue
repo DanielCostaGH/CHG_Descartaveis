@@ -55,7 +55,7 @@
             <div class="bg-white p-6 rounded-lg shadow mb-6">
 
                 <h3 class="text-xl mb-4 px-4">Produtos Recentes</h3>
-                <v-table>
+                <v-table  class="custom-table-body">
                     <template v-slot:default>
                         <thead>
                             <tr>
@@ -68,7 +68,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="item in products" :key="item.id">
+                            <tr v-for="item in products" :key="item.id" >
                                 <td>{{ item.name }}</td>
                                 <td>{{ item.price }}</td>
                                 <td>{{ item.quantity }}</td>
@@ -160,3 +160,12 @@ export default {
     }
 };
 </script>
+
+
+
+<style>
+.custom-table-body {
+    max-height: 40vh !important;
+    overflow-y: auto;
+}
+</style>
