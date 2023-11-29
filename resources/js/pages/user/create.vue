@@ -1,49 +1,81 @@
 <template>
     <div class="container mx-auto">
-        <div class="flex justify-around items-center h-screen w-full bg-red-">
-            <div class="">
-                <v-icon>
-                    <img class="w-[55vh]" :src="logo_light" alt="Logo">
-                </v-icon>
-                <div>
-                    <a href=""><v-icon></v-icon></a>
+        <div class="lg:flex justify-around items-center h-screen w-full bg-red-">
+            <div class="w-full text-center">
+                <img class="w-[55vh] mx-auto" :src="logo_light" alt="Logo">
+                <div class="mb-5">
+                    <a href="/" class="text-blue-500 ">Voltar para pagina inicial?</a>
                 </div>
             </div>
 
-            <div class=" flex justify-center">
-                <form @submit.prevent="submitForm">
-                    <div class="text-center mb-16">
-                        <span class="text-3xl text-[#727272] font-bold">LOGIN</span>
+            <div class=" flex justify-center w-full">
+                <form @submit.prevent="submitForm" class="w-full mx-5 md:w-5/6 lg:w-[70vh]">
+                    <div class="text-center mb-5 md:mb-10 lg:mb-16">
+                        <span class="text-3xl text-[#727272] font-bold">CADASTRAR</span>
                     </div>
 
-                    <div class="relative w-[60vh]">
-                        <input v-model="email" class="bg-[#ECECEC] w-full h-[5vh] my-2 p-5 rounded" type="text" placeholder="E-mail" :class="{ 'border-red-500': emailError }">
-                        <div class="text-red-500">{{ emailError }}</div>
-                        <input v-model="password" class="bg-[#ECECEC] w-full h-[5vh] my-3 p-5 rounded" type="password" placeholder="Senha" :class="{ 'border-red-500': passwordError }">
-                        <div class="text-red-500">{{ passwordError }}</div>
-                    </div>
+                    <div class="relative">
 
-                    <div class="flex justify-between items-center">
-                        <div class="flex items-center">
-                            <div class="switch mr-3">
-                                <input type="checkbox" class="sr-only">
-                                <div :class="{'slider': true, 'checked': isSwitchChecked}" @click="toggleSwitch"></div>
-                            </div>
-                            <a class="text-[#1A1A1A]" href="#"> Salvar senha</a>
+                        <!-- nome e email -->
+                        <div class="flex">
+                            <input v-model="name" class="bg-[#ECECEC] w-full h-[5vh] my-2 p-5 rounded mr-2" type="text"
+                                placeholder="Insira seu nome" :class="{ 'border-red-500': emailError }">
+
+                            <input v-model="email" class="bg-[#ECECEC] w-full h-[5vh] my-2 p-5 rounded ml-2" type="text"
+                                placeholder="E-mail" :class="{ 'border-red-500': emailError }">
+                        </div>
+
+                        <div class="flex">
+                            <div class="text-red-500 mr-2">{{ emailError }}</div>
+                            <div class="text-red-500 ml-2">{{ emailError }}</div>
                         </div>
 
 
-                        <a class="text-[#007AFF]" href="/admin/cadastro">Esqueci minha senha</a>
+
+                        <!-- cpf e telefone -->
+                        <div class="flex">
+                            <input v-model="document" class="bg-[#ECECEC] w-full h-[5vh] my-2 p-5 rounded mr-2" type="text"
+                                placeholder="Insira seu CPF" :class="{ 'border-red-500': emailError }">
+
+                            <input v-model="tell" class="bg-[#ECECEC] w-full h-[5vh] my-2 p-5 rounded ml-2" type="text"
+                                placeholder="Insira seu numero" :class="{ 'border-red-500': emailError }">
+                        </div>
+
+                        <div class="flex">
+                            <div class="text-red-500 mr-2">{{ emailError }}</div>
+                            <div class="text-red-500 ml-2">{{ emailError }}</div>
+                        </div>
+
+
+
+
+                        <!-- Senhas -->
+                        <div class="flex">
+                            <input v-model="password" class="bg-[#ECECEC] w-full h-[5vh] my-3 p-5 rounded mr-2"
+                                type="password" placeholder="Senha" :class="{ 'border-red-500': passwordError }">
+                            <input v-model="password" class="bg-[#ECECEC] w-full h-[5vh] my-3 p-5 rounded ml-2"
+                                type="password" placeholder="Confirmar Senha" :class="{ 'border-red-500': passwordError }">
+                        </div>
+
+                        <div class="flex">
+                            <div class="text-red-500 mr-2">{{ emailError }}</div>
+                            <div class="text-red-500 ml-2">{{ emailError }}</div>
+                        </div>
+
                     </div>
 
+
                     <div class="text-center text-white">
-                        <button @click="submitForm" class="bg-[#007AFF] w-full h-[6vh] mt-10 rounded" type="button">Entrar</button>
+                        <button @click="submitForm" class="bg-[#007AFF] w-full h-[6vh] mt-10 rounded"
+                            type="button">Registrar Conta</button>
                     </div>
 
 
                     <div class="text-center">
-                        <button class="bg-[#F3F3F3] text-[#1A1A1A] w-full h-[6vh] my-4 rounded flex justify-center items-center" type="submit">
-                            <v-icon class="p-4"><img :src="google_icon" alt=""></v-icon> Entre com sua conta Google</button>
+                        <a href="/user/login"
+                            class="bg-[#F3F3F3] text-[#1A1A1A] w-full h-[6vh] my-4 rounded flex justify-center items-center"
+                            type="submit">
+                            <v-icon class="p-4 mr-2">mdi-key</v-icon>Ja possui uma conta? Entrar</a>
                     </div>
                 </form>
             </div>
@@ -85,20 +117,20 @@ export default {
                 return;
             }
 
-            axios.post('/admin/login', {
+            axios.post('/user/login', {
                 email: this.email,
                 password: this.password
             })
-            .then(response => {
-                if (response.data.token) {
-                    window.location.href = '/dashboard';
-                } else {
-                    this.emailError = 'Credenciais inválidas';
-                }
-            })
-            .catch(error => {
-
-            });
+                .then(response => {
+                    if (response.data.token) {
+                        window.location.href = '/dashboard';
+                    } else {
+                        this.emailError = 'Credenciais inválidas';
+                    }
+                })
+                .catch(error => {
+                    // Trate os erros do backend aqui, por exemplo, exiba uma mensagem de erro
+                });
         }
     }
 }

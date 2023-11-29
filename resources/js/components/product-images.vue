@@ -1,53 +1,96 @@
 <template>
-  <div class="bg-white w-full h-[70vh] flex">
 
-    <div class="h-full w-3/12 my-5">
-      <div class=""><img class="mx-auto my-5" :src="up_arrow" alt="seta"></div>
+    <!-- VERSÃO DESKTOP -->
+    <v-container fluid class="hidden lg:block">
+        <v-row>
+            <!-- Coluna para imagens secundárias -->
+            <v-col cols="12" md="3" class="pa-2">
+                <v-img :src="up_arrow" class="my-2 mx-auto h-5"></v-img>
 
-      <div id="product_images" class="overflow-scroll h-5/6">
-        <div v-for="(image, index) in productImages" :key="index" @click="displayImage(image)"
-          class="bg-white border-2 border-gray-500 hover hover:border-blue-500 rounded h-[12vh] w-[12vh] mx-auto my-5 cursor-pointer flex items-center justify-center">
-          <img class="h-5/6 w-5/6" :src="`/images/products/${product.id}/${image}`" :alt="image">
-        </div>
-      </div>
+                <v-container class="overflow-y-auto" style="max-height: 70vh;">
+                    <v-row>
+                        <v-col cols="12" v-for="(image, index) in productImages" :key="index">
+                            <v-img :src="`/images/products/${product.id}/${image}`" class="mx-auto my-2 h-28"
+                                aspect-ratio="1" @click="displayImage(image)"></v-img>
+                        </v-col>
+
+                    </v-row>
+                </v-container>
+
+                <v-img :src="down_arrow" class="my-2 mx-auto h-5"></v-img>
+            </v-col>
+
+            <!-- Coluna para imagem principal -->
+            <v-col cols="12" md="9" class="d-flex align-center">
+                <v-img :src="selectedImage" class="mx-auto" style="max-height: 70vh;"></v-img>
+            </v-col>
+        </v-row>
+    </v-container>
 
 
-      <div class=""><img class="mx-auto my-5" :src="down_arrow" alt="seta"></div>
-    </div>
 
-    <!-- imagem principal -->
-    <div id="main_image" class="w-9/12 h-full flex items-center ">
-      <img class="h-5/6 w-auto mx-auto" :src="selectedImage" alt="">
-    </div>
-  </div>
+    <!-- VERSÃO MOBILE -->
+    <v-container fluid class="lg:hidden border-y">
+        <v-row>
+
+            <!-- Coluna para imagem principal -->
+            <v-col cols="12" md="9" class="d-flex align-center border-b">
+                <v-img :src="selectedImage" class="mx-auto" style="height: 40vh;"></v-img>
+            </v-col>
+
+            <!-- Coluna para imagens secundárias -->
+            <v-col cols="12" md="3" class="pa-2">
+
+                <v-container class="overflow-y-auto" style="max-height: 70vh;">
+                    <v-row>
+                        <div class="flexc">
+                            <v-col cols="12" v-for="(image, index) in productImages" :key="index" class="mx-auto">
+                                <v-img :src="`/images/products/${product.id}/${image}`" class="mx-auto my-2 h-28 border rounded-lg"
+                                    aspect-ratio="1" @click="displayImage(image)"></v-img>
+                            </v-col>
+                        </div>
+
+                    </v-row>
+                </v-container>
+
+            </v-col>
+        </v-row>
+    </v-container>
 </template>
 
 <script>
 export default {
-  data() {
-    return {
-      up_arrow: '/images/up_arrow.svg',
-      down_arrow: '/images/down_arrow.svg',
-      selectedImage: '',
-    };
-  },
-  props: {
-    product: Object,
-  },
-  computed: {
-    productImages() {
-      return this.product.images.split(';').filter(image => image !== '');
+    data() {
+        return {
+            up_arrow: '/images/up_arrow.svg',
+            down_arrow: '/images/down_arrow.svg',
+            selectedImage: '',
+        };
     },
-  },
-  mounted() {
-    if (this.productImages.length > 0) {
-      this.selectedImage = `/images/products/${this.product.id}/${this.productImages[0]}`;
-    }
-  },
-  methods: {
-    displayImage(image) {
-      this.selectedImage = `/images/products/${this.product.id}/${image}`;
+    props: {
+        product: Object,
     },
-  },
+    computed: {
+        productImages() {
+            return this.product.images.split(';').filter(image => image !== '');
+        },
+    },
+    mounted() {
+        if (this.productImages.length > 0) {
+            this.selectedImage = `/images/products/${this.product.id}/${this.productImages[0]}`;
+        }
+    },
+    methods: {
+        displayImage(image) {
+            this.selectedImage = `/images/products/${this.product.id}/${image}`;
+        },
+    },
 };
 </script>
+
+
+<style>
+.flexc {
+    display: flex !important;
+}
+</style>

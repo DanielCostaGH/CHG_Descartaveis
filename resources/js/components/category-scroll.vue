@@ -22,7 +22,7 @@
                     <v-sheet class="d-flex justify-center align-center overflow-hidden" tile shaped>
 
                         <a :href="`products/${category.name}`">
-                            <v-avatar size="208" color="grey-lighten-1 border-lg">
+                            <v-avatar class="border-lg" size="208">
                                 <img :src="category.image" :alt="category.name" class="fill-avatar">
                             </v-avatar>
                         </a>
@@ -59,7 +59,7 @@
                     <v-sheet class="d-flex justify-center align-center overflow-hidden" tile shaped>
 
                         <a :href="`products/${category.name}`">
-                            <v-avatar size="208" color="grey lighten-4">
+                            <v-avatar class="border-lg" size="208">
                                 <img :src="category.image" :alt="category.name" class="fill-avatar">
                             </v-avatar>
                         </a>
@@ -88,11 +88,13 @@ export default {
                 .then(response => {
                     this.categories = response.data.map(category => ({
                         ...category,
-                        image: `/images/categories/${category.id}/${category.images}`
+                        image: `/images/categories/${category.category_id}/${category.images}`
                     }));
+
                 })
                 .catch(error => {
                     console.error("Erro ao buscar categorias:", error);
+
                 });
         },
 

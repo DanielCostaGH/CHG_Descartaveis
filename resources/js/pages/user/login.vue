@@ -40,8 +40,8 @@
 
 
                     <div class="text-center">
-                        <button class="bg-[#F3F3F3] text-[#1A1A1A] w-full h-[6vh] my-4 rounded flex justify-center items-center" type="submit">
-                            <v-icon class="p-4"><img :src="google_icon" alt=""></v-icon> Entre com sua conta Google</button>
+                        <a class="bg-[#F3F3F3] text-[#1A1A1A] w-full h-[6vh] my-4 rounded flex justify-center items-center" href="/user/create">
+                            <v-icon class="p-4">mdi-account</v-icon> Criar conta</a>
                     </div>
                 </form>
             </div>

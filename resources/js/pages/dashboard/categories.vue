@@ -19,11 +19,11 @@
             <section class="bg-white h-[75vh] overflow-y-scroll">
                 <v-row>
                     <v-col>
-                        <v-card class="pa-4 shadow-md rounded-lg">
+                        <v-card class="pa-4 rounded-lg">
                             <v-card-title class="text-h5 font-medium">Lista de Categorias</v-card-title>
                             <v-row>
                                 <v-col v-for="(category, index) in categories" :key="index" cols="12" md="6" lg="4">
-                                    <v-card class="pa-4 shadow-md rounded-lg">
+                                    <v-card class="pa-4">
                                         <v-card-title class="text-h6 font-medium mt-2">{{ category.name }}</v-card-title>
                                         <v-img :src="`/images/categories/${category.id}/${category.images}`" class="my-4"
                                             aspect-ratio="2.0" contain></v-img>
@@ -39,11 +39,12 @@
                                             </v-btn>
                                         </v-card-actions>
                                     </v-card>
-                                    <div v-if="categories.length === 0" class="text-center py-10">
-                                        Nenhuma categoria encontrada.
-                                    </div>
+
                                 </v-col>
                             </v-row>
+                            <div v-if="categories.length === 0" class="text-center py-10">
+                                Nenhuma categoria encontrada.
+                            </div>
                         </v-card>
                     </v-col>
                 </v-row>

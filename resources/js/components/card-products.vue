@@ -4,14 +4,6 @@
             <v-card v-for="(product, index) in productsWithImagePaths" :key="index" :loading="loading" class="card my-4"
                 width="320">
 
-                <v-row align="center" class="mx-3 my-3">
-                    <v-rating :model-value="product.rating" color="amber" density="compact" half-increments readonly
-                        size="base"></v-rating>
-                    <div class="text-grey ms-4">
-                        {{ product.rating }} ({{ product.reviewCount }})
-                    </div>
-                </v-row>
-
                 <v-img :src="product.imagePath" fit height="200"></v-img>
 
                 <v-card-item class="border-top my-2">

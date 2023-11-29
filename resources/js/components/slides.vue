@@ -1,5 +1,5 @@
 <template>
-    <div class="px-10 bg-gray-100">
+    <div class="px-10 border-b">
         <swiper :cssMode="true" :loop="true" :navigation="navigationOptions" :pagination="true" :mousewheel="true"
             :autoplay="{
                 delay: 7000,
