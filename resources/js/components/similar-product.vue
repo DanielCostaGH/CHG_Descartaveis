@@ -27,7 +27,7 @@
                 </v-card-item>
 
                 <v-card-actions class="justify-center">
-                    <v-btn :href="`products/${product.id}`" class="my-custom-button text-white" color="green-accent-4"
+                    <v-btn :href="`${product.id}`" class="my-custom-button text-white" color="green-accent-4"
                         variant="flat">
                         <v-icon class="mx-2">
                             mdi-eye

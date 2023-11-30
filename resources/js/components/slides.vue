@@ -1,10 +1,10 @@
 <template>
-    <div class="px-10 border-b">
+    <div class="hidden md:block px-10 border-b">
         <swiper :cssMode="true" :loop="true" :navigation="navigationOptions" :pagination="true" :mousewheel="true"
             :autoplay="{
                 delay: 7000,
                 disableOnInteraction: false,
-            }" :keyboard="true" :modules="modules" class="mySwiper h-[30vh] md:h-[40vh] lg:h-[60vh]">
+            }" :keyboard="true" :modules="modules" class="mySwiper h-[30vh] w-full md:h-[40vh] lg:h-[60vh]">
 
             <button class="hidden lg:block lg:absolute top-0 right-0 h-[30vh]">
                 <swiper-button-next
@@ -16,22 +16,42 @@
                     class="swiper-button-prev custom-prev hover:scale-110 hover:duration-300 p-40"></swiper-button-prev>
             </button>
 
-            <button class="lg:hidden">
-                <swiper-button-next class="swiper-button-next custom-next"></swiper-button-next>
-            </button>
-
-            <button class="lg:hidden">
-                <swiper-button-prev class="swiper-button-prev custom-prev"></swiper-button-prev>
-            </button>
-
             <swiper-slide v-for="(image, index) in slides" :key="index" class="h-full">
                 <div class="w-full flex justify-center items-center h-5/6 lg:h-[60vh]">
                     <img class="h-5/6" :src="image" :alt="'Imagem ' + index">
                 </div>
             </swiper-slide>
 
+        </swiper>
+    </div>
 
 
+
+    <!-- Mobile component -->
+    <div class=" md:hidden">
+    <swiper
+    :grabCursor="true"
+    :effect="'creative'"
+    :pagination="true"
+    :loop="true"
+    :creativeEffect="{
+      prev: {
+        shadow: true,
+        translate: [0, 0, -400],
+      },
+      next: {
+        translate: ['100%', 0, 0],
+      },
+    }"
+    :modules="modules"
+    class="mySwiper pb-10"
+  >
+
+            <swiper-slide v-for="(image, index) in slides" :key="index" class="h-full">
+                <div class="w-full flex justify-center items-center">
+                    <img class="h-5/6 no-shadow" :src="image" :alt="'Imagem ' + index">
+                </div>
+            </swiper-slide>
 
         </swiper>
     </div>
@@ -43,7 +63,9 @@ import { Swiper, SwiperSlide } from 'swiper/vue';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
-import { Navigation, Pagination, Mousewheel, Keyboard, Autoplay } from 'swiper/modules';
+import 'swiper/css/effect-creative';
+
+import { Navigation, Pagination, Mousewheel, Keyboard, Autoplay, EffectCreative } from 'swiper/modules';
 import axios from 'axios';
 
 export default {
@@ -51,6 +73,7 @@ export default {
         Swiper,
         SwiperSlide,
     },
+
     data() {
         return {
             slides: [],
@@ -58,7 +81,7 @@ export default {
                 nextEl: '.custom-next',
                 prevEl: '.custom-prev',
             },
-            modules: [Navigation, Pagination, Mousewheel, Keyboard, Autoplay],
+            modules: [Navigation, Pagination, Mousewheel, Keyboard, Autoplay, EffectCreative],
         };
     },
     mounted() {
@@ -77,3 +100,8 @@ export default {
 </script>
 
 
+<style>
+.no-shadow {
+    box-shadow: none !important;
+}
+</style>

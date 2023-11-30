@@ -72,7 +72,7 @@ export default {
         async loadTopicOptions() {
             try {
                 const response = await axios.get('/api/category');
-                this.topicOptions = response.data.slice(0, 4); // Ajuste conforme a estrutura da sua resposta
+                this.topicOptions = response.data.slice(0, 4);
             } catch (error) {
                 console.error(error);
             }

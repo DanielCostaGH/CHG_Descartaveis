@@ -1,7 +1,7 @@
 <template>
     <v-expansion-panels>
         <v-expansion-panel v-model="isOpen" >
-            
+
             <v-expansion-panel-title>
                 <div class="flex justify-between cursor-pointer">
                     <h3 class="text-xl font-semibold text-gray-500 mb-4 pt-4">Carrossel de Imagens</h3>
@@ -17,7 +17,7 @@
                             <v-card-actions>
                                 <v-file-input v-model="newImage" label="Escolher imagem" @change="uploadImage"
                                     outlined></v-file-input>
-                                <v-btn color="primary" @click="addImage" class="ml-2">Adicionar Imagem</v-btn>
+                                <v-btn color="primary"  @click="addImage" class="ml-2">Adicionar Imagem</v-btn>
                             </v-card-actions>
 
                         </v-card>

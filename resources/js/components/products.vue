@@ -1,7 +1,7 @@
 <template>
-    <div class="container mx-auto">
+    <div class="container mx-auto ">
 
-        <div class="mt-10">
+        <div class="mt-10 max-w-fit md:max-w-full">
             <v-row justify="space-between" align="center">
                 <v-col cols="auto">
                     <span class="text-h6 ml-2">Melhores produtos!</span>
@@ -20,7 +20,7 @@
 
 
         <div class="flex overflow-x-scroll py-8">
-            <v-card v-for="(product, index) in products" :key="index" :loading="loading" class="card my-4" width="320">
+            <v-card v-for="(product, index) in products" :key="index" :loading="loading" class="card my-4 mx-4" width="320">
 
                 <v-img :src="product.imagePath" fit height="200"></v-img>
 

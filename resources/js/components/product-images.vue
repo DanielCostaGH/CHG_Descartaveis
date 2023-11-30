@@ -1,5 +1,4 @@
 <template>
-
     <!-- VERSÃO DESKTOP -->
     <v-container fluid class="hidden lg:block">
         <v-row>
@@ -7,7 +6,7 @@
             <v-col cols="12" md="3" class="pa-2">
                 <v-img :src="up_arrow" class="my-2 mx-auto h-5"></v-img>
 
-                <v-container class="overflow-y-auto" style="max-height: 70vh;">
+                <v-container class="overflow-y-auto" style="height: 60vh;">
                     <v-row>
                         <v-col cols="12" v-for="(image, index) in productImages" :key="index">
                             <v-img :src="`/images/products/${product.id}/${image}`" class="mx-auto my-2 h-28"
@@ -22,7 +21,7 @@
 
             <!-- Coluna para imagem principal -->
             <v-col cols="12" md="9" class="d-flex align-center">
-                <v-img :src="selectedImage" class="mx-auto" style="max-height: 70vh;"></v-img>
+                <v-img :src="selectedImage" class="mx-auto" style="height: 50vh;"></v-img>
             </v-col>
         </v-row>
     </v-container>
@@ -40,19 +39,14 @@
 
             <!-- Coluna para imagens secundárias -->
             <v-col cols="12" md="3" class="pa-2">
-
-                <v-container class="overflow-y-auto" style="max-height: 70vh;">
-                    <v-row>
-                        <div class="flexc">
-                            <v-col cols="12" v-for="(image, index) in productImages" :key="index" class="mx-auto">
-                                <v-img :src="`/images/products/${product.id}/${image}`" class="mx-auto my-2 h-28 border rounded-lg"
-                                    aspect-ratio="1" @click="displayImage(image)"></v-img>
-                            </v-col>
+                <div class="overflow-y-auto">
+                    <div class="flex-container">
+                        <div v-for="(image, index) in productImages" :key="index" class="flex-item">
+                            <v-img :src="`/images/products/${product.id}/${image}`" class="image-style" aspect-ratio="1"
+                                @click="displayImage(image)"></v-img>
                         </div>
-
-                    </v-row>
-                </v-container>
-
+                    </div>
+                </div>
             </v-col>
         </v-row>
     </v-container>
@@ -88,9 +82,21 @@ export default {
 };
 </script>
 
-
 <style>
-.flexc {
-    display: flex !important;
+.flex-container {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+}
+
+.flex-item {
+    flex: 0 0 auto;
+    margin: 5px;
+    width: 100px;
+}
+
+.image-style {
+    width: 100%;
+    height: auto;
 }
 </style>

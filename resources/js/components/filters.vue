@@ -20,10 +20,14 @@
                     multiple class="pa-0" :menu-props="{ maxHeight: '300' }" hide-details return-object></v-autocomplete>
             </v-col>
 
+            <v-col cols="12" md="1">
+                <v-btn color="error" size="large" dark class="width-100" @click="clearFilters">
+                    <v-icon class="mr-3">mdi-filter-remove</v-icon>
+                </v-btn>
+            </v-col>
 
-
-            <v-col cols="12" md="3">
-                <v-btn color="indigo" dark class="width-100" @click="applyFilter">
+            <v-col cols="12" md="2">
+                <v-btn color="indigo" size="large" dark class="width-100" @click="applyFilter">
                     <v-icon class="mr-3">mdi-layers-search</v-icon>
                     Pesquisar</v-btn>
             </v-col>
@@ -46,8 +50,8 @@
                     <v-btn icon @click="dialog = false">
                         <v-icon>mdi-close</v-icon>
                     </v-btn>
-                    <v-toolbar-title>Filtros</v-toolbar-title>
                     <v-spacer></v-spacer>
+                    <v-btn dark text @click="clearFilters">Limpar</v-btn>
                     <v-btn dark text @click="applyFilter">Aplicar</v-btn>
                 </v-toolbar>
 
@@ -129,7 +133,14 @@ export default {
             .catch(error =>{
                 console.error("Erro ao buscar cores", error)
             });
-        }
+        },
+
+
+        clearFilters() {
+            this.selectedCategories = [];
+            this.selectedColors = [];
+            this.priceSort = null;
+        },
     },
 
     mounted() {

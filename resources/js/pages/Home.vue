@@ -1,5 +1,5 @@
 <template>
-    <v-app>
+    <div class="overflow-hidden">
         <navbar />
         <topics />
         <slides />
@@ -14,7 +14,7 @@
                 <img :src="wpp" alt="WhatsApp Icon">
             </a>
         </div>
-    </v-app>
+    </div>
 </template>
 
 <script>
