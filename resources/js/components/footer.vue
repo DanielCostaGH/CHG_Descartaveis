@@ -12,7 +12,7 @@
                 <div class="flex text-white text-xl items-center">
                     <img class="px-5 py-8" :src="whatsapp_dark" alt="">
                     <div>
-                        <span> Para ligações</span> <br>
+                        <span> Whatsapp</span> <br>
                         <span>{{ whatsappNum }}</span>
                     </div>
                 </div>
