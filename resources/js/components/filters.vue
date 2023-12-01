@@ -140,6 +140,7 @@ export default {
             this.selectedCategories = [];
             this.selectedColors = [];
             this.priceSort = null;
+            this.applyFilter();
         },
     },
 

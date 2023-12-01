@@ -3,17 +3,18 @@
 namespace App\Services;
 
 use App\Models\Product;
+use App\Models\ProductColors;
 
 class ProductFilterService
 {
     public function filter($parameters)
     {
         $query = Product::query();
+        $qColors = ProductColors::query();
 
         if (isset($parameters['productName'])) {
             $query->where('name', 'like', '%' . $parameters['productName'] . '%');
         }
-        // dd($query->toSql(), $query->getBindings());
 
         if (isset($parameters['priceSort'])) {
             $query = $this->applyPriceSort($query, $parameters['priceSort']);
@@ -55,10 +56,9 @@ class ProductFilterService
 
     protected function applyColorFilter($query, $colors)
     {
-        return $query->where(function ($q) use ($colors) {
-            foreach ($colors as $color) {
-                $q->orWhere('color_id', $color);
-            }
+        return $query->whereHas('productColors', function ($q) use ($colors) {
+            $q->whereIn('color_id', $colors);
         });
     }
+
 }
