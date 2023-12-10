@@ -6,7 +6,6 @@
                 <painel />
             </header>
 
-            <!-- Área Principal -->
             <v-row class="bg-white rounded-lg">
                 <v-col cols="12">
                     <h2 class="text-h6">Produto: {{ editedProduct.name }}</h2>
@@ -56,88 +55,65 @@
 
 
                 <v-col cols="12 my-15 border-t-2">
-                    <!-- Formulário -->
                     <v-form @submit.prevent="updateProduct">
                         <v-row>
 
-                            <!-- Nome do Produto -->
                             <v-col cols="12" md="6">
                                 <v-text-field label="Nome do Produto" v-model="editedProduct.name" outlined
                                     placeholder="Nome do Produto">
                                 </v-text-field>
                             </v-col>
 
-                            <!-- Marca -->
                             <v-col cols="12" md="6">
                                 <v-text-field label="Marca" v-model="editedProduct.brand" outlined placeholder="Marca">
                                 </v-text-field>
                             </v-col>
 
-                            <!-- Descrição -->
                             <v-col cols="12">
                                 <v-textarea label="Descrição" v-model="editedProduct.description" outlined
                                     placeholder="Descrição do Produto" rows="4">
                                 </v-textarea>
                             </v-col>
 
-                            <!-- Preço -->
                             <v-col cols="12" md="6">
                                 <v-text-field label="Preço" v-model="editedProduct.price" type="number" step="0.01" outlined
                                     placeholder="Preço">
                                 </v-text-field>
                             </v-col>
 
-                            <!-- Cores Disponíveis (Autocomplete) -->
                             <v-col cols="12" md="6">
-                                <v-autocomplete
-                                    v-model="editedProduct.colors"
-                                    :items="colors"
-                                    label="Cor"
-                                    item-title="name"
-                                    chips
-                                    small-chips
-                                    multiple
-                                    class="pa-0"
-                                    :menu-props="{ maxHeight: '300' }"
-                                    hide-details
-                                    return-object
-                                ></v-autocomplete>
+                                <v-autocomplete v-model="editedProduct.colors" :items="colors" label="Cor" item-title="name"
+                                    chips small-chips multiple class="pa-0" :menu-props="{ maxHeight: '300' }" hide-details
+                                    return-object></v-autocomplete>
                             </v-col>
 
-                            <!-- Variação -->
-                            <!-- Campo de Input para Variação -->
-                            
                             <v-col cols="12" md="6">
                                 <v-text-field label="Variação" v-model="newVariation" outlined
                                     placeholder="Variação"></v-text-field>
                                 <div>
-                                    <div class="flex justify-between my-3 max-h-[10vh] overflow-auto" v-for="(variation, index) in productVariations" :key="index">
+                                    <div class="flex justify-between my-3 max-h-[10vh] overflow-auto"
+                                        v-for="(variation, index) in productVariations" :key="index">
                                         {{ variation }}
-                                        <!-- Botão para remover variação (opcional) -->
                                         <v-btn small @click="removeVariation(index)">Remover</v-btn>
                                     </div>
                                 </div>
 
-                                <!-- Botão Adicionar Variação -->
                                 <v-btn @click="addVariation" color="blue" dark>Adicionar Variação</v-btn>
                             </v-col>
 
 
-                            <!-- Quantidade -->
                             <v-col cols="12" md="6">
                                 <v-text-field label="Quantidade" v-model="editedProduct.quantity" type="number" outlined
                                     placeholder="Quantidade">
                                 </v-text-field>
                             </v-col>
 
-                            <!-- Status -->
                             <v-col cols="12" md="6">
                                 <v-select label="Status" v-model="editedProduct.status"
                                     :items="['active', 'inactive', 'out_of_stock']" outlined>
                                 </v-select>
                             </v-col>
 
-                            <!-- Botão Salvar Alterações -->
                             <v-col cols="12">
                                 <v-btn @click="updateProduct" color="blue" dark large>
                                     Salvar Alterações
@@ -148,20 +124,23 @@
                     </v-form>
                 </v-col>
             </v-row>
-
-            <!-- Área de Imagens -->
-            <v-row>
-                <v-col cols="12" md="6">
-                    <!-- Visualização e Upload de Imagem -->
-                    <!-- ... -->
-                </v-col>
-                <v-col cols="12" md="6">
-                    <!-- Lista de Imagens Selecionadas -->
-                    <!-- ... -->
-                </v-col>
-            </v-row>
         </main>
     </div>
+
+    <v-dialog v-model="dialog" persistent max-width="50%">
+        <v-card color="success">
+            <v-card-text class="white--text text-h5 pt-15">
+                <v-row align="center" justify="center">
+                    <v-icon class="mr-2" size="x-large">mdi-check-circle</v-icon>
+                    O produto foi editado com sucesso.
+                </v-row>
+            </v-card-text>
+            <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="white" class="text-h6" text @click="confirmProductCreation">OK</v-btn>
+            </v-card-actions>
+        </v-card>
+    </v-dialog>
 </template>
 
 <script>
@@ -194,6 +173,7 @@ export default {
             productVariations: [],
             colors: [],
             deletedImages: [],
+            dialog: false,
         };
     },
     created() {
@@ -218,10 +198,8 @@ export default {
         }
         if (this.$props.product) {
             const product = this.$props.product;
-            // ...outras atribuições...
             this.editedProduct.images = product.images.split(';').filter(imgName => imgName.trim());
 
-            // Dividindo a string de imagens e criando a lista de imagens
             this.images = product.images.split(';').filter(imgName => imgName).map(imgName => {
                 return {
                     src: `/images/products/${product.id}/${imgName.trim()}`,
@@ -229,7 +207,6 @@ export default {
                 };
             });
 
-            // Se houver imagens, defina a primeira como a imagem selecionada
             if (this.images.length > 0) {
                 this.selectedImage = this.images[0].src;
             }
@@ -240,13 +217,13 @@ export default {
         addImage() {
             if (this.newImage && this.newImage.length > 0) {
                 const reader = new FileReader();
-                    reader.onload = (event) => {
+                reader.onload = (event) => {
                     const newImageFile = this.newImage[0];
 
                     this.images.push({
                         src: event.target.result,
                         name: newImageFile.name,
-                        file: newImageFile  
+                        file: newImageFile
                     });
 
                     this.editedProduct.images = [...this.images];
@@ -273,11 +250,10 @@ export default {
         },
 
 
-        // Método para adicionar uma variação à lista de variações
         addVariation() {
             if (this.newVariation.trim() !== '') {
                 this.productVariations.push(this.newVariation);
-                this.newVariation = ''; 
+                this.newVariation = '';
             }
         },
 
@@ -295,7 +271,7 @@ export default {
             formData.append('brand', this.editedProduct.brand);
             formData.append('quantity', this.editedProduct.quantity);
             formData.append('status', this.editedProduct.status);
-            
+
             this.productVariations.forEach((variation, index) => {
                 formData.append(`variation[${index}]`, variation);
             });
@@ -307,7 +283,6 @@ export default {
                 });
             }
 
-            // Lógica para manter as imagens antigas que nao foram removidas
 
             if (Array.isArray(this.editedProduct.images)) {
                 this.editedProduct.images.forEach(imageInfo => {
@@ -319,7 +294,6 @@ export default {
                 formData.append('images[]', this.editedProduct.images);
             }
 
-            // Lógica para adição de novas imagens
             if (Array.isArray(this.images)) {
                 this.editedProduct.images.forEach(imageInfo => {
                     if (imageInfo.file) {
@@ -328,7 +302,6 @@ export default {
                 });
             }
 
-            // Lógica para a deleção de imagens antigas
             if (Array.isArray(this.deletedImages)) {
                 this.deletedImages.forEach(deletedImage => {
                     formData.append('deletedImages[]', deletedImage);
@@ -340,26 +313,29 @@ export default {
                     'Content-Type': 'multipart/form-data',
                 },
             })
-            .then(response => {
-                this.product = response.data;
-                this.$router.push('/dashboard');
-            })
-            .catch(error => {
-                console.error('Erro ao atualizar produto', error);
-            });
+                .then(response => {
+                    this.product = response.data;
+                    this.dialog = true;
+                })
+                .catch(error => {
+                    console.error('Erro ao atualizar produto', error);
+                });
         },
 
-
+        confirmProductCreation() {
+            this.dialog = false; // Fecha o diálogo
+            window.location.href = '/dashboard/products'; // Redireciona o usuário
+        },
 
         fetchColors() {
             axios.get('/api/colors')
                 .then(response => {
-                this.colors = response.data;
+                    this.colors = response.data;
 
-                if (this.$props.product && this.$props.product.colors) {
-                    const selectedColorIds = this.$props.product.colors.split(';').map(colorId => parseInt(colorId.trim()));
-                    this.editedProduct.colors = this.colors.filter(color => selectedColorIds.includes(color.id));
-                }
+                    if (this.$props.product && this.$props.product.colors) {
+                        const selectedColorIds = this.$props.product.colors.split(';').map(colorId => parseInt(colorId.trim()));
+                        this.editedProduct.colors = this.colors.filter(color => selectedColorIds.includes(color.id));
+                    }
                 })
                 .catch(error => {
                     console.error("Erro ao buscar cores", error)
@@ -373,7 +349,7 @@ export default {
                 .catch(error => {
                     console.error("Erro ao buscar variações", error);
                 });
-            },
+        },
 
     },
 

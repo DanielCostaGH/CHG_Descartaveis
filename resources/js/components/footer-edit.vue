@@ -39,6 +39,10 @@
 
         </v-expansion-panel>
     </v-expansion-panels>
+
+    <v-alert class="alert-container text-xl elevation-5 custom-border " v-model="alert.show" :type="alert.type" dismissible>
+        {{ alert.text }}
+    </v-alert>
 </template>
 
 <script>
@@ -52,6 +56,11 @@ export default {
             logoImage: null,
             logoImageName: '',
             logoImagePreview: '',
+            alert: {
+                show: false,
+                text: '',
+                type: ''
+            },
         };
     },
     methods: {
@@ -59,7 +68,6 @@ export default {
         fetchFooterData() {
             axios.get('/api/footer/get')
                 .then(response => {
-                    console.log(response.data);
                     const footerData = response.data[0];
                     if (footerData) {
                         this.whatsapp = footerData.whatsapp_num;
@@ -109,12 +117,21 @@ export default {
                 }
             })
                 .then(response => {
-                    console.log(response);
-                    alert('Alterações salvas com sucesso!');
+                    this.showAlert('Alterações salvas com sucesso!', 'success');
                 })
                 .catch(error => {
-                    console.error('Erro ao salvar as alterações:', error);
+                    this.showAlert('Erro ao salvar alterações.', 'error');
                 });
+        },
+
+        showAlert(text, type) {
+            this.alert.text = text;
+            this.alert.type = type;
+            this.alert.show = true;
+
+            setTimeout(() => {
+                this.alert.show = false;
+            }, 2000);
         },
 
     },
@@ -124,3 +141,24 @@ export default {
     },
 };
 </script>
+
+
+<style scoped>
+.alert-container {
+    position: fixed;
+    top: 25%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    width: 100%;
+    padding: 4vh;
+}
+
+.v-alert {
+    max-width: 600px;
+}
+.custom-border {
+  border: 2px solid white;
+}
+
+</style>

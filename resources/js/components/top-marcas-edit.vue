@@ -8,7 +8,6 @@
             </v-expansion-panel-title>
 
             <v-expansion-panel-text>
-                <!-- Formulário para adicionar uma nova marca -->
                 <div class="flex w-full py-5">
                     <v-text-field label="Nome da Marca" v-model="newBrandName"></v-text-field>
                     <v-file-input label="Insira a imagem" @change="handleFileUpload"></v-file-input>
@@ -60,7 +59,6 @@
                     </div>
                 </v-list-item>
 
-                <!-- Botão para Salvar Alterações -->
                 <v-btn @click="saveChanges" color="primary" class="mt-10 px-4 py-2 rounded">
                     Salvar Alterações
                 </v-btn>
@@ -87,7 +85,7 @@
         </v-expansion-panel>
     </v-expansion-panels>
 
-    <v-alert class="alert-container text-xl" v-model="alert.show" :type="alert.type" dismissible>
+    <v-alert class="alert-container text-xl elevation-5 custom-border " v-model="alert.show" :type="alert.type" dismissible>
         {{ alert.text }}
     </v-alert>
 </template>
@@ -107,7 +105,7 @@ export default {
             alert: {
                 show: false,
                 text: '',
-                type: '' // 'success' para sucesso e 'error' para erro
+                type: ''
             },
         };
     },
@@ -124,7 +122,6 @@ export default {
 
         addBrand() {
             if (this.computedBrands.length + this.editedBrands.length >= 3) {
-                // Mostra uma mensagem de aviso (pode usar v-snackbar ou alert)
                 this.showAlert('Máximo de 3 marcas permitidas.', 'warning');
             } else if (this.newBrandName && this.newBrandImage) {
                 let newBrand = {
@@ -152,7 +149,6 @@ export default {
             this.editedBrands.forEach((brand, index) => {
                 formData.append(`brands[${index}][name]`, brand.name);
 
-                // Se 'images' é um objeto File, adicione-o ao FormData
                 if (brand.images instanceof File) {
                     formData.append(`brands[${index}][images]`, brand.images, brand.images.name);
                 }
@@ -165,7 +161,7 @@ export default {
                 }
             })
                 .then(response => {
-                    this.fetchBrands(); // Recarrega as marcas
+                    this.fetchBrands();
                     this.showAlert('Marcas salvas com sucesso!', 'success');
 
                 })
@@ -175,7 +171,7 @@ export default {
 
                 });
 
-            // Reset os campos do formulário
+
             this.editedBrands = [];
             this.newBrandName = '';
             this.newBrandImage = null;
@@ -216,7 +212,7 @@ export default {
 
             setTimeout(() => {
                 this.alert.show = false;
-            }, 2000); // 3000 milissegundos = 3 segundos
+            }, 2000);
         }
 
     },
@@ -233,19 +229,19 @@ export default {
 <style scoped>
 .alert-container {
     position: fixed;
-    top: 10%;
+    top: 25%;
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 1000;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     width: 100%;
     padding: 4vh;
 }
 
 .v-alert {
     max-width: 600px;
-    /* ajuste conforme necessário */
 }
+.custom-border {
+  border: 2px solid white;
+}
+
 </style>

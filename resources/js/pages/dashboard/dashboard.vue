@@ -1,19 +1,13 @@
 <template>
     <div class="flex">
-        <!-- Barra lateral -->
         <sidebar />
 
-        <!-- Conteúdo principal -->
         <main class="w-4/5 p-6 bg-gray-100">
-            <!-- Header -->
             <header>
                 <painel />
             </header>
 
-            <!-- Painel de Visão Geral -->
             <div class="bg-white p-6 rounded-lg shadow mb-6">
-                <!-- Exiba os indicadores aqui (número de produtos, categorias, pedidos, etc.) -->
-                <!-- Exemplo: -->
                 <div class="grid grid-cols-2 gap-4 text-center">
                     <div class="bg-gradient-to-br from-blue_gradient-light to-blue_gradient-dark p-4 text-white rounded-lg">
                         <h3 class="text-xl font-semibold">Total de Produtos</h3>
@@ -27,7 +21,6 @@
                 </div>
             </div>
 
-            <!-- Acesso Rápido às Funcionalidades -->
             <div class="bg-white p-6 rounded-lg shadow mb-6">
                 <div class="grid grid-cols-2 gap-4">
 
@@ -56,15 +49,13 @@
 
                 </div>
             </div>
-            <!-- ... Resto do código ... -->
 
 
 
-            <!-- Listagem de Produtos Recentes -->
             <div class="bg-white p-6 rounded-lg shadow mb-6">
 
                 <h3 class="text-xl mb-4 px-4">Produtos Recentes</h3>
-                <v-table>
+                <v-table  class="custom-table-body">
                     <template v-slot:default>
                         <thead>
                             <tr>
@@ -77,7 +68,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="item in products" :key="item.id">
+                            <tr v-for="item in products" :key="item.id" >
                                 <td>{{ item.name }}</td>
                                 <td>{{ item.price }}</td>
                                 <td>{{ item.quantity }}</td>
@@ -93,7 +84,6 @@
                     </template>
                 </v-table>
             </div>
-            <!-- ... Resto do código ... -->
 
         </main>
     </div>
@@ -170,3 +160,12 @@ export default {
     }
 };
 </script>
+
+
+
+<style>
+.custom-table-body {
+    max-height: 40vh !important;
+    overflow-y: auto;
+}
+</style>

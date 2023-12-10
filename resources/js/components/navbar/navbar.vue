@@ -3,7 +3,6 @@
 
     <nav class="bg-white">
         <div class="container mx-auto hidden md:flex flex-col justify-between md:flex-row items-center">
-            <!-- Logo -->
             <a href="/">
                 <img class="md:h-[160px]" :src="logo_light" alt="Logo">
             </a>
@@ -27,7 +26,6 @@
                 </div>
             </div>
 
-            <!-- Links (exibidos apenas em telas grandes) -->
             <div class="md:space-x-4 mt-4 md:mt-0 hidden md:flex">
                 <div class="flex items-center hover:underline">
 
@@ -51,12 +49,10 @@
 
 
             <div class="md:hidden flex justify-between md:flex-row items-center">
-                <!-- Logo -->
                 <a href="/">
                     <img class="" :src="logo_light" alt="Logo">
                 </a>
 
-                <!-- Botão do Menu Mobile -->
                 <button @click="toggleMenu" class="md:hidden text-gray-600 mx-5 duration-300">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                         stroke="currentColor">
@@ -66,7 +62,6 @@
 
 
             </div>
-            <!-- Barra de pesquisa -->
             <div class="w-5/6 mx-auto px-4 my-4 relative">
                 <img class="absolute left-4 top-1/2 transform -translate-y-1/2 px-4" :src="search" alt="icon">
                 <input type="text"
@@ -74,7 +69,6 @@
                     placeholder="Pesquise o que procura" />
             </div>
 
-            <!-- Links do Menu Mobile (exibidos quando o botão é clicado) -->
             <div :class="{ 'mobile-menu': menuOpen }" class="relative duration-300 border-white md:hidden">
                 <ul class="text-gray-600 py-2">
                     <li class="my-2 flex items-center justify-center hover:underline">

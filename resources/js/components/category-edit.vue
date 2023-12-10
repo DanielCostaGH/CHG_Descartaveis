@@ -60,7 +60,7 @@
         </v-expansion-panel>
     </v-expansion-panels>
 
-    <v-alert class="alert-container text-xl" v-model="alert.show" :type="alert.type" dismissible>
+    <v-alert class="alert-container text-xl elevation-5 custom-border " v-model="alert.show" :type="alert.type" dismissible>
         {{ alert.text }}
     </v-alert>
 </template>
@@ -106,7 +106,6 @@ export default {
 
         addCategory() {
             if (this.selectedCategories) {
-
                 this.editedCategories.push({
                     ...this.selectedCategories,
                     category_id: this.selectedCategories.id
@@ -165,13 +164,10 @@ export default {
 <style scoped>
 .alert-container {
     position: fixed;
-    top: 10%;
+    top: 25%;
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 1000;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     width: 100%;
     padding: 4vh;
 }
@@ -179,4 +175,8 @@ export default {
 .v-alert {
     max-width: 600px;
 }
+.custom-border {
+  border: 2px solid white;
+}
+
 </style>

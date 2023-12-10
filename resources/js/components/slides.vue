@@ -1,108 +1,107 @@
 <template>
-    <div class="px-10 bg-gray-100">
+    <div class="hidden md:block px-10 border-b">
         <swiper :cssMode="true" :loop="true" :navigation="navigationOptions" :pagination="true" :mousewheel="true"
             :autoplay="{
                 delay: 7000,
                 disableOnInteraction: false,
-            }" :keyboard="true" :modules="modules" class="mySwiper h-[30vh] md:h-[40vh] lg:h-[60vh]">
+            }" :keyboard="true" :modules="modules" class="mySwiper h-[30vh] w-full md:h-[40vh] lg:h-[60vh]">
 
             <button class="hidden lg:block lg:absolute top-0 right-0 h-[30vh]">
-                <swiper-button-next class="swiper-button-next custom-next hover:scale-110 hover:duration-300 p-40"></swiper-button-next>
+                <swiper-button-next
+                    class="swiper-button-next custom-next hover:scale-110 hover:duration-300 p-40"></swiper-button-next>
             </button>
 
-            <button class="hidden lg:block lg:absolute top-0 left-0 h-[30vh]" >
+            <button class="hidden lg:block lg:absolute top-0 left-0 h-[30vh]">
                 <swiper-button-prev
                     class="swiper-button-prev custom-prev hover:scale-110 hover:duration-300 p-40"></swiper-button-prev>
             </button>
 
-            <button class="lg:hidden">
-                <swiper-button-next class="swiper-button-next custom-next"></swiper-button-next>
-            </button>
-
-            <button class="lg:hidden">
-                <swiper-button-prev class="swiper-button-prev custom-prev"></swiper-button-prev>
-            </button>
-
-            <swiper-slide class="h-full">
-                <div class=" w-full flex justify-center items-center h-5/6 lg:h-[60vh]">
-                    <img class="h-5/6" :src="image1" alt="imagem">
+            <swiper-slide v-for="(image, index) in slides" :key="index" class="h-full">
+                <div class="w-full flex justify-center items-center h-5/6 lg:h-[60vh]">
+                    <img class="h-5/6" :src="image" :alt="'Imagem ' + index">
                 </div>
             </swiper-slide>
 
-            <swiper-slide class="h-full">
-                <div class=" w-full flex justify-center items-center h-5/6 lg:h-[60vh]">
-                    <img class="h-5/6" :src="image2" alt="imagem">
+        </swiper>
+    </div>
+
+
+
+    <!-- Mobile component -->
+    <div class=" md:hidden">
+    <swiper
+    :grabCursor="true"
+    :effect="'creative'"
+    :pagination="true"
+    :loop="true"
+    :creativeEffect="{
+      prev: {
+        shadow: true,
+        translate: [0, 0, -400],
+      },
+      next: {
+        translate: ['100%', 0, 0],
+      },
+    }"
+    :modules="modules"
+    class="mySwiper pb-10"
+  >
+
+            <swiper-slide v-for="(image, index) in slides" :key="index" class="h-full">
+                <div class="w-full flex justify-center items-center">
+                    <img class="h-5/6 no-shadow" :src="image" :alt="'Imagem ' + index">
                 </div>
             </swiper-slide>
-
-            <swiper-slide class="h-full">
-                <div class=" w-full flex justify-center items-center h-5/6 lg:h-[60vh]">
-                    <img class="h-5/6" :src="image3" alt="imagem">
-                </div>
-            </swiper-slide>
-
-            <swiper-slide class="h-full">
-                <div class=" w-full flex justify-center items-center h-5/6 lg:h-[60vh]">
-                    <img class="h-5/6" :src="image4" alt="imagem">
-                </div>
-            </swiper-slide>
-
-            <swiper-slide class="h-full">
-                <div class=" w-full flex justify-center items-center h-5/6 lg:h-[60vh]">
-                    <img class="h-5/6" :src="image5" alt="imagem">
-                </div>
-            </swiper-slide>
-
-            <swiper-slide class="h-full">
-                <div class=" w-full flex justify-center items-center h-5/6 lg:h-[60vh]">
-                    <img class="h-5/6" :src="image3" alt="imagem">
-                </div>
-            </swiper-slide>
-
-
-
 
         </swiper>
     </div>
 </template>
 
 <script>
-// Import Swiper Vue.js components
+// Importações
 import { Swiper, SwiperSlide } from 'swiper/vue';
-
-// Import Swiper styles
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
+import 'swiper/css/effect-creative';
 
-
-
-// import required modules
-import { Navigation, Pagination, Mousewheel, Keyboard, Autoplay } from 'swiper/modules';
+import { Navigation, Pagination, Mousewheel, Keyboard, Autoplay, EffectCreative } from 'swiper/modules';
+import axios from 'axios';
 
 export default {
     components: {
         Swiper,
         SwiperSlide,
     },
-    setup() {
-        const navigationOptions = {
-            nextEl: '.custom-next',
-            prevEl: '.custom-prev',
-        };
 
-
+    data() {
         return {
-            modules: [Navigation, Pagination, Mousewheel, Keyboard, Autoplay],
-            navigationOptions,
-            image1: '/images/slides/i1.png',
-            image2: '/images/slides/i2.png',
-            image3: '/images/slides/i3.png',
-            image4: '/images/slides/i4.png',
-            image5: '/images/slides/i5.png',
+            slides: [],
+            navigationOptions: {
+                nextEl: '.custom-next',
+                prevEl: '.custom-prev',
+            },
+            modules: [Navigation, Pagination, Mousewheel, Keyboard, Autoplay, EffectCreative],
         };
+    },
+    mounted() {
+        this.fetchImages();
+    },
+    methods: {
+        fetchImages() {
+            axios.get('/api/slides/get')
+                .then(response => {
+                    this.slides = response.data.map(slide => `/images/slides/${slide.images}`);
+                })
+                .catch(error => console.error('Erro ao buscar imagens', error));
+        },
     },
 };
 </script>
 
 
+<style>
+.no-shadow {
+    box-shadow: none !important;
+}
+</style>

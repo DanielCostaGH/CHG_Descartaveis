@@ -1,5 +1,5 @@
 <template>
-    <v-app>
+    <div class="overflow-hidden">
         <navbar />
         <topics />
         <slides />
@@ -9,13 +9,12 @@
         <foot />
 
 
-        <!-- Botão do WhatsApp flutuante com CSS puro -->
         <div class="whatsapp-btn">
             <a href="https://api.whatsapp.com/send?phone=31980160125" target="_blank">
                 <img :src="wpp" alt="WhatsApp Icon">
             </a>
         </div>
-    </v-app>
+    </div>
 </template>
 
 <script>

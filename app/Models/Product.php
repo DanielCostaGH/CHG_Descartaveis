@@ -28,9 +28,15 @@ class Product extends Model
     }
 
 
-    public static function searchByName($query){
+    public static function searchByName($query)
+    {
         return self::where('name', 'LIKE', "%{$query}%")
             ->limit(7)
             ->get();
+    }
+
+    public function productColors()
+    {
+        return $this->hasMany(ProductColors::class, 'product_id');
     }
 }

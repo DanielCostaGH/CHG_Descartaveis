@@ -104,7 +104,7 @@ export default {
     data() {
         return {
             selectedComponent: userInfo,
-            userData: {}, 
+            userData: {},
         };
     },
     props: {
@@ -122,8 +122,7 @@ export default {
         userFavorites,
         userRequests,
     },
-    mounted() {
-    },
+
     methods: {
         selectComponent(componentName) {
             this.selectedComponent = componentName;

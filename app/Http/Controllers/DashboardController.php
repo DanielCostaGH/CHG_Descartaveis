@@ -207,10 +207,10 @@ class DashboardController extends Controller
     public function productDelete($id) {
         $product = Product::find($id);
         $product->delete();
-        
+
         $productColors = ProductColors::where('product_id', $id)->get();
         foreach ($productColors as $color) {
             $color->delete();
         }
-    }    
+    }
 }
