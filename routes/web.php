@@ -51,6 +51,7 @@ Route::group(['prefix' => 'user', 'middleware' => 'UserAuthMiddleware'], functio
 Route::group(['prefix' => 'products'], function () {
     Route::get('/', [ProductsController::class, 'index'])->name('product.name');
     Route::get('/{id}', [ProductsController::class, 'show'])->name('product.show');
+    Route::get('/filter/{id}', [ProductsController::class, 'show'])->name('product.show');
 });
 
 

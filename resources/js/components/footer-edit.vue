@@ -11,7 +11,7 @@
                 <div class="my-5">
                     <v-row>
                         <v-col cols="12" sm="6">
-                            <v-text-field label="Whatsapp" v-model="whatsapp" outlined dense>{{this.whatsapp}}</v-text-field>
+                            <v-text-field label="Whatsapp" v-model="whatsapp" outlined dense></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="6">
                             <v-text-field label="Telefone" v-model="phone" outlined dense></v-text-field>

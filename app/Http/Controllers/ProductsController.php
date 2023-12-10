@@ -94,6 +94,10 @@ class ProductsController extends Controller
         return view('products.product_details', compact('product'));
     }
 
+    public function filter($id) {
+
+    }
+
 
     public function getAvailableProducts()
     {
