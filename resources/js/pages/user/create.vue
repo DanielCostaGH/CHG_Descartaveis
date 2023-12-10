@@ -101,12 +101,18 @@ export default {
             this.isSwitchChecked = !this.isSwitchChecked;
         },
         submitForm() {
+            const formData = new FormData();
+            formData.append('name', this.name); 
+            formData.append('email', this.email); 
+            formData.append('password', this.password); 
+            formData.append('document', this.document); 
+            formData.append('tell', this.tell); 
+
             this.emailError = '';
             this.passwordError = '';
 
-            // Validar campos
             if (!this.email) {
-                this.emailError = 'O campo de email deve ser preenchido.';
+                this.emailError = 'O campo de email deve ser preenchido.'; 
             }
 
             if (!this.password) {
@@ -114,24 +120,22 @@ export default {
             }
 
             if (this.emailError || this.passwordError) {
-                return;
+                return; 
             }
 
-            axios.post('/user/login', {
-                email: this.email,
-                password: this.password
-            })
+            axios.post('/user/store', formData )
                 .then(response => {
                     if (response.data.token) {
-                        window.location.href = '/dashboard';
+                        window.location.href = '/dashboard'; 
                     } else {
                         this.emailError = 'Credenciais inválidas';
                     }
                 })
                 .catch(error => {
-                    // Trate os erros do backend aqui, por exemplo, exiba uma mensagem de erro
+
                 });
         }
+
     }
 }
 

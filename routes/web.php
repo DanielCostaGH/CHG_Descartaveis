@@ -37,7 +37,7 @@ Route::group(['prefix' => 'admin'], function () {
 Route::get('/user/login', [UserController::class, 'showLoginForm'])->name('user.login');
 Route::post('/user/login', [UserController::class, 'login'])->name('user.login.post');
 Route::get('/user/create', [UserController::class, 'create'])->name('user.create');
-Route::post('/', [UserController::class, 'store'])->name('user.store');
+Route::post('/user/store', [UserController::class, 'store'])->name('user.store');
 
 
 

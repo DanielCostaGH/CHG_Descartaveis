@@ -13,7 +13,7 @@ class UserRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -26,6 +26,8 @@ class UserRequest extends FormRequest
             'email' => 'required|email|unique:admin,email',
             'password' => 'required|min:6',
             'name' => 'required',
+            'tell' => 'required|string',
+            'document' => 'required|string'
         ];
     }
 }
