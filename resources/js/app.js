@@ -10,7 +10,7 @@ import store from './store'
 import axios from 'axios';
 
 
-const app = createApp(App);
+const app = createApp();
 
 app.use(createVuetify());
 app.use(store);
@@ -53,7 +53,7 @@ import productCreate from './pages/dashboard/productCreate.vue'
 import categoryCreate from './pages/dashboard/categoryCreate.vue'
 
 
-import shoppingCart from './pages/shopping_cart.vue'
+import shoppingCart from './pages/cart/shopping_cart.vue'
 
 
 

@@ -99,3 +99,8 @@ Route::group(['prefix' => 'api'], function () {
 });
 
 Route::middleware('auth:user')->get('/api/get', [UserController::class, 'getUser']);
+
+
+Route::group(['prefix' => 'cart', 'middleware' => 'UserAuthMiddleware'], function () {
+    Route::get('/{id}', [ShoppingCartController::class, 'index']);
+});

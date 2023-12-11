@@ -53,9 +53,10 @@ class UserController extends Controller
 
             $response = ['user' => $user, 'token' => $token];
             return response()->json($response, 200);
+        }else{
+            return redirect()->route('user.login')->with('message', 'Credenciais inválidas');
         }
 
-        return redirect()->route('user.login')->with('message', 'Credenciais inválidas');
     }
 
     public function addAddress(UserAddAdressRequest $request, $id)
@@ -112,7 +113,10 @@ class UserController extends Controller
         $user->document = $request->input('document');
         $user->save();
 
-        return redirect()->route('home');
+        return response()->json([
+            'message' => 'Usuário criado com sucesso!',
+            'user' => $user->makeHidden('password')
+        ], 201);
     }
 
     public function getUser()

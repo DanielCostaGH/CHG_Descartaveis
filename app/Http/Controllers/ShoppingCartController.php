@@ -9,6 +9,6 @@ class ShoppingCartController extends Controller
 
 
     public function index(){
-        return view('shopping_cart');
+        return view('cart.shopping_cart');
     }
 }

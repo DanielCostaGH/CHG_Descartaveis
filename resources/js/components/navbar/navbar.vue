@@ -30,13 +30,14 @@
                 <div class="flex items-center hover:underline">
 
                     <img class="mr-2" :src="user" alt="">
-                    <a href="/user/login">Login/Cadastro</a>
+                    <a v-if="userInfo" href="/user">Minha conta</a>
+                    <a v-else href="/user/login">Login/Cadastro</a>
                 </div>
                 <div class="flex items-center hover:underline">
                     <v-icon class="mr-2">
                         <img :src="cart" alt="">
                     </v-icon>
-                    <a :href="userInfo ? `/${userInfo.id}/cart` : '#'">Carrinho</a>
+                    <a :href="userInfo ? `/cart/${userInfo.id}` : '#'">Carrinho</a>
                 </div>
             </div>
 
@@ -73,11 +74,12 @@
                 <ul class="text-gray-600 py-2">
                     <li class="my-2 flex items-center justify-center hover:underline">
                         <img class="mr-2" :src="user" alt="">
-                        <a href="#">Login/Cadastro</a>
+                        <a v-if="userInfo" :href="`/user/${userInfo.id}`">Minha conta</a>
+                        <a v-else href="/user/login">Login/Cadastro</a>
                     </li>
                     <li class="my-4 flex items-center justify-center hover:underline">
                         <img class="mr-2" :src="cart" alt="">
-                        <a href="#">Carrinho</a>
+                        <a :href="userInfo ? `/cart/${userInfo.id}` : '#'">Carrinho</a>
                     </li>
                 </ul>
             </div>
@@ -105,9 +107,9 @@ export default {
 
     computed: {
         userInfo() {
-      return this.$store.state.user;
+            return this.$store.state.user;
+        },
     },
-  },
 
     methods: {
         toggleMenu() {
@@ -129,8 +131,8 @@ export default {
         },
 
         redirectToProduct(productId) {
-        window.location.href = `/products/${productId}`;
-    },
+            window.location.href = `/products/${productId}`;
+        },
 
     }
 
