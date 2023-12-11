@@ -12,7 +12,7 @@
             <div class="w-5/6 md:w-3/6 px-4 mt-4 md:mt-0 relative">
                 <img class="absolute left-4 top-1/2 transform -translate-y-1/2 px-4" :src="search" alt="icon">
                 <input type="text" v-model="searchQuery" @input="fetchSuggestions"
-                    class="rounded-lg bg-[#F3F9FB] shadow-md p-4 pl-12 w-full focus:border-2 focus:outline-none focus:border-gray-400 text-lg"
+                    class="rounded-lg bg-[#F3F9FB]  p-4 pl-12 w-full shadow focus:shadow-lg focus:outline-none focus:border-gray-400 text-lg"
                     placeholder="Pesquise o que procura" />
 
                 <div v-if="suggestions.length > 0" class="absolute z-10 w-5/6 bg-white border-b mt-1 rounded-lg">
@@ -36,7 +36,7 @@
                     <v-icon class="mr-2">
                         <img :src="cart" alt="">
                     </v-icon>
-                    <a href="#">Carrinho</a>
+                    <a :href="userInfo ? `/${userInfo.id}/cart` : '#'">Carrinho</a>
                 </div>
             </div>
 
@@ -103,6 +103,11 @@ export default {
         };
     },
 
+    computed: {
+        userInfo() {
+      return this.$store.state.user;
+    },
+  },
 
     methods: {
         toggleMenu() {

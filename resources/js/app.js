@@ -6,9 +6,22 @@ import App from './components/App.vue';
 import Home from './pages/Home.vue';
 import '@mdi/font/css/materialdesignicons.css'
 import 'vuetify/styles'
+import store from './store'
+import axios from 'axios';
 
-const app = createApp();
-app.use(createVuetify())
+
+const app = createApp(App);
+
+app.use(createVuetify());
+app.use(store);
+
+axios.get('/api/get')
+    .then(response => {
+        store.dispatch('setUser', response.data);
+    })
+    .catch(error => {
+        console.error('Erro:', error);
+    });
 
 
 
@@ -40,6 +53,10 @@ import productCreate from './pages/dashboard/productCreate.vue'
 import categoryCreate from './pages/dashboard/categoryCreate.vue'
 
 
+import shoppingCart from './pages/shopping_cart.vue'
+
+
+
 app.component('admin-login', adminLogin);
 app.component('admin-index', adminIndex);
 app.component('admin-create', adminCreate);
@@ -62,6 +79,9 @@ app.component('categories-index', categoriesIndex);
 app.component('product-create', productCreate);
 app.component('category-create', categoryCreate);
 
+
+
+app.component('shopping_cart', shoppingCart);
 
 
 app.mount('#app');

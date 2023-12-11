@@ -10,7 +10,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\FooterController;
 use App\Http\Controllers\BrandsController;
 use App\Http\Controllers\SlidesController;
-
+use App\Http\Controllers\ShoppingCartController;
 
 
 
@@ -46,6 +46,7 @@ Route::group(['prefix' => 'user', 'middleware' => 'UserAuthMiddleware'], functio
     Route::get('/', [UserController::class, 'index'])->name('user.name');
     Route::put('/update_basic/{id}', [UserController::class, 'updateBasic'])->name('user.update_basic');
     Route::post('/add_address/{id}', [UserController::class, 'addAddress'])->name('user.add_address');
+    Route::get('/{id}/cart', [ShoppingCartController::class, 'index']);
 });
 
 Route::group(['prefix' => 'products'], function () {
@@ -96,3 +97,5 @@ Route::group(['prefix' => 'api'], function () {
     Route::delete('/slides/{id}', [SlidesController::class, 'destroy']);
 
 });
+
+Route::middleware('auth:user')->get('/api/get', [UserController::class, 'getUser']);
