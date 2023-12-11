@@ -33,6 +33,12 @@ export default {
     }
   },
 
+  computed: {
+    userInfo() {
+      return this.$store.state.user;
+    },
+  },
+
     components: {
         navbar,
         topics,

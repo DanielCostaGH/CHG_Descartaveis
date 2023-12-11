@@ -14,6 +14,9 @@ use Illuminate\Support\Facades\Redirect;
 
 class UserController extends Controller
 {
+
+
+
     /**
      * Display a listing of the resource.
      *
@@ -50,14 +53,15 @@ class UserController extends Controller
 
             $response = ['user' => $user, 'token' => $token];
             return response()->json($response, 200);
+        }else{
+            return redirect()->route('user.login')->with('message', 'Credenciais inválidas');
         }
 
-        return redirect()->route('user.login')->with('message', 'Credenciais inválidas');
     }
 
-    public function addAddress(UserAddAdressRequest $request, $id){
+    public function addAddress(UserAddAdressRequest $request, $id)
+    {
         dd($request->all());
-
     }
 
 
@@ -69,20 +73,19 @@ class UserController extends Controller
         if (!$user) {
             return response()->json(['message' => 'Usuário não encontrado'], 404);
         }
-        if (password_verify($request->senhaAtual, $user->password)){
+        if (password_verify($request->senhaAtual, $user->password)) {
             $user->name = $request->nome;
             $user->email = $request->email;
             $user->phone = $request->telefone;
             $user->document = $request->cpf;
             $user->password = bcrypt($request->novaSenha);
-            $user->save();  
+            $user->save();
             return response()->json(['message' => 'Perfil atualizado com sucesso']);
         }
         return response()->json(['message' => 'senha atual incorreta']);
-
     }
 
-    
+
 
     /**
      * Show the form for creating a new resource.
@@ -100,7 +103,8 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(UserRequest $request) {
+    public function store(UserRequest $request)
+    {
         $user = new User();
         $user->email = $request->input('email');
         $user->password = bcrypt($request->input('password'));
@@ -109,7 +113,16 @@ class UserController extends Controller
         $user->document = $request->input('document');
         $user->save();
 
-        return redirect()->route('user.index');
+        return response()->json([
+            'message' => 'Usuário criado com sucesso!',
+            'user' => $user->makeHidden('password')
+        ], 201);
+    }
+
+    public function getUser()
+    {
+        $user = auth('user')->user();
+        return response()->json($user);
     }
 
     /**
