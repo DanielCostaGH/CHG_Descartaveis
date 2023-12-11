@@ -1,10 +1,10 @@
 <template>
-    <div class="hidden md:block px-10 border-b">
-        <swiper :cssMode="true" :loop="true" :navigation="navigationOptions" :pagination="true" :mousewheel="true"
+    <div class="hidden md:block px-10 border-b ">
+        <swiper :cssMode="true" :loop="true" :navigation="navigationOptions" :mousewheel="true"
             :autoplay="{
                 delay: 7000,
                 disableOnInteraction: false,
-            }" :keyboard="true" :modules="modules" class="mySwiper h-[30vh] w-full md:h-[40vh] lg:h-[60vh]">
+            }" :keyboard="true" :modules="modules" class="mySwiper w-full lg:h-[60vh] ">
 
             <button class="hidden lg:block lg:absolute top-0 right-0 h-[30vh]">
                 <swiper-button-next
@@ -16,9 +16,9 @@
                     class="swiper-button-prev custom-prev hover:scale-110 hover:duration-300 p-40"></swiper-button-prev>
             </button>
 
-            <swiper-slide v-for="(image, index) in slides" :key="index" class="h-full">
-                <div class="w-full flex justify-center items-center h-5/6 lg:h-[60vh]">
-                    <img class="h-5/6" :src="image" :alt="'Imagem ' + index">
+            <swiper-slide v-for="(image, index) in slides" :key="index" class="">
+                <div class="w-full flex justify-center items-center lg:h-[60vh] overflow-hidden">
+                    <img class="w-4/6 image-desk " :src="image" :alt="'Imagem ' + index">
                 </div>
             </swiper-slide>
 
@@ -44,12 +44,12 @@
       },
     }"
     :modules="modules"
-    class="mySwiper pb-10"
+    class="mySwiper pb-10 "
   >
 
             <swiper-slide v-for="(image, index) in slides" :key="index" class="h-full">
                 <div class="w-full flex justify-center items-center">
-                    <img class="h-5/6 no-shadow" :src="image" :alt="'Imagem ' + index">
+                    <img class="image-mob no-shadow" :src="image" :alt="'Imagem ' + index">
                 </div>
             </swiper-slide>
 
@@ -104,4 +104,19 @@ export default {
 .no-shadow {
     box-shadow: none !important;
 }
+
+.image-mob {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    aspect-ratio: 16 / 9;
+}
+
+.image-desk {
+    width: 75%;
+    height: auto;
+    object-fit: cover;
+    aspect-ratio: 16 / 9;
+}
+
 </style>

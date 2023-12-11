@@ -53,7 +53,10 @@ import productCreate from './pages/dashboard/productCreate.vue'
 import categoryCreate from './pages/dashboard/categoryCreate.vue'
 
 
-import shoppingCart from './pages/cart/shopping_cart.vue'
+import shoppingCart from './pages/cart/shoppingCart.vue'
+import paymentCart from './pages/cart/paymentCart.vue'
+import confirmationCart from './pages/cart/confirmationCart.vue'
+
 
 
 
@@ -80,8 +83,10 @@ app.component('product-create', productCreate);
 app.component('category-create', categoryCreate);
 
 
-
 app.component('shopping_cart', shoppingCart);
+app.component('payment_cart', paymentCart);
+app.component('confirmation_cart', confirmationCart);
+
 
 
 app.mount('#app');

@@ -78,8 +78,8 @@
             </div>
 
             <div class="w-5/6 mx-auto px-5">
-                <v-btn  @click="goNext" color="#2B9D44" block large dark class="my-5 text-h6" rounded="lg"
-                    style="padding-top: 1.6rem; padding-bottom: 1.6rem;">
+                <v-btn  :href="userInfo ? `/cart/payment/${userInfo.id}` : '#'" color="#2B9D44" block large dark class="my-5 text-h6" rounded="lg"
+                    style="padding-top: 1.6rem; padding-bottom: 1.6rem;" >
                     <v-icon left class="mr-3 text-h4">
                         mdi-cash
                     </v-icon>
@@ -144,6 +144,10 @@ export default {
                 0
             ).toFixed(2);
         },
+        userInfo() {
+            return this.$store.state.user;
+        },
+
     },
     methods: {
         increaseQuantity(product) {
