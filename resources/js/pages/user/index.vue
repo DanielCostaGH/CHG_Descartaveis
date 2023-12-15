@@ -57,8 +57,7 @@
                     </li>
 
                     <li class="my-4  w-full">
-                        <a href="/user/cart" class="flex w-full items-center p-5 rounded-lg hover:bg-[#F3F4F5] hover:shadow-lg active:bg-gray-200 cursor-pointer text-gray-500"
-                            @click="logoutAction">
+                        <a :href="userInfo ? `/cart/${userInfo.id}` : '#'" class="flex w-full items-center p-5 rounded-lg hover:bg-[#F3F4F5] hover:shadow-lg active:bg-gray-200 cursor-pointer text-gray-500">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
                                 stroke="currentColor" class="w-6 h-6 mr-3">
                                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -115,6 +114,13 @@ export default {
             type: Array,
         },
     },
+
+    computed: {
+        userInfo() {
+            return this.$store.state.user;
+        },
+    },
+    
     components: {
         navbar,
         userInfo,

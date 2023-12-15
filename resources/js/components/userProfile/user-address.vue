@@ -16,7 +16,7 @@
                         <div class="flex w-full">
                             <v-text-field v-model="formData.zipcode" label="CEP" outlined dense class="mb-4  w-2/6"
                                 @blur="buscarEnderecoPorCEP"></v-text-field>
-                                <v-text-field v-model="formData.number" label="Número" outlined dense
+                            <v-text-field v-model="formData.number" label="Número" outlined dense
                                 class="mb-4 ml-5 w-1/6"></v-text-field>
 
                             <v-text-field v-model="formData.city" label="Cidade" outlined dense
@@ -38,26 +38,30 @@
 
                 <v-divider class="my-4"></v-divider>
 
-                <!-- Lista de endereços cadastrados -->
-                <div class="flex w-full">
-                    <v-card v-for="(endereco, index) in userAddresses" :key="index" class="mb-4">
+                <v-radio-group class="flex flex-wrap justify-center w-full" v-model="enderecoSelecionado">
+                    <v-card v-for="(endereco, index) in userAddresses" :key="index" class="mb-4 w-[70vh]">
                         <v-card-text>
                             <v-row>
-                                <v-col cols="10">
-                                    <div>{{ endereco.street }}, {{ endereco.number }}, {{ endereco.city }}, {{
-                                        endereco.state }}, {{ endereco.zipcode }}</div>
+                                <v-col cols="9" class="flex items-center">
+                                    <div>{{ endereco.street }}, {{ endereco.number }}, {{ endereco.neighborhood }}, {{
+                                        endereco.city }},
+                                        {{ endereco.state }}, {{ endereco.zipcode }}</div>
                                 </v-col>
-                                <v-col cols="2">
-                                    <v-radio v-model="enderecoSelecionado" :value="index" name="endereco-radio"></v-radio>
+                                <v-col cols="2" class="flex items-center ">
+                                    <v-col>
+                                        <v-radio :value="index"></v-radio>
+                                    </v-col>
+                                    <v-btn @click="deleteAddress(endereco.id)"><v-icon>mdi-delete-alert-outline</v-icon></v-btn>
                                 </v-col>
+
                             </v-row>
                         </v-card-text>
                     </v-card>
-                </div>
+                </v-radio-group>
 
                 <v-divider class="my-4"></v-divider>
 
-                <v-btn @click="salvarEndereco" class="rounded-full bg-blue-darken-2">
+                <v-btn @click="salvarEnderecoPrincipal" class="rounded-full bg-blue-darken-2">
                     Salvar Endereço Selecionado
                 </v-btn>
             </v-card-text>
@@ -93,17 +97,19 @@ export default {
     },
     methods: {
         adicionarEndereco() {
-            const { street, number, city, state, zipcode } = this.formData;
+            const { street, number, city, state, zipcode, neighborhood } = this.formData;
 
             axios.post(`/user/add_address/${this.userData.id}`, {
                 street,
                 number,
                 city,
                 state,
-                zipcode
+                zipcode,
+                neighborhood
             })
                 .then(response => {
                     console.log('Endereço salvo com sucesso:', response);
+                    this.fetchAddresses();
                 })
                 .catch(error => {
                     console.error('Erro ao salvar endereço:', error);
@@ -121,7 +127,7 @@ export default {
                         this.formData.neighborhood = response.data.bairro || '';
                     })
                     .catch(error => {
-                        console.error('Erro ao buscar endereço por CEP:', error);
+                        alert('Erro ao buscar endereço por CEP:', error);
                     });
             } else {
                 console.warn('CEP inválido');
@@ -130,15 +136,70 @@ export default {
 
 
         fetchAddresses() {
-            axios.get(`/user/get_address/${this.userData.id}`)
-            .then(response => {
-                console.log(response.data);
-                this.userAddresses = response.data;
-            })
+            axios.get(`/user/get_address`)
+                .then(response => {
+                    const addresses = response.data.addresses;
+                    const mainAddress = response.data.main_address;
+
+                    this.userAddresses = addresses;
+
+                    if (mainAddress) {
+                        const mainAddressIndex = addresses.findIndex(address => address.id === mainAddress.id);
+                        this.enderecoSelecionado = mainAddressIndex !== -1 ? mainAddressIndex : null;
+                    } else {
+                        this.enderecoSelecionado = null;
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro ao buscar endereços:', error);
+                });
+        },
+
+
+        deleteAddress(addressId) {
+        if (confirm("Tem certeza que deseja deletar este endereço?")) {
+            axios.delete(`/user/delete_address/${addressId}`)
+                .then(response => {
+                    alert("Endereço deletado com sucesso!");
+                    this.fetchAddresses(); 
+                })
+                .catch(error => {
+                    alert("Erro ao deletar endereço");
+                    console.error('Erro ao deletar endereço:', error);
+                });
         }
     },
 
-    mounted(){
+
+
+        salvarEnderecoPrincipal() {
+            if (this.enderecoSelecionado !== null) {
+                const enderecoPrincipal = this.userAddresses[this.enderecoSelecionado];
+
+                if (enderecoPrincipal && enderecoPrincipal.id) {
+                    console.log('Endereço Principal:', enderecoPrincipal);
+
+                    axios.post(`/user/set_main_address`, { addressId: enderecoPrincipal.id })
+                        .then(response => {
+                            alert("Endereço principal atualizado com sucesso!");
+                            this.fetchAddresses();
+                        })
+                        .catch(error => {
+                            alert("Erro ao atualizar endereço principal");
+                        });
+
+                } else {
+                    alert('ID do endereço não encontrado.');
+                }
+
+            } else {
+                alert('Nenhum endereço selecionado.');
+            }
+        },
+
+    },
+
+    mounted() {
         this.fetchAddresses();
     }
 };

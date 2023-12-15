@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('city');
             $table->string('state');
             $table->string('neighborhood');
+            $table->boolean('is_main')->default(false);
             $table->unsignedBigInteger('user_id');
             $table->timestamps();
 
