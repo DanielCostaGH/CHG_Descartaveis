@@ -12,7 +12,7 @@
             <div class="w-5/6 md:w-3/6 px-4 mt-4 md:mt-0 relative">
                 <img class="absolute left-4 top-1/2 transform -translate-y-1/2 px-4" :src="search" alt="icon">
                 <input type="text" v-model="searchQuery" @input="fetchSuggestions"
-                    class="rounded-lg bg-[#F3F9FB] shadow-md p-4 pl-12 w-full focus:border-2 focus:outline-none focus:border-gray-400 text-lg"
+                    class="rounded-lg bg-[#F3F9FB]  p-4 pl-12 w-full shadow focus:shadow-lg focus:outline-none focus:border-gray-400 text-lg"
                     placeholder="Pesquise o que procura" />
 
                 <div v-if="suggestions.length > 0" class="absolute z-10 w-5/6 bg-white border-b mt-1 rounded-lg">
@@ -30,13 +30,14 @@
                 <div class="flex items-center hover:underline">
 
                     <img class="mr-2" :src="user" alt="">
-                    <a href="/user/login">Login/Cadastro</a>
+                    <a v-if="userInfo" href="/user">Minha conta</a>
+                    <a v-else href="/user/login">Login/Cadastro</a>
                 </div>
                 <div class="flex items-center hover:underline">
                     <v-icon class="mr-2">
                         <img :src="cart" alt="">
                     </v-icon>
-                    <a href="#">Carrinho</a>
+                    <a :href="userInfo ? `/cart/${userInfo.id}` : '#'">Carrinho</a>
                 </div>
             </div>
 
@@ -73,11 +74,12 @@
                 <ul class="text-gray-600 py-2">
                     <li class="my-2 flex items-center justify-center hover:underline">
                         <img class="mr-2" :src="user" alt="">
-                        <a href="#">Login/Cadastro</a>
+                        <a v-if="userInfo" :href="`/user/${userInfo.id}`">Minha conta</a>
+                        <a v-else href="/user/login">Login/Cadastro</a>
                     </li>
                     <li class="my-4 flex items-center justify-center hover:underline">
                         <img class="mr-2" :src="cart" alt="">
-                        <a href="#">Carrinho</a>
+                        <a :href="userInfo ? `/cart/${userInfo.id}` : '#'">Carrinho</a>
                     </li>
                 </ul>
             </div>
@@ -103,6 +105,11 @@ export default {
         };
     },
 
+    computed: {
+        userInfo() {
+            return this.$store.state.user;
+        },
+    },
 
     methods: {
         toggleMenu() {
@@ -124,8 +131,8 @@ export default {
         },
 
         redirectToProduct(productId) {
-        window.location.href = `/products/${productId}`;
-    },
+            window.location.href = `/products/${productId}`;
+        },
 
     }
 

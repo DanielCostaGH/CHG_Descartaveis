@@ -53,7 +53,7 @@
                         <div class="flex">
                             <input v-model="password" class="bg-[#ECECEC] w-full h-[5vh] my-3 p-5 rounded mr-2"
                                 type="password" placeholder="Senha" :class="{ 'border-red-500': passwordError }">
-                            <input v-model="password" class="bg-[#ECECEC] w-full h-[5vh] my-3 p-5 rounded ml-2"
+                            <input v-model="confirmPassword" class="bg-[#ECECEC] w-full h-[5vh] my-3 p-5 rounded ml-2"
                                 type="password" placeholder="Confirmar Senha" :class="{ 'border-red-500': passwordError }">
                         </div>
 
@@ -92,6 +92,7 @@ export default {
             isSwitchChecked: false,
             email: '',
             password: '',
+            confirmPassword: '',
             emailError: '',
             passwordError: ''
         };
@@ -102,17 +103,18 @@ export default {
         },
         submitForm() {
             const formData = new FormData();
-            formData.append('name', this.name); 
-            formData.append('email', this.email); 
-            formData.append('password', this.password); 
-            formData.append('document', this.document); 
-            formData.append('tell', this.tell); 
+            formData.append('name', this.name);
+            formData.append('email', this.email);
+            formData.append('password', this.password);
+            formData.append('confirmPassword', this.confirmPassword);
+            formData.append('document', this.document);
+            formData.append('tell', this.tell);
 
             this.emailError = '';
             this.passwordError = '';
 
             if (!this.email) {
-                this.emailError = 'O campo de email deve ser preenchido.'; 
+                this.emailError = 'O campo de email deve ser preenchido.';
             }
 
             if (!this.password) {
@@ -120,20 +122,27 @@ export default {
             }
 
             if (this.emailError || this.passwordError) {
-                return; 
+                return;
             }
 
-            axios.post('/user/store', formData )
-                .then(response => {
-                    if (response.data.token) {
-                        window.location.href = '/dashboard'; 
-                    } else {
-                        this.emailError = 'Credenciais inválidas';
-                    }
-                })
-                .catch(error => {
+            axios.post('/user/store', formData)
+    .then(response => {
+        if (response.status === 201) {
+            window.location.href = '/user/login';
+        } else {
+            this.emailError = 'Ocorreu um erro inesperado';
+        }
+    })
+    .catch(error => {
+        if (error.response) {
+            this.emailError = error.response.data.message || 'Erro no servidor';
+        } else if (error.request) {
+            this.emailError = 'Nenhuma resposta do servidor';
+        } else {
+            this.emailError = error.message;
+        }
+    });
 
-                });
         }
 
     }

@@ -10,7 +10,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\FooterController;
 use App\Http\Controllers\BrandsController;
 use App\Http\Controllers\SlidesController;
-
+use App\Http\Controllers\ShoppingCartController;
 
 
 
@@ -97,4 +97,13 @@ Route::group(['prefix' => 'api'], function () {
     Route::get('/slides/get', [SlidesController::class, 'getSlides']);
     Route::delete('/slides/{id}', [SlidesController::class, 'destroy']);
 
+});
+
+Route::middleware('auth:user')->get('/api/get', [UserController::class, 'getUser']);
+
+
+Route::group(['prefix' => 'cart', 'middleware' => 'UserAuthMiddleware'], function () {
+    Route::get('/{id}', [ShoppingCartController::class, 'index']);
+    Route::get('/payment/{id}', [ShoppingCartController::class, 'payment']);
+    Route::get('/confirmation/{id}', [ShoppingCartController::class, 'confirmation']);
 });

@@ -15,6 +15,9 @@ use Illuminate\Support\Facades\Redirect;
 
 class UserController extends Controller
 {
+
+
+
     /**
      * Display a listing of the resource.
      *
@@ -51,9 +54,10 @@ class UserController extends Controller
 
             $response = ['user' => $user, 'token' => $token];
             return response()->json($response, 200);
+        }else{
+            return redirect()->route('user.login')->with('message', 'Credenciais inválidas');
         }
 
-        return redirect()->route('user.login')->with('message', 'Credenciais inválidas');
     }
 
     public function addAddress(Request $request, $id)
@@ -98,7 +102,7 @@ public function getUserAddresses($id)
         if (!$user) {
             return response()->json(['message' => 'Usuário não encontrado'], 404);
         }
-        if (password_verify($request->senhaAtual, $user->password)){
+        if (password_verify($request->senhaAtual, $user->password)) {
             $user->name = $request->nome;
             $user->email = $request->email;
             $user->phone = $request->telefone;
@@ -108,7 +112,6 @@ public function getUserAddresses($id)
             return response()->json(['message' => 'Perfil atualizado com sucesso']);
         }
         return response()->json(['message' => 'senha atual incorreta']);
-
     }
 
 
@@ -129,7 +132,8 @@ public function getUserAddresses($id)
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(UserRequest $request) {
+    public function store(UserRequest $request)
+    {
         $user = new User();
         $user->email = $request->input('email');
         $user->password = bcrypt($request->input('password'));
@@ -138,7 +142,16 @@ public function getUserAddresses($id)
         $user->document = $request->input('document');
         $user->save();
 
-        return redirect()->route('user.index');
+        return response()->json([
+            'message' => 'Usuário criado com sucesso!',
+            'user' => $user->makeHidden('password')
+        ], 201);
+    }
+
+    public function getUser()
+    {
+        $user = auth('user')->user();
+        return response()->json($user);
     }
 
     /**

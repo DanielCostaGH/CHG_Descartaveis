@@ -88,15 +88,14 @@ export default {
                 password: this.password
             })
             .then(response => {
-                if (response.data.token) {
-                    window.location.href = '/dashboard';
-                } else {
-                    this.emailError = 'Credenciais inválidas';
-                }
-            })
-            .catch(error => {
-                // Trate os erros do backend aqui, por exemplo, exiba uma mensagem de erro
-            });
+                    if (response.data.token) {
+                        window.location.href = '/';
+                    } else {
+                        this.emailError = 'Credenciais inválidas';
+                    }
+                })
+                .catch(error => {
+                });
         }
     }
 }
