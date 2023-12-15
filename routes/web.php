@@ -46,6 +46,8 @@ Route::group(['prefix' => 'user', 'middleware' => 'UserAuthMiddleware'], functio
     Route::get('/', [UserController::class, 'index'])->name('user.name');
     Route::put('/update_basic/{id}', [UserController::class, 'updateBasic'])->name('user.update_basic');
     Route::post('/add_address/{id}', [UserController::class, 'addAddress'])->name('user.add_address');
+    Route::get('/get_address/{id}', [UserController::class, 'getUserAddresses'])->name('user.get_address');
+    Route::get('/{id}/cart', [ShoppingCartController::class, 'index']);
 });
 
 Route::group(['prefix' => 'products'], function () {

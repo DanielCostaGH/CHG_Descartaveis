@@ -7,17 +7,25 @@
                     <div class="flex flex-wrap">
 
                         <div class="flex w-full">
-                            <v-text-field v-model="formData.rua" label="Rua" outlined dense class="mb-4 mr-5 w-1/2"></v-text-field>
-                            <v-text-field v-model="formData.numero" label="Número" outlined dense class="mb-4 ml-5 w-1/2"></v-text-field>
+                            <v-text-field v-model="formData.street" label="Rua" outlined dense
+                                class="mb-4 mr-5 w-1/2"></v-text-field>
+                            <v-text-field v-model="formData.neighborhood" label="Bairro" outlined dense
+                                class="mb-4 ml-5 w-1/2"></v-text-field>
                         </div>
 
                         <div class="flex w-full">
-                            <v-text-field v-model="formData.cep" label="CEP" outlined dense class="mb-4 mr-5"></v-text-field>
-                            <v-text-field v-model="formData.cidade" label="Cidade" outlined dense class="mb-4 ml-5 w-1/2"></v-text-field>
+                            <v-text-field v-model="formData.zipcode" label="CEP" outlined dense class="mb-4  w-2/6"
+                                @blur="buscarEnderecoPorCEP"></v-text-field>
+                                <v-text-field v-model="formData.number" label="Número" outlined dense
+                                class="mb-4 ml-5 w-1/6"></v-text-field>
+
+                            <v-text-field v-model="formData.city" label="Cidade" outlined dense
+                                class="mb-4 ml-5 w-3/6"></v-text-field>
                         </div>
 
                         <div class="flex w-full">
-                            <v-text-field v-model="formData.estado" label="Estado" outlined dense class="mb-4 mr-5"></v-text-field>
+                            <v-text-field v-model="formData.state" label="Estado" outlined dense
+                                class="mb-4 mr-5"></v-text-field>
 
                             <v-btn @click="adicionarEndereco" class="rounded-full bg-blue-darken-2 pt-5 pb-9">
                                 <v-icon class="mr-2">mdi-plus</v-icon>
@@ -30,18 +38,22 @@
 
                 <v-divider class="my-4"></v-divider>
 
-                <v-card v-for="(endereco, index) in userAddresses" :key="index" class="mb-4">
-                    <v-card-text>
-                        <v-row>
-                            <v-col cols="10">
-                                <div>{{ endereco.rua }}, {{ endereco.numero }}, {{ endereco.cidade }}, {{ endereco.estado }}, {{ endereco.cep }}</div>
-                            </v-col>
-                            <v-col cols="2">
-                                <v-radio v-model="enderecoSelecionado" :value="index" name="endereco-radio"></v-radio>
-                            </v-col>
-                        </v-row>
-                    </v-card-text>
-                </v-card>
+                <!-- Lista de endereços cadastrados -->
+                <div class="flex w-full">
+                    <v-card v-for="(endereco, index) in userAddresses" :key="index" class="mb-4">
+                        <v-card-text>
+                            <v-row>
+                                <v-col cols="10">
+                                    <div>{{ endereco.street }}, {{ endereco.number }}, {{ endereco.city }}, {{
+                                        endereco.state }}, {{ endereco.zipcode }}</div>
+                                </v-col>
+                                <v-col cols="2">
+                                    <v-radio v-model="enderecoSelecionado" :value="index" name="endereco-radio"></v-radio>
+                                </v-col>
+                            </v-row>
+                        </v-card-text>
+                    </v-card>
+                </div>
 
                 <v-divider class="my-4"></v-divider>
 
@@ -62,47 +74,72 @@ export default {
             type: Object,
             default: () => ({})
         },
-        userAddresses: {
-            type: Array,
-            default: () => []
-        },
     },
     data() {
         return {
             formData: {
-                rua: '',
-                numero: '',
-                cidade: '',
-                estado: '',
-                cep: '',
+                street: '',
+                number: '',
+                city: '',
+                state: '',
+                zipcode: '',
+                neighborhood: '',
             },
+
+            userAddresses: [],
             valid: false,
             enderecoSelecionado: null,
         };
     },
     methods: {
         adicionarEndereco() {
-            this.userAddresses.push({ ...this.formData, user_id: this.userData.id });
-            this.formData = {
-                rua: '',
-                numero: '',
-                cidade: '',
-                estado: '',
-                cep: '',
-            };
-        },
-        salvarEndereco() {
-            if (this.enderecoSelecionado !== null) {
-                const enderecoSelecionado = this.userAddresses[this.enderecoSelecionado];
+            const { street, number, city, state, zipcode } = this.formData;
 
-                axios.post(`/add_address/${enderecoSelecionado.user_id}`, enderecoSelecionado)
+            axios.post(`/user/add_address/${this.userData.id}`, {
+                street,
+                number,
+                city,
+                state,
+                zipcode
+            })
+                .then(response => {
+                    console.log('Endereço salvo com sucesso:', response);
+                })
+                .catch(error => {
+                    console.error('Erro ao salvar endereço:', error);
+                });
+        },
+
+
+        buscarEnderecoPorCEP() {
+            if (/^\d{5}[-]?\d{3}$/.test(this.formData.zipcode)) {
+                axios.get(`https://viacep.com.br/ws/${this.formData.zipcode}/json/`)
                     .then(response => {
+                        this.formData.street = response.data.logradouro || '';
+                        this.formData.city = response.data.localidade || '';
+                        this.formData.state = response.data.uf || '';
+                        this.formData.neighborhood = response.data.bairro || '';
                     })
                     .catch(error => {
-                        console.error('Erro ao enviar a solicitação:', error);
+                        console.error('Erro ao buscar endereço por CEP:', error);
                     });
+            } else {
+                console.warn('CEP inválido');
             }
         },
+
+
+        fetchAddresses() {
+            axios.get(`/user/get_address/${this.userData.id}`)
+            .then(response => {
+                console.log(response.data);
+                this.userAddresses = response.data;
+            })
+        }
     },
+
+    mounted(){
+        this.fetchAddresses();
+    }
 };
 </script>

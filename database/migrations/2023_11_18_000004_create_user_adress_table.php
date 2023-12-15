@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('zipcode');
             $table->string('city');
             $table->string('state');
+            $table->string('neighborhood');
             $table->unsignedBigInteger('user_id');
             $table->timestamps();
 

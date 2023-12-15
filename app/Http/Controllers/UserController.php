@@ -7,6 +7,7 @@ use App\Http\Requests\UserUpdateRequest;
 use App\Http\Requests\UserAddAdressRequest;
 use App\Models\User;
 use App\Models\UserAddress;
+use Error;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -55,10 +56,38 @@ class UserController extends Controller
         return redirect()->route('user.login')->with('message', 'Credenciais inválidas');
     }
 
-    public function addAddress(UserAddAdressRequest $request, $id){
-        dd($request->all());
+    public function addAddress(Request $request, $id)
+{
+    try {
+        $endereco = [
+            'zipcode' => $request->input('zipcode'),
+            'city' => $request->input('city'),
+            'state' => $request->input('state'),
+            'number' => $request->input('number'),
+            'street' => $request->input('street'),
+            'user_id' => $id,
+        ];
 
+        UserAddress::create($endereco);
+
+        return response()->json(['message' => 'Endereço adicionado com sucesso'], 200);
+    } catch (\Exception $e) {
+        return response()->json(['error' => 'Erro ao adicionar endereço'], 500);
     }
+}
+
+public function getUserAddresses($id)
+{
+    $user = User::find($id);
+
+    if (!$user) {
+        return response()->json(['error' => 'Usuário não encontrado'], 404);
+    }
+
+    $addresses = UserAddress::getAllAddresses($user);
+    return response()->json($addresses);
+}
+
 
 
     public function updateBasic(UserUpdateRequest $request, $id)
@@ -75,14 +104,14 @@ class UserController extends Controller
             $user->phone = $request->telefone;
             $user->document = $request->cpf;
             $user->password = bcrypt($request->novaSenha);
-            $user->save();  
+            $user->save();
             return response()->json(['message' => 'Perfil atualizado com sucesso']);
         }
         return response()->json(['message' => 'senha atual incorreta']);
 
     }
 
-    
+
 
     /**
      * Show the form for creating a new resource.
