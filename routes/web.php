@@ -48,8 +48,8 @@ Route::group(['prefix' => 'user', 'middleware' => 'UserAuthMiddleware'], functio
     Route::post('/add_address/{id}', [UserController::class, 'addAddress'])->name('user.add_address');
     Route::get('/get_address', [UserController::class, 'getUserAddresses']);
     Route::post('/set_main_address', [UserController::class, 'setMainAddress']);
+    Route::put('/edit_address', [UserController::class, 'updateAddress']);
     Route::delete('/delete_address/{addressId}', [UserController::class, 'deleteAddress']);
-
 });
 
 Route::group(['prefix' => 'products'], function () {

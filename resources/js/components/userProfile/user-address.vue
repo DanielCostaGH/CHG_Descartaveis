@@ -38,8 +38,8 @@
 
                 <v-divider class="my-4"></v-divider>
 
-                <v-radio-group class="flex flex-wrap justify-center w-full" v-model="enderecoSelecionado">
-                    <v-card v-for="(endereco, index) in userAddresses" :key="index" class="mb-4 w-[70vh]">
+                <v-radio-group class="flex flex-wrap justify-center w-full" v-model="selectedMainAddress">
+                    <v-card v-for="(endereco, index) in userAddresses" :key="index" class="mb-4 w-[90vh]">
                         <v-card-text>
                             <v-row>
                                 <v-col cols="9" class="flex items-center">
@@ -51,7 +51,12 @@
                                     <v-col>
                                         <v-radio :value="index"></v-radio>
                                     </v-col>
-                                    <v-btn @click="deleteAddress(endereco.id)"><v-icon>mdi-delete-alert-outline</v-icon></v-btn>
+                                    <v-btn @click="openEditModal(index)">
+                                        <v-icon>mdi-home-edit-outline</v-icon>
+                                    </v-btn>
+
+                                    <v-btn
+                                        @click="deleteAddress(endereco.id)"><v-icon>mdi-delete-alert-outline</v-icon></v-btn>
                                 </v-col>
 
                             </v-row>
@@ -67,6 +72,25 @@
             </v-card-text>
         </v-card>
     </div>
+
+
+    <v-dialog v-model="showEditModal">
+        <v-card>
+            <v-card-title>Editar Endereço</v-card-title>
+            <v-card-text>
+                <v-text-field v-model="editAddress.street" label="Rua"></v-text-field>
+                <v-text-field v-model="editAddress.number" label="Número"></v-text-field>
+                <v-text-field v-model="editAddress.neighborhood" label="Bairro"></v-text-field>
+                <v-text-field v-model="editAddress.zipcode" label="CEP"></v-text-field>
+                <v-text-field v-model="editAddress.city" label="Cidade"></v-text-field>
+                <v-text-field v-model="editAddress.state" label="Estado"></v-text-field>
+            </v-card-text>
+            <v-card-actions>
+                <v-btn color="primary" @click="updateAddress">Salvar</v-btn>
+                <v-btn color="grey" @click="showEditModal = false">Cancelar</v-btn>
+            </v-card-actions>
+        </v-card>
+    </v-dialog>
 </template>
 
 <script>
@@ -92,7 +116,9 @@ export default {
 
             userAddresses: [],
             valid: false,
-            enderecoSelecionado: null,
+            selectedMainAddress: null,
+            showEditModal: false,
+            editAddress: {},
         };
     },
     methods: {
@@ -145,9 +171,9 @@ export default {
 
                     if (mainAddress) {
                         const mainAddressIndex = addresses.findIndex(address => address.id === mainAddress.id);
-                        this.enderecoSelecionado = mainAddressIndex !== -1 ? mainAddressIndex : null;
+                        this.selectedMainAddress = mainAddressIndex !== -1 ? mainAddressIndex : null;
                     } else {
-                        this.enderecoSelecionado = null;
+                        this.selectedMainAddress = null;
                     }
                 })
                 .catch(error => {
@@ -155,26 +181,42 @@ export default {
                 });
         },
 
-
-        deleteAddress(addressId) {
-        if (confirm("Tem certeza que deseja deletar este endereço?")) {
-            axios.delete(`/user/delete_address/${addressId}`)
+        updateAddress() {
+            const data = {
+                ...this.editAddress
+            };
+            axios.put('/user/edit_address', data)
                 .then(response => {
-                    alert("Endereço deletado com sucesso!");
-                    this.fetchAddresses(); 
+                    this.selectedMainAddress = response.data.address;
+                    this.showEditModal = false;
+                    this.fetchAddresses();
                 })
                 .catch(error => {
-                    alert("Erro ao deletar endereço");
-                    console.error('Erro ao deletar endereço:', error);
-                });
-        }
-    },
+                    alert('Erro ao atualizar o endereço: ', error)
+                })
+
+        },
+
+
+        deleteAddress(addressId) {
+            if (confirm("Tem certeza que deseja deletar este endereço?")) {
+                axios.delete(`/user/delete_address/${addressId}`)
+                    .then(response => {
+                        alert("Endereço deletado com sucesso!");
+                        this.fetchAddresses();
+                    })
+                    .catch(error => {
+                        alert("Erro ao deletar endereço");
+                        console.error('Erro ao deletar endereço:', error);
+                    });
+            }
+        },
 
 
 
         salvarEnderecoPrincipal() {
-            if (this.enderecoSelecionado !== null) {
-                const enderecoPrincipal = this.userAddresses[this.enderecoSelecionado];
+            if (this.selectedMainAddress !== null) {
+                const enderecoPrincipal = this.userAddresses[this.selectedMainAddress];
 
                 if (enderecoPrincipal && enderecoPrincipal.id) {
                     console.log('Endereço Principal:', enderecoPrincipal);
@@ -196,6 +238,20 @@ export default {
                 alert('Nenhum endereço selecionado.');
             }
         },
+
+        openEditModal(index) {
+            if (index !== null && this.userAddresses.length > index) {
+                this.editAddress = { ...this.userAddresses[index] };
+                this.showEditModal = true;
+            } else {
+                console.error("Índice de endereço inválido");
+                console.log(this.userAddresses, index);
+            }
+        }
+
+
+
+
 
     },
 

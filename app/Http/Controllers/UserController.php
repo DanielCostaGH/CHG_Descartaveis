@@ -120,6 +120,38 @@ public function setMainAddress(Request $request)
     }
 }
 
+public function updateAddress(Request $request){
+    $user = auth('user')->user();
+    $addressId = $request->input('id');
+
+    if (!$user) {
+        return response()->json(['error' => 'Usuário não encontrado'], 404);
+    }
+
+    $address = UserAddress::where('id', $addressId)
+                          ->where('user_id', $user->id)
+                          ->first();
+
+    if (!$address) {
+        return response()->json(['error' => 'Endereço não encontrado'], 404);
+    }
+
+    $updatedFields = $request->only([
+        'zipcode',
+        'city',
+        'state',
+        'number',
+        'street',
+        'neighborhood',
+        'user_id',
+    ]);
+
+    $address->update($updatedFields);
+
+    return response()->json(['message' => 'Endereço atualizado com sucesso', 'address' => $address]);
+}
+
+
 
 public function deleteAddress($addressId)
 {
