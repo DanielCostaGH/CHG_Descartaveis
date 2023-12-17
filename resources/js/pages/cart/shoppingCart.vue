@@ -28,9 +28,14 @@
                         <v-label class="text-h6">Carrinho vazio. Adicione produtos!</v-label>
                     </div>
                     <div v-for="product in products" :key="product.id"
-                        class="p-5 my-5 shadow-lg rounded-lg flex items-center justify-between">
-                        <div>
-                            <h1>{{ product.name }}</h1>
+                        class="p-5 my-5 shadow-lg flex items-center justify-between">
+                        <div class="flex items-center">
+                            <div class="mx-5 mr-10">
+                                <img :src="product.imagePath" alt="Imagem do Produto" class="avatar-img">
+                            </div>
+
+                            <div>
+                                <h1>{{ product.name }}</h1>
                             <v-label class="my-1">preço: {{ product.price }}</v-label>
 
 
@@ -49,6 +54,8 @@
                                     </button>
                                 </div>
                             </div>
+                            </div>
+
                         </div>
 
                         <div>
@@ -80,7 +87,7 @@
                     <div class="py-5">
                         <v-label class="font-weight-bold">Frete: <span class="p-2">R$ 00,00</span></v-label> <br>
                     </div>
-                    <span class="font-weight-bold">Valor total: <span class="p-2 text-white rounded bg-warning">R$ {{
+                    <span class="font-weight-bold">Valor com frete: <span class="p-2 text-white rounded bg-warning">R$ {{
                         totalPrice
                     }}</span> </span>
                 </div>
@@ -109,7 +116,7 @@
 
 
     <v-dialog v-model="showEditModal">
-        <v-card>
+        <v-card class="container mx-auto w-3/5">
             <v-card-title>Editar Endereço</v-card-title>
             <v-card-text>
                 <v-text-field v-model="editAddress.street" label="Rua"></v-text-field>
@@ -127,7 +134,7 @@
     </v-dialog>
 
     <v-dialog v-model="showSelectModal">
-        <v-card>
+        <v-card class="container mx-auto w-3/5">
             <v-card-title>Selecionar Novo Endereço</v-card-title>
             <v-card-text>
                 <v-list>
@@ -150,20 +157,7 @@ export default {
         return {
             address: [],
             selectedMainAddress: null,
-            products: [
-                {
-                    id: 1,
-                    name: 'Monitor Gamer Asus TUF',
-                    price: 1699.99,
-                    quantity: 1,
-                },
-                {
-                    id: 2,
-                    name: 'Placa de Video RX 6750 XT MECH',
-                    price: 1939.99,
-                    quantity: 1,
-                },
-            ],
+            products: [],
             empty: false,
             showEditModal: false,
             showSelectModal: false,
@@ -188,6 +182,8 @@ export default {
         },
 
     },
+
+
     methods: {
         fetchAddresses() {
             axios.get(`/user/get_address`)
@@ -204,31 +200,68 @@ export default {
                 });
         },
 
-        updateAddress(){
+        fetchProducts() {
+            axios.get('/api/get_cart')
+                .then(response => {
+                    this.products = response.data.map(item => {
+                        const firstImageName = item.product.images.split(';')[0];
+                        const imagePath = `/images/products/${item.product.id}/${firstImageName}`;
+
+                        return {
+                            ...item.product,
+                            cartItemId: item.id,
+                            quantity: item.quantity,
+                            unitPrice: item.unit_price,
+                            selectedColor: item.color,
+                            selectedVariation: item.variation,
+                            imagePath: imagePath,
+                        };
+                    });
+                    this.emptyCart();
+                })
+                .catch(error => {
+                    console.log("Erro ao recuperar os itens do carrinho", error);
+                })
+        },
+
+
+        updateAddress() {
             const data = {
                 ...this.editAddress
             };
 
             axios.put('/user/edit_address', data)
-            .then(response => {
-                this.selectedMainAddress = response.data.address;
-                this.showEditModal = false;
-                this.fetchAddresses();
-            })
+                .then(response => {
+                    this.selectedMainAddress = response.data.address;
+                    this.showEditModal = false;
+                    this.fetchAddresses();
+                })
+                .catch(error => {
+                    alert('Erro ao atualizar o endereço: ', error)
+                })
+
+        },
+
+        updateCartItemQuantity(cartItemId, newQuantity) {
+        axios.put(`/api/update_cart_item/${cartItemId}`, { quantity: newQuantity })
             .catch(error => {
-                alert('Erro ao atualizar o endereço: ', error)
-            })
+                console.error("Erro ao atualizar a quantidade", error);
+            });
+    },
 
-        },
+    increaseQuantity(product) {
+        const newQuantity = product.quantity + 1;
+        this.updateCartItemQuantity(product.cartItemId, newQuantity);
+        product.quantity = newQuantity;
+    },
 
-        increaseQuantity(product) {
-            product.quantity++;
-        },
-        decreaseQuantity(product) {
-            if (product.quantity > 1) {
-                product.quantity--;
-            }
-        },
+    decreaseQuantity(product) {
+        if (product.quantity > 1) {
+            const newQuantity = product.quantity - 1;
+            this.updateCartItemQuantity(product.cartItemId, newQuantity);
+            product.quantity = newQuantity;
+        }
+    },
         removeProduct(productToRemove) {
             this.products = this.products.filter(
                 (product) => product.id !== productToRemove.id
@@ -260,10 +293,20 @@ export default {
     },
 
     mounted() {
-        this.emptyCart(),
-            this.fetchAddresses()
+        this.fetchAddresses(),
+            this.fetchProducts()
     }
 
 
 };
 </script>
+
+
+<style>
+.avatar-img {
+    width: 50px;
+    margin-right: 10px;
+}
+
+
+</style>

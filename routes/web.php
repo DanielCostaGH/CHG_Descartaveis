@@ -99,6 +99,9 @@ Route::group(['prefix' => 'api'], function () {
     Route::get('/slides/get', [SlidesController::class, 'getSlides']);
     Route::delete('/slides/{id}', [SlidesController::class, 'destroy']);
     Route::get('/get_address/{id}', [UserController::class, 'getUserAddresses']);
+    Route::post('/add_cart', [ShoppingCartController::class, 'addToCart']);
+    Route::get('/get_cart', [ShoppingCartController::class, 'getCart']);
+    Route::put('/update_cart_item/{cartItemId}', [ShoppingCartController::class, 'updateCartItem']);
 });
 
 Route::middleware('auth:user')->get('/api/get', [UserController::class, 'getUser']);

@@ -16,12 +16,13 @@
                 <v-label>Cores disponíveis</v-label>
                 <v-row class="my-4">
                     <v-col v-for="(color, index) in colors" :key="index" cols="3" class="pa-2 d-flex justify-center">
-                        <div>
-                            <div class="rounded-circle shadow-lg"
-                                :style="{ backgroundColor: color.value, width: '60px', height: '60px' }"
-                                @click="selectedColor = color.name"></div>
-                        </div>
-                    </v-col>
+                    <div @click="selectColor(color.name)"
+                         :class="{ 'color-selected': selectedColor === color.name }">
+                        <div class="rounded-circle shadow-lg"
+                             :style="{ backgroundColor: color.value, width: '60px', height: '60px' }"></div>
+                    </div>
+                </v-col>
+
                 </v-row>
             </div>
 
@@ -29,8 +30,8 @@
                 <v-label>Variações</v-label>
                 <v-row>
                     <v-col cols="12">
-                        <v-select :items="productVariations" label="Veja as variações"></v-select>
-                    </v-col>
+                <v-select v-model="selectedVariation" :items="productVariations" label="Veja as variações"></v-select>
+            </v-col>
                 </v-row>
 
                 <div>
@@ -39,6 +40,12 @@
                                 mdi-whatsapp
                             </v-icon>
                             Comprar
+                        </v-btn>
+                        <v-btn color="primary" @click="addToCart" block large dark class="my-5 text-h6 font-weight-bold" rounded="lg" style="padding-top: 2rem; padding-bottom: 2rem;">
+                            <v-icon left class="mr-3 text-h4" >
+                                mdi-cart-outline
+                            </v-icon>
+                            Adicionar ao Carrinho
                         </v-btn>
                 </div>
 
@@ -52,6 +59,8 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
     data() {
         return {
@@ -66,6 +75,8 @@ export default {
 
             ],
             selectedColor: null,
+            selectedVariation: null,
+
         }
 
     },
@@ -77,14 +88,37 @@ export default {
             return this.product.variation.split(';').filter(variation => variation.trim() !== '');
         },
     },
+    methods: {
+        selectColor(colorName) {
+            this.selectedColor = colorName;
+        },
+        addToCart() {
+            const data = {
+                color: this.selectedColor,
+                variation: this.selectedVariation,
+                productId: this.product.id,
+            };
+
+            axios.post(`http://localhost/api/add_cart/`, data)
+                .then(response => {
+                    console.log("Produto adicionado ao carrinho", response.data);
+                })
+                .catch(error => {
+                    console.error("Erro ao adicionar produto ao carrinho", error);
+                });
+        }
+    }
 }
 </script>
 
 
 
 <style>
+
 .color-selected {
     border: 2px solid black;
-    box-shadow: 2px black;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    border-radius: 50%;
+    padding: 2px;
 }
 </style>

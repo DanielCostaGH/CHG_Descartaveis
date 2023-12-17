@@ -28,6 +28,11 @@ class Product extends Model
     }
 
 
+    public function cartItems()
+    {
+        return $this->hasMany(CartItem::class);
+    }
+
     public static function searchByName($query)
     {
         return self::where('name', 'LIKE', "%{$query}%")
@@ -38,5 +43,9 @@ class Product extends Model
     public function productColors()
     {
         return $this->hasMany(ProductColors::class, 'product_id');
+    }
+
+    public static function getProductPrice($productId){
+        return  self::select("price")->find($productId);
     }
 }
