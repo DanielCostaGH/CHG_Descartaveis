@@ -27,7 +27,7 @@ class ProductRequest extends FormRequest
             'sku' => 'nullable|string|max:30',
             'name' => 'required|string',
             'description' => 'required|string',
-            'price' => 'required|integer',
+            'price' => 'required|numeric',
             'images' => 'required|max:2048',
             //'category_id' => 'required|exists:categories,id',
             'brand' => 'required|string|max:20',
@@ -37,6 +37,7 @@ class ProductRequest extends FormRequest
             'variation.*' => 'required',
             'quantity' => 'required|integer',
             'status' => 'required',
+            'category' => 'required',
         ];
     }
 
@@ -48,7 +49,7 @@ class ProductRequest extends FormRequest
     public function messages()
     {
         return [
-            'price.integer' => 'O campo price deve ser um número inteiro.',
+            'price.numeric' => 'O campo price deve ser um número inteiro.',
             'category_id.exists' => 'A categoria selecionada não é válida.',
         ];
     }

@@ -87,6 +87,8 @@ class DashboardController extends Controller
 
     public function productUpdate($id, ProductUpdateRequest $request)
     {
+        $category = Category::where('name', $request->category)->first();
+
         $product = Product::find($id);
         $product->sku = $request->input('sku') ?? 'teste';
         $product->name = $request->input('name');
@@ -99,6 +101,7 @@ class DashboardController extends Controller
 
         $product->variation = implode(';', $request->variation);
         $product->quantity = $request->input('quantity');
+        $product->category_id = $category->id;
 
         $product->save();
 

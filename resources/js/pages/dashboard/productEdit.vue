@@ -76,9 +76,15 @@
                             </v-col>
 
                             <v-col cols="12" md="6">
-                                <v-text-field label="Preço" v-model="editedProduct.price" type="number" step="0.01" outlined
-                                    placeholder="Preço">
-                                </v-text-field>
+                                <v-text-field
+                                    label="Preço"
+                                    v-model="editedProduct.price"
+                                    type="number"
+                                    step="0.01"
+                                    outlined
+                                    placeholder="Preço"
+                                    :prefix="'R$ '"
+                                ></v-text-field>
                             </v-col>
 
                             <v-col cols="12" md="6">
@@ -101,6 +107,15 @@
                                 <v-btn @click="addVariation" color="blue" dark>Adicionar Variação</v-btn>
                             </v-col>
 
+                            <v-col cols="12" md="6">
+                                <v-select
+                                v-model="editedProduct.categoryId"
+                                :items="categoryNames"
+                                label="Categoria"
+                                outlined
+                                @change="updateCategoryId"
+                                ></v-select>
+                            </v-col>
 
                             <v-col cols="12" md="6">
                                 <v-text-field label="Quantidade" v-model="editedProduct.quantity" type="number" outlined
@@ -156,6 +171,7 @@ export default {
             defaultImage: '/images/empty.png',
             newImage: '',
             selectedImage: '',
+            categories: [],
             images: [],
             editedProduct: {
                 name: '',
@@ -168,6 +184,7 @@ export default {
                 variation: '',
                 quantity: null,
                 status: 'active',
+                categoryId: null,
             },
             newVariation: '',
             productVariations: [],
@@ -212,7 +229,26 @@ export default {
             }
         }
     },
+    filters: {
+        formatPrice(value) {
+            if (!value) return 'R$ 0,00';
+
+            const price = parseFloat(value).toFixed(2);
+            return `R$ ${price.replace('.', ',')}`; 
+        }
+    },
     methods: {
+
+        updateCategoryId() {
+            const selectedCategory = this.categories.find(
+                category => category.name === this.editedProduct.categoryName
+            );
+
+            if (selectedCategory) {
+                this.editedProduct.categoryId = selectedCategory.id;
+            }
+        },
+
 
         addImage() {
             if (this.newImage && this.newImage.length > 0) {
@@ -267,10 +303,11 @@ export default {
 
             formData.append('name', this.editedProduct.name);
             formData.append('description', this.editedProduct.description);
-            formData.append('price', this.editedProduct.price);
+            formData.append('price', this.formattedPrice);
             formData.append('brand', this.editedProduct.brand);
             formData.append('quantity', this.editedProduct.quantity);
             formData.append('status', this.editedProduct.status);
+            formData.append('category', this.editedProduct.categoryId);
 
             this.productVariations.forEach((variation, index) => {
                 formData.append(`variation[${index}]`, variation);
@@ -350,12 +387,33 @@ export default {
                     console.error("Erro ao buscar variações", error);
                 });
         },
+        fetchCategories() {
+            axios.get('/api/category')
+                .then(response => {
+                this.categories = response.data; 
+            })
+            .catch(error => {
+                console.error("Erro ao buscar categorias", error);
+            });
+        },
 
     },
 
     mounted() {
         this.fetchColors();
         this.fetchVariations();
+        this.fetchCategories();
+    },
+    computed: {
+        formattedPrice() {
+          if (!this.editedProduct.price) return null; 
+
+          const price = parseFloat(this.editedProduct.price).toFixed(2); 
+            return parseFloat(price.replace(',', '.')); 
+        },
+        categoryNames() {
+            return this.categories.map(category => category.name);
+        },
     },
 
     components: {

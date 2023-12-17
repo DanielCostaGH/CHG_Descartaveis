@@ -27,7 +27,7 @@ class ProductUpdateRequest extends FormRequest
             'sku' => 'nullable|string|max:30',
             'name' => 'string',
             'description' => 'required|string',
-            'price' => 'required|integer',
+            'price' => 'required|numeric',
             'images' => 'required|max:2048',
             //'category_id' => 'required|exists:categories,id',
             'brand' => 'required|string|max:20',
@@ -37,6 +37,7 @@ class ProductUpdateRequest extends FormRequest
             'variation.*' => 'required',
             'quantity' => 'required|integer',
             'status' => 'required',
+            'category' => 'required',
         ];
     }
 
