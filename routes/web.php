@@ -102,6 +102,8 @@ Route::group(['prefix' => 'api'], function () {
     Route::post('/add_cart', [ShoppingCartController::class, 'addToCart']);
     Route::get('/get_cart', [ShoppingCartController::class, 'getCart']);
     Route::put('/update_cart_item/{cartItemId}', [ShoppingCartController::class, 'updateCartItem']);
+    Route::delete('/remove_cart_item/{cartItemId}', [ShoppingCartController::class, 'deleteCartItem']);
+    Route::get('/get_total_price/{cartItemId}', [ShoppingCartController::class, 'getTotalPrice']);
 });
 
 Route::middleware('auth:user')->get('/api/get', [UserController::class, 'getUser']);

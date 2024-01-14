@@ -41,15 +41,20 @@ class DashboardController extends Controller
     public function productStore(ProductRequest $request)
     {
         $product = new Product();
-        $product->sku = $request->input('sku') ?? 'testee';
-        $product->name = $request->input('name');
-        $product->description = $request->input('description');
-        $product->price = $request->input('price');
-        $product->category_id = $request->input('category_id') ?? 1;
-        $product->brand = $request->input('brand');
-        $product->images = "teste";
-        $product->variation = implode(';', $request->variation);
-        $product->quantity = $request->input('quantity');
+        $product->sku           = $request->input('sku') ?? 'testee';
+        $product->name          = $request->input('name');
+        $product->description   = $request->input('description');
+        $product->price         = $request->input('price');
+        $product->category_id   = $request->input('category_id');
+        $product->brand         = $request->input('brand');
+        $product->images        = "teste";
+        $product->variation     = implode(';', $request->variation);
+        $product->height        = $request->input('height');
+        $product->width         = $request->input('width');
+        $product->length        = $request->input('length');
+        $product->weight        = $request->input('weight');
+        $product->quantity      = $request->input('quantity');
+        $product->status        = $request->input('status');
         $product->save();
 
         foreach ($request->colors as $color) {

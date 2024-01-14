@@ -76,15 +76,8 @@
                             </v-col>
 
                             <v-col cols="12" md="6">
-                                <v-text-field
-                                    label="Preço"
-                                    v-model="editedProduct.price"
-                                    type="number"
-                                    step="0.01"
-                                    outlined
-                                    placeholder="Preço"
-                                    :prefix="'R$ '"
-                                ></v-text-field>
+                                <v-text-field label="Preço" v-model="editedProduct.price" type="number" step="0.01" outlined
+                                    placeholder="Preço" :prefix="'R$ '"></v-text-field>
                             </v-col>
 
                             <v-col cols="12" md="6">
@@ -108,13 +101,37 @@
                             </v-col>
 
                             <v-col cols="12" md="6">
-                                <v-select
-                                v-model="editedProduct.categoryId"
-                                :items="categoryNames"
-                                label="Categoria"
-                                outlined
-                                @change="updateCategoryId"
-                                ></v-select>
+                                <v-select v-model="editedProduct.categoryId" :items="categoryNames" label="Categoria"
+                                    outlined @change="updateCategoryId"></v-select>
+                            </v-col>
+
+                            <v-col cols="12" md="12">
+                                <v-label>
+                                    Especificações
+                                </v-label>
+                            </v-col>
+
+
+                            <v-col cols="12" md="6">
+                                <div class="flex gap-4">
+                                    <v-text-field label="Altura do Produto" v-model="editedProduct.height" outlined
+                                        placeholder="Altura do Produto">
+                                    </v-text-field>
+                                    <v-text-field label="Largura do Produto" v-model="editedProduct.width" outlined
+                                        placeholder="Largura do Produto">
+                                    </v-text-field>
+                                </div>
+                            </v-col>
+
+                            <v-col cols="12" md="6">
+                                <div class="flex gap-4">
+                                    <v-text-field label="Comprimento do Produto" v-model="editedProduct.length" outlined
+                                        placeholder="Comprimento do Produto">
+                                    </v-text-field>
+                                    <v-text-field label="Peso do Produto" v-model="editedProduct.weight" outlined
+                                        placeholder="Peso do Produto">
+                                    </v-text-field>
+                                </div>
                             </v-col>
 
 
@@ -130,12 +147,16 @@
                                 </v-select>
                             </v-col>
 
+
+
+
+
+
                             <v-col cols="12">
                                 <v-btn @click="storeProduct" color="blue" dark large>
                                     Salvar Produto
                                 </v-btn>
                             </v-col>
-
                         </v-row>
                     </v-form>
                 </v-col>
@@ -215,6 +236,10 @@ export default {
             this.editedProduct.colors = product.colors;
             this.editedProduct.variation = product.variation;
             this.editedProduct.quantity = product.quantity;
+            this.editedProduct.heigth = product.heigth;
+            this.editedProduct.width = product.width;
+            this.editedProduct.length = product.length;
+            this.editedProduct.wieght = product.wieght;
             this.editedProduct.status = product.status;
         }
         if (this.$props.product) {
@@ -241,7 +266,7 @@ export default {
             if (!value) return 'R$ 0,00';
 
             const price = parseFloat(value).toFixed(2);
-            return `R$ ${price.replace('.', ',')}`; 
+            return `R$ ${price.replace('.', ',')}`;
         }
     },
     methods: {
@@ -307,6 +332,11 @@ export default {
             formData.append('quantity', this.editedProduct.quantity);
             formData.append('status', this.editedProduct.status);
             formData.append('category', this.editedProduct.categoryId);
+            formData.append('height', this.editedProduct.height);
+            formData.append('width', this.editedProduct.width);
+            formData.append('length', this.editedProduct.length);
+            formData.append('weight', this.editedProduct.weight);
+
 
             this.productVariations.forEach((variation, index) => {
                 formData.append(`variation[${index}]`, variation);
@@ -356,11 +386,11 @@ export default {
         fetchCategories() {
             axios.get('/api/category')
                 .then(response => {
-                this.categories = response.data; 
-            })
-            .catch(error => {
-                console.error("Erro ao buscar categorias", error);
-            });
+                    this.categories = response.data;
+                })
+                .catch(error => {
+                    console.error("Erro ao buscar categorias", error);
+                });
         },
 
         confirmProductCreation() {
@@ -376,16 +406,16 @@ export default {
     },
     computed: {
         formattedPrice() {
-          if (!this.editedProduct.price) return null; 
+            if (!this.editedProduct.price) return null;
 
-          const price = parseFloat(this.editedProduct.price).toFixed(2); 
-            return parseFloat(price.replace(',', '.')); 
+            const price = parseFloat(this.editedProduct.price).toFixed(2);
+            return parseFloat(price.replace(',', '.'));
         },
 
         categoryNames() {
             return this.categories.map(category => category.name);
         },
-        
+
     },
 
     components: {

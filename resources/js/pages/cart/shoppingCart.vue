@@ -36,24 +36,24 @@
 
                             <div>
                                 <h1>{{ product.name }}</h1>
-                            <v-label class="my-1">preço: {{ product.price }}</v-label>
+                                <v-label class="my-1">preço: {{ product.price }}</v-label>
 
 
-                            <div class="flex">
-                                <div class="flex gap-4">
-                                    <button @click="decreaseQuantity(product)">
-                                        <v-icon>mdi-minus-circle-outline</v-icon>
-                                    </button>
+                                <div class="flex">
+                                    <div class="flex gap-4">
+                                        <button @click="decreaseQuantity(product)">
+                                            <v-icon>mdi-minus-circle-outline</v-icon>
+                                        </button>
 
-                                    <div>
-                                        <span v-text="product.quantity"></span>
+                                        <div>
+                                            <span v-text="product.quantity"></span>
+                                        </div>
+
+                                        <button @click="increaseQuantity(product)">
+                                            <v-icon>mdi-plus-circle-outline</v-icon>
+                                        </button>
                                     </div>
-
-                                    <button @click="increaseQuantity(product)">
-                                        <v-icon>mdi-plus-circle-outline</v-icon>
-                                    </button>
                                 </div>
-                            </div>
                             </div>
 
                         </div>
@@ -67,50 +67,11 @@
 
                     </div>
                 </div>
-            </div>
-
-            <div class="w-2/6 mx-5 my-10 rounded-lg shadow-lg">
-                <!-- Resumo -->
-
-                <div>
-
-                </div>
-                <div class="p-7 text-h5 font-weight-bold flex items-center">
-                    <v-icon color="#2B9D44">mdi-file-search</v-icon>
-                    <span class="text-gray-600 mx-4">Resumo</span>
-                </div>
-
-                <div class="p-7">
-                    <span class="font-weight-bold">Valor dos Produtos: <span class="p-2 text-white rounded bg-primary">R$ {{
-                        totalPrice }}</span></span>
-                    <hr class="my-5">
-                    <div class="py-5">
-                        <v-label class="font-weight-bold">Frete: <span class="p-2">R$ 00,00</span></v-label> <br>
-                    </div>
-                    <span class="font-weight-bold">Valor com frete: <span class="p-2 text-white rounded bg-warning">R$ {{
-                        totalPrice
-                    }}</span> </span>
-                </div>
-
-                <div class="w-5/6 mx-auto px-5">
-                    <v-btn :href="userInfo ? `/cart/payment/${userInfo.id}` : '#'" color="#2B9D44" block large dark
-                        class="my-5 text-h6" rounded="lg" style="padding-top: 1.6rem; padding-bottom: 1.6rem;">
-                        <v-icon left class="mr-3 text-h4">
-                            mdi-cash
-                        </v-icon>
-                        Ir para pagamento
-                    </v-btn>
-
-                    <v-btn href="/" color="primary" block large dark class="my-5 text-h6" rounded="lg"
-                        style="padding-top: 1.6rem; padding-bottom: 1.6rem;">
-                        <v-icon left class="mr-3 text-h4">
-                            mdi-arrow-left
-                        </v-icon>
-                        Continuar comprando
-                    </v-btn>
-                </div>
 
             </div>
+
+
+            <cartSummary :totalPrice="totalPrice"/>
         </div>
     </div>
 
@@ -150,6 +111,7 @@
 <script>
 import axios from 'axios';
 import navbar from '../../components/navbar/navbar.vue'
+import cartSummary from '../../components/cart-summary.vue'
 
 
 export default {
@@ -163,11 +125,13 @@ export default {
             showSelectModal: false,
             editAddress: {},
         };
-
     },
+
 
     components: {
         navbar,
+        cartSummary,
+
     },
 
     computed: {
@@ -243,30 +207,34 @@ export default {
         },
 
         updateCartItemQuantity(cartItemId, newQuantity) {
-        axios.put(`/api/update_cart_item/${cartItemId}`, { quantity: newQuantity })
-            .catch(error => {
-                console.error("Erro ao atualizar a quantidade", error);
-            });
-    },
+            axios.put(`/api/update_cart_item/${cartItemId}`, { quantity: newQuantity })
+                .catch(error => {
+                    console.error("Erro ao atualizar a quantidade", error);
+                });
+        },
 
-    increaseQuantity(product) {
-        const newQuantity = product.quantity + 1;
-        this.updateCartItemQuantity(product.cartItemId, newQuantity);
-        product.quantity = newQuantity;
-    },
-
-    decreaseQuantity(product) {
-        if (product.quantity > 1) {
-            const newQuantity = product.quantity - 1;
+        increaseQuantity(product) {
+            const newQuantity = product.quantity + 1;
             this.updateCartItemQuantity(product.cartItemId, newQuantity);
             product.quantity = newQuantity;
-        }
-    },
+        },
+
+        decreaseQuantity(product) {
+            if (product.quantity > 1) {
+                const newQuantity = product.quantity - 1;
+                this.updateCartItemQuantity(product.cartItemId, newQuantity);
+                product.quantity = newQuantity;
+            }
+        },
         removeProduct(productToRemove) {
-            this.products = this.products.filter(
-                (product) => product.id !== productToRemove.id
-            );
-            this.emptyCart()
+            axios.delete(`/api/remove_cart_item/${productToRemove.cartItemId}`)
+                .then(response => {
+                    this.products = this.products.filter(product => product.cartItemId !== productToRemove.cartItemId);
+                    this.emptyCart();
+                })
+                .catch(error => {
+                    console.error("Erro ao remover o produto do carrinho", error);
+                });
         },
         emptyCart() {
             if (this.products.length == 0) {
@@ -307,6 +275,4 @@ export default {
     width: 50px;
     margin-right: 10px;
 }
-
-
 </style>

@@ -92,4 +92,30 @@ class ShoppingCartController extends Controller
     return response()->json(['message' => 'Quantidade atualizada com sucesso']);
 }
 
+
+public function deleteCartItem($cartItemId)
+{
+    $cartItem = CartItem::find($cartItemId);
+
+    if (!$cartItem) {
+        return response()->json(['message' => 'Item do carrinho não encontrado'], 404);
+    }
+
+    $cartItem->delete();
+
+    return response()->json(['message' => 'Item removido do carrinho com sucesso']);
+}
+
+
+public function getTotalPrice($cartItemId){
+    $cartItem = CartItem::find($cartItemId);
+
+    if (!$cartItem) {
+        return response()->json(['message' => 'Item do carrinho não encontrado'], 404);
+    }
+
+    
+}
+
+
 }
