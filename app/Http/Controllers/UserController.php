@@ -54,122 +54,122 @@ class UserController extends Controller
 
             $response = ['user' => $user, 'token' => $token];
             return response()->json($response, 200);
-        }else{
+        } else {
             return redirect()->route('user.login')->with('message', 'Credenciais inválidas');
         }
-
     }
 
     public function addAddress(Request $request, $id)
-{
-    try {
-        $endereco = [
-            'zipcode'          => $request->input('zipcode'),
-            'city'             => $request->input('city'),
-            'state'            => $request->input('state'),
-            'number'           => $request->input('number'),
-            'street'           => $request->input('street'),
-            'neighborhood'     => $request->input('neighborhood'),
-            'user_id'          => $id,
-        ];
+    {
+        try {
+            $endereco = [
+                'zipcode'          => $request->input('zipcode'),
+                'city'             => $request->input('city'),
+                'state'            => $request->input('state'),
+                'number'           => $request->input('number'),
+                'street'           => $request->input('street'),
+                'neighborhood'     => $request->input('neighborhood'),
+                'user_id'          => $id,
+            ];
 
-        UserAddress::create($endereco);
+            UserAddress::create($endereco);
 
-        return response()->json(['message' => 'Endereço adicionado com sucesso'], 200);
-    } catch (\Exception $e) {
-        return response()->json(['error' => 'Erro ao adicionar endereço'], 500);
-    }
-}
-
-public function getUserAddresses()
-{
-    $user = auth('user')->user();
-
-    if (!$user) {
-        return response()->json(['error' => 'Usuário não encontrado'], 404);
+            return response()->json(['message' => 'Endereço adicionado com sucesso'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Erro ao adicionar endereço'], 500);
+        }
     }
 
-    $addresses = UserAddress::where('user_id', $user->id)->get();
-    $mainAddress = $addresses->where('is_main', true)->first();
+    public function getUserAddresses()
+    {
+        $user = auth('user')->user();
 
-    return response()->json(['addresses' => $addresses, 'main_address' => $mainAddress]);
-}
+        if (!$user) {
+            return response()->json(['error' => 'Usuário não encontrado'], 404);
+        }
 
+        $addresses = UserAddress::where('user_id', $user->id)->get();
+        $mainAddress = $addresses->where('is_main', true)->first();
 
-public function setMainAddress(Request $request)
-{
-    $user = auth('user')->user();
-    $addressId = $request->input('addressId');
-
-
-    if (!$user) {
-        return response()->json(['error' => 'Usuário não encontrado'], 404);
+        return response()->json(['addresses' => $addresses, 'main_address' => $mainAddress]);
     }
 
-    UserAddress::where('user_id', $user->id)->update(['is_main' => false]);
 
-    $address = UserAddress::find($addressId);
+    public function setMainAddress(Request $request)
+    {
+        $user = auth('user')->user();
+        $addressId = $request->input('addressId');
 
-    if ($address) {
-        $address->is_main = true;
-        $address->save();
 
-        return response()->json(['message' => 'Endereço principal atualizado com sucesso']);
-    } else {
-        return response()->json(['error' => 'Endereço não encontrado'], 404);
-    }
-}
+        if (!$user) {
+            return response()->json(['error' => 'Usuário não encontrado'], 404);
+        }
 
-public function updateAddress(Request $request){
-    $user = auth('user')->user();
-    $addressId = $request->input('id');
+        UserAddress::where('user_id', $user->id)->update(['is_main' => false]);
 
-    if (!$user) {
-        return response()->json(['error' => 'Usuário não encontrado'], 404);
-    }
+        $address = UserAddress::find($addressId);
 
-    $address = UserAddress::where('id', $addressId)
-                          ->where('user_id', $user->id)
-                          ->first();
+        if ($address) {
+            $address->is_main = true;
+            $address->save();
 
-    if (!$address) {
-        return response()->json(['error' => 'Endereço não encontrado'], 404);
+            return response()->json(['message' => 'Endereço principal atualizado com sucesso']);
+        } else {
+            return response()->json(['error' => 'Endereço não encontrado'], 404);
+        }
     }
 
-    $updatedFields = $request->only([
-        'zipcode',
-        'city',
-        'state',
-        'number',
-        'street',
-        'neighborhood',
-        'user_id',
-    ]);
+    public function updateAddress(Request $request)
+    {
+        $user = auth('user')->user();
+        $addressId = $request->input('id');
 
-    $address->update($updatedFields);
+        if (!$user) {
+            return response()->json(['error' => 'Usuário não encontrado'], 404);
+        }
 
-    return response()->json(['message' => 'Endereço atualizado com sucesso', 'address' => $address]);
-}
+        $address = UserAddress::where('id', $addressId)
+            ->where('user_id', $user->id)
+            ->first();
 
+        if (!$address) {
+            return response()->json(['error' => 'Endereço não encontrado'], 404);
+        }
 
+        $updatedFields = $request->only([
+            'zipcode',
+            'city',
+            'state',
+            'number',
+            'street',
+            'neighborhood',
+            'user_id',
+        ]);
 
-public function deleteAddress($addressId)
-{
-    $user = auth('user')->user();
+        $address->update($updatedFields);
 
-    if (!$user) {
-        return response()->json(['error' => 'Usuário não encontrado'], 404);
+        return response()->json(['message' => 'Endereço atualizado com sucesso', 'address' => $address]);
     }
 
-    $address = UserAddress::where('user_id', $user->id)->where('id', $addressId)->first();
 
-    if ($address) {
-        $address->delete();
-        return response()->json(['message' => 'Endereço deletado com sucesso']);
-    } else {
-        return response()->json(['error' => 'Endereço não encontrado'], 404);
+
+    public function deleteAddress($addressId)
+    {
+        $user = auth('user')->user();
+
+        if (!$user) {
+            return response()->json(['error' => 'Usuário não encontrado'], 404);
+        }
+
+        $address = UserAddress::where('user_id', $user->id)->where('id', $addressId)->first();
+
+        if ($address) {
+            $address->delete();
+            return response()->json(['message' => 'Endereço deletado com sucesso']);
+        } else {
+            return response()->json(['error' => 'Endereço não encontrado'], 404);
+        }
     }
-}
 
 
 
@@ -229,10 +229,13 @@ public function deleteAddress($addressId)
         ], 201);
     }
 
-    public function getUser()
-    {
-        $user = auth('user')->user();
-        return response()->json($user);
+    public function getUser() {
+        $user = auth()->user();
+        if ($user) {
+            return response()->json($user);
+        } else {
+            return response()->json(null);
+        }
     }
 
     /**

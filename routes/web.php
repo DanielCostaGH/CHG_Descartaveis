@@ -11,6 +11,7 @@ use App\Http\Controllers\FooterController;
 use App\Http\Controllers\BrandsController;
 use App\Http\Controllers\SlidesController;
 use App\Http\Controllers\ShoppingCartController;
+use App\Http\Controllers\MelhorEnvioController;
 
 
 
@@ -104,6 +105,7 @@ Route::group(['prefix' => 'api'], function () {
     Route::put('/update_cart_item/{cartItemId}', [ShoppingCartController::class, 'updateCartItem']);
     Route::delete('/remove_cart_item/{cartItemId}', [ShoppingCartController::class, 'deleteCartItem']);
     Route::get('/get_total_price/{cartItemId}', [ShoppingCartController::class, 'getTotalPrice']);
+    Route::post('/get_local_cart_products', [ShoppingCartController::class, 'getLocalCartProducts']);
 });
 
 Route::middleware('auth:user')->get('/api/get', [UserController::class, 'getUser']);
@@ -114,3 +116,8 @@ Route::group(['prefix' => 'cart', 'middleware' => 'UserAuthMiddleware'], functio
     Route::get('/payment/{id}', [ShoppingCartController::class, 'payment']);
     Route::get('/confirmation/{id}', [ShoppingCartController::class, 'confirmation']);
 });
+
+Route::get('/local/cart', [ShoppingCartController::class, 'localCart']);
+
+
+Route::get('/callback', [MelhorEnvioController::class, 'handleCallback']);

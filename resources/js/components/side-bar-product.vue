@@ -89,25 +89,44 @@ export default {
         },
     },
     methods: {
-        selectColor(colorName) {
-            this.selectedColor = colorName;
-        },
-        addToCart() {
-            const data = {
-                color: this.selectedColor,
-                variation: this.selectedVariation,
-                productId: this.product.id,
-            };
+  selectColor(colorName) {
+    this.selectedColor = colorName;
+  },
 
-            axios.post(`http://localhost/api/add_cart/`, data)
-                .then(response => {
-                    console.log("Produto adicionado ao carrinho", response.data);
-                })
-                .catch(error => {
-                    console.error("Erro ao adicionar produto ao carrinho", error);
-                });
-        }
+  addToCart() {
+    const cartItem = {
+      color: this.selectedColor,
+      variation: this.selectedVariation,
+      productId: this.product.id,
+      quantity: 1 // Supondo que a quantidade padrão seja 1
+    };
+
+    if (this.userInfo) {
+      axios.post(`http://localhost/api/add_cart/`, cartItem)
+        .then(response => {
+          console.log("Produto adicionado ao carrinho", response.data);
+        })
+        .catch(error => {
+          console.error("Erro ao adicionar produto ao carrinho", error);
+        });
+    } else {
+      this.addToLocalCart(cartItem);
     }
+  },
+
+  addToLocalCart(cartItem) {
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    let foundIndex = cart.findIndex(item => item.productId === cartItem.productId && item.color === cartItem.color && item.variation === cartItem.variation);
+
+    if (foundIndex !== -1) {
+      cart[foundIndex].quantity += cartItem.quantity; 
+    } else {
+      cart.push(cartItem); 
+    }
+    localStorage.setItem('cart', JSON.stringify(cart));
+  }
+}
+
 }
 </script>
 

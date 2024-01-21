@@ -23,6 +23,11 @@ class ShoppingCartController extends Controller
         return view('cart.confirmation_cart');
     }
 
+    public function localCart()
+{
+    return view('cart.local');
+}
+
 
     public function addToCart(Request $request)
     {
@@ -74,6 +79,19 @@ class ShoppingCartController extends Controller
                          ->get();
 
     return response()->json($cartItems);
+    }
+
+    public function getLocalCartProducts(Request $request) {
+        $productIds = $request->input('productIds', []);
+        $products = Product::whereIn('id', $productIds)
+                           ->get()
+                           ->map(function ($product) {
+                               $firstImageName = explode(';', $product->images)[0];
+                               $product->imagePath = "/images/products/{$product->id}/{$firstImageName}";
+                               return $product;
+                           });
+    
+        return response()->json($products);
     }
 
 

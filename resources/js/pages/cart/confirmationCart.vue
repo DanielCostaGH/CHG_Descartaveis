@@ -1,110 +1,111 @@
 <template>
-    <navbar/>
-    <div class="container mx-auto my-5">
-
-    <div class="flex h-[60vh]">
-        <div class="w-4/6">
-            <div class="p-4 flex shadow-lg rounded-lg mx-5 my-10">
-
+  <navbar />
+  <div class="container mx-auto my-5">
+    <div class="flex flex-col md:flex-row">
+      <div class="flex-grow">
+        <div class="mx-5  p-5">
+          <v-card class="my-5 h-full">
+            <div class="p-7 text-h5 font-weight-bold flex items-center" style="background-color: #F5F5F5;">
+              <v-icon color="#2B9D44">mdi-file-search</v-icon>
+              <span class="text-gray-600 mx-4">INFORMAÇÕES DO SEU PEDIDO</span>
             </div>
+            <v-card-text v-if="order">
+              <v-list two-line>
+                <v-list-item>
+                  <v-list-item-content>
+                    <v-list-item-title>Dados pessoais</v-list-item-title>
+                    <v-list-item-subtitle>Nome: {{ order.userData.name }}</v-list-item-subtitle>
+                    <v-list-item-subtitle>CPF/CNPJ: {{ order.userData.document }}</v-list-item-subtitle>
+                  </v-list-item-content>
+                </v-list-item>
+                <v-list-item>
+                  <v-list-item-content>
+                    <v-list-item-title>Endereço de Entrega</v-list-item-title>
+                    <v-list-item-subtitle>{{ order.address.street }}, {{ order.address.number }} - {{
+                      order.address.neighborhood }}, {{ order.address.city }}, {{ order.address.state }}</v-list-item-subtitle>
+                  </v-list-item-content>
+                </v-list-item>
+                <v-list-item>
+                  <v-list-item-content>
+                    <v-list-item-title>Método de Pagamento</v-list-item-title>
+                    <v-list-item-subtitle>{{ order.paymentMethod.name }}</v-list-item-subtitle>
+                  </v-list-item-content>
+                </v-list-item>
+                <v-list-item>
+                  <v-list-item-content>
+                    <v-list-item-title>Produtos</v-list-item-title>
+                    <div v-for="product in order.products" :key="product.id"
+                        class="p-5 my-5 shadow-lg flex items-center justify-between">
+                        <div class="flex items-center">
+                            <div class="mx-5 mr-10">
+                                <img :src="product.imagePath" alt="Imagem do Produto" class="avatar-img">
+                            </div>
 
-            <div class="mx-5 my-10 shadow-lg rounded-lg p-5">
-
-
-
-            </div>
+                            <div>
+                                <h1>{{ product.name }}</h1>
+                                <v-label class="my-1">Preço: {{ product.price }}</v-label>
+                                <div>
+                                    <v-label class="my-1">Quantidade: {{ product.quantity }}</v-label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                  </v-list-item-content>
+                </v-list-item>
+                <v-list-item>
+                  <v-list-item-content>
+                    <v-list-item-title>Total</v-list-item-title>
+                    <v-list-item-subtitle>R$ {{ order.total }}</v-list-item-subtitle>
+                  </v-list-item-content>
+                </v-list-item>
+              </v-list>
+            </v-card-text>
+            <v-card-text v-else>
+              <p>Nenhum pedido encontrado.</p>
+            </v-card-text>
+          </v-card>
         </div>
-
-        <div class="w-2/6 mx-5 my-10 rounded-lg shadow-lg">
-            <!-- Resumo -->
-
-            <div>
-
-            </div>
-            <div class="p-7 text-h5 font-weight-bold flex items-center">
-                <v-icon color="#2B9D44">mdi-file-search</v-icon>
-                <span class="text-gray-600 mx-4">Resumo</span>
-            </div>
-
-            <div class="p-7">
-                <span class="font-weight-bold">Valor dos Produtos: <span class="p-2 text-white rounded bg-primary">R$ {{
-                    totalPrice }}</span></span>
-                <hr class="my-5">
-                <div class="py-5">
-                    <v-label class="font-weight-bold">Frete: <span class="p-2">R$ 00,00</span></v-label> <br>
-                </div>
-                <span class="font-weight-bold">Valor total: <span class="p-2 text-white rounded bg-warning">R$ {{ totalPrice
-                }}</span> </span>
-            </div>
-
-            <div class="w-5/6 mx-auto px-5">
-                <v-btn  color="#2B9D44" block large dark class="my-5 text-h6" rounded="lg"
-                    style="padding-top: 1.6rem; padding-bottom: 1.6rem;">
-                    <v-icon left class="mr-3 text-h4">
-                        mdi-cash
-                    </v-icon>
-                    Finalizar compra
-                </v-btn>
-
-                <v-btn  :href="userInfo ? `/cart/payment/${userInfo.id}` : '#'" color="primary" block large dark class="my-5 text-h6" rounded="lg"
-                    style="padding-top: 1.6rem; padding-bottom: 1.6rem;" >
-                    <v-icon left class="mr-3 text-h4">
-                        mdi-cash
-                    </v-icon>
-                    Voltar
-                </v-btn>
-            </div>
-
-        </div>
+      </div>
+      <cartSummary :totalPrice="totalPrice" @continueToConfirmation="createOrder" />
     </div>
-    </div>
+  </div>
 </template>
 
 <script>
-
-import navbar from '../../components/navbar/navbar.vue'
+import navbar from '../../components/navbar/navbar.vue';
+import cartSummary from '../../components/cart-summary.vue';
 
 export default {
     data() {
         return {
-            products: [
-                {
-                    id: 1,
-                    name: 'Monitor Gamer Asus TUF',
-                    price: 1699.99,
-                    quantity: 1,
-                },
-                {
-                    id: 2,
-                    name: 'Placa de Video RX 6750 XT MECH',
-                    price: 1939.99,
-                    quantity: 1,
-                },
-            ],
+            order: null,
         };
     },
 
     components: {
         navbar,
+        cartSummary,
     },
 
     computed: {
         totalPrice() {
-            return this.products.reduce(
-                (total, product) => total + product.price * product.quantity,
-                0
-            ).toFixed(2);
+            return this.order ? this.order.total : '0.00';
         },
+    },
 
-        userInfo() {
-            return this.$store.state.user;
-        },
+    mounted() {
+        this.loadOrder();
     },
 
     methods: {
-
+        loadOrder() {
+            const orderString = localStorage.getItem('order');
+            if (orderString) {
+                this.order = JSON.parse(orderString);
+            }
+        },
     },
-
-
 };
 </script>
+
+

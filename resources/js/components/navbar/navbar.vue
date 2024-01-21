@@ -37,7 +37,7 @@
                     <v-icon class="mr-2">
                         <img :src="cart" alt="">
                     </v-icon>
-                    <a :href="userInfo ? `/cart/${userInfo.id}` : '#'">Carrinho</a>
+                    <a :href="cartUrl">Carrinho</a>
                 </div>
             </div>
 
@@ -109,6 +109,14 @@ export default {
         userInfo() {
             return this.$store.state.user;
         },
+
+        cartUrl() {
+        if (this.userInfo) {
+            return `/cart/${this.userInfo.id}`;
+        } else {
+            return '/local/cart';
+        }
+    },
     },
 
     methods: {
@@ -129,11 +137,20 @@ export default {
                 this.suggestions = [];
             }
         },
+        
 
         redirectToProduct(productId) {
             window.location.href = `/products/${productId}`;
         },
 
+        checkuser(){
+            console.log(this.userInfo);
+        }
+
+    },
+
+    mounted(){
+        this.checkuser();
     }
 
 }
