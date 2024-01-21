@@ -106,6 +106,7 @@ Route::group(['prefix' => 'api'], function () {
     Route::delete('/remove_cart_item/{cartItemId}', [ShoppingCartController::class, 'deleteCartItem']);
     Route::get('/get_total_price/{cartItemId}', [ShoppingCartController::class, 'getTotalPrice']);
     Route::post('/get_local_cart_products', [ShoppingCartController::class, 'getLocalCartProducts']);
+    Route::post('/calculate-frete', [MelhorEnvioController::class, 'calculate']);
 });
 
 Route::middleware('auth:user')->get('/api/get', [UserController::class, 'getUser']);
@@ -119,5 +120,5 @@ Route::group(['prefix' => 'cart', 'middleware' => 'UserAuthMiddleware'], functio
 
 Route::get('/local/cart', [ShoppingCartController::class, 'localCart']);
 
-
+Route::get('/melhor-envio/redirect', [MelhorEnvioController::class, 'redirectToProvider']);
 Route::get('/callback', [MelhorEnvioController::class, 'handleCallback']);

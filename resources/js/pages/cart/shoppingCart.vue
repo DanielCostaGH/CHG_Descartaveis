@@ -71,7 +71,7 @@
             </div>
 
 
-            <cartSummary :totalPrice="totalPrice"/>
+            <cartSummary :totalPrice="totalPrice" :products="products"/>
         </div>
     </div>
 

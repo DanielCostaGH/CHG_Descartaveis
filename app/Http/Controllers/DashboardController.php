@@ -95,12 +95,16 @@ class DashboardController extends Controller
         $category = Category::where('name', $request->category)->first();
 
         $product = Product::find($id);
-        $product->sku = $request->input('sku') ?? 'teste';
-        $product->name = $request->input('name');
-        $product->description = $request->input('description');
-        $product->price = $request->input('price');
-        $product->category_id = $request->input('category_id');
-        $product->brand = $request->input('brand');
+        $product->sku           = $request->input('sku') ?? 'teste';
+        $product->name          = $request->input('name');
+        $product->description   = $request->input('description');
+        $product->price         = $request->input('price');
+        $product->category_id   = $request->input('category_id');
+        $product->brand         = $request->input('brand');
+        $product->height        = $request->input('height');
+        $product->width         = $request->input('width');
+        $product->length        = $request->input('length');
+        $product->weight        = $request->input('weight');
         $deletedImages = $request->input('deletedImages');
 
 

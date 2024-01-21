@@ -117,6 +117,35 @@
                                 ></v-select>
                             </v-col>
 
+                            <v-col cols="12" md="12">
+                                <v-label>
+                                    Especificações
+                                </v-label>
+                            </v-col>
+
+                            <v-col cols="12" md="6">
+                                <div class="flex gap-4">
+                                    <v-text-field label="Altura do Produto" v-model="editedProduct.height" outlined
+                                        placeholder="Altura do Produto">
+                                    </v-text-field>
+                                    <v-text-field label="Largura do Produto" v-model="editedProduct.width" outlined
+                                        placeholder="Largura do Produto">
+                                    </v-text-field>
+                                </div>
+                            </v-col>
+
+                            <v-col cols="12" md="6">
+                                <div class="flex gap-4">
+                                    <v-text-field label="Comprimento do Produto" v-model="editedProduct.length" outlined
+                                        placeholder="Comprimento do Produto">
+                                    </v-text-field>
+                                    <v-text-field label="Peso do Produto" v-model="editedProduct.weight" outlined
+                                        placeholder="Peso do Produto">
+                                    </v-text-field>
+                                </div>
+                            </v-col>
+
+
                             <v-col cols="12" md="6">
                                 <v-text-field label="Quantidade" v-model="editedProduct.quantity" type="number" outlined
                                     placeholder="Quantidade">
@@ -182,6 +211,10 @@ export default {
                 brand: '',
                 colors: [],
                 variation: '',
+                height: '',
+                width: '',
+                length: '',
+                weight: '',
                 quantity: null,
                 status: 'active',
                 categoryId: null,
@@ -210,6 +243,10 @@ export default {
                 });
             }
             this.editedProduct.variation = product.variation;
+            this.editedProduct.height = product.height;
+            this.editedProduct.width = product.width;
+            this.editedProduct.length = product.length;
+            this.editedProduct.weight = product.weight;
             this.editedProduct.quantity = product.quantity;
             this.editedProduct.status = product.status;
         }
@@ -308,6 +345,11 @@ export default {
             formData.append('quantity', this.editedProduct.quantity);
             formData.append('status', this.editedProduct.status);
             formData.append('category', this.editedProduct.categoryId);
+            formData.append('height', this.editedProduct.height);
+            formData.append('width', this.editedProduct.width);
+            formData.append('length', this.editedProduct.length);
+            formData.append('weight', this.editedProduct.weight);
+
 
             this.productVariations.forEach((variation, index) => {
                 formData.append(`variation[${index}]`, variation);

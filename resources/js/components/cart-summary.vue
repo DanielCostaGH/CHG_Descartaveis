@@ -42,11 +42,15 @@
 
         <div v-if="cartStep !== 'confirmation'" class="w-5/6 mx-auto px-5">
             <v-label>Calcular frete</v-label>
-            <v-text-field></v-text-field>
+            <v-text-field v-model="destinationPostalCode" placeholder="Digite o CEP de destino"></v-text-field>
+            <v-btn @click="calculateFrete">Calcular</v-btn>
         </div>
-        <div v-if="cartStep !== 'confirmation'">
+
+        <div v-if="freteList.length > 0">
             <v-list>
-                <v-list-item v-for="(frete, index) in freteList" :key="index"></v-list-item>
+                <v-list-item v-for="(frete, index) in freteList" :key="index">
+                    {{ frete.service_name }} - R$ {{ frete.price }}
+                </v-list-item>
             </v-list>
         </div>
 
@@ -60,7 +64,8 @@ import axios from 'axios';
 export default {
     data() {
         return {
-
+            destinationPostalCode: '',
+            freteList: [],
         }
     },
 
@@ -68,7 +73,9 @@ export default {
         totalPrice: {
             type: String,
             required: true
-        }
+        },
+
+        products: Array,
     },
 
     computed: {
@@ -132,6 +139,32 @@ export default {
                 this.$router.push(this.button1Href);
             }
         },
+
+        calculateFrete() {
+
+            const productDetails = this.products.map(product => ({
+                id: product.id,
+                width: product.width,
+                height: product.height,
+                length: product.length,
+                weight: product.weight,
+                insurance_value: product.insurance_value,
+                quantity: product.quantity
+            }));
+
+             axios.post('/api/calculate-frete', {
+                to: { postal_code: this.destinationPostalCode },
+                products: productDetails
+            })
+            .then(response => {
+                this.freteList = response.data;
+            })
+            .catch(error => {
+                console.error('Erro ao calcular o frete:', error);
+            });
+        },
+
+
     },
 }
 </script>

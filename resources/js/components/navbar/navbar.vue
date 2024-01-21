@@ -142,16 +142,7 @@ export default {
         redirectToProduct(productId) {
             window.location.href = `/products/${productId}`;
         },
-
-        checkuser(){
-            console.log(this.userInfo);
-        }
-
     },
-
-    mounted(){
-        this.checkuser();
-    }
 
 }
 </script>
