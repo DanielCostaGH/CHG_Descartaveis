@@ -126,26 +126,41 @@ export default {
             }
 
             axios.post('/user/store', formData)
-    .then(response => {
-        if (response.status === 201) {
-            window.location.href = '/user/login';
-        } else {
-            this.emailError = 'Ocorreu um erro inesperado';
-        }
-    })
-    .catch(error => {
-        if (error.response) {
-            this.emailError = error.response.data.message || 'Erro no servidor';
-        } else if (error.request) {
-            this.emailError = 'Nenhuma resposta do servidor';
-        } else {
-            this.emailError = error.message;
-        }
-    });
+                .then(response => {
+                    if (response.status === 201) {
+                        this.mergeLocalCart();
+                        window.location.href = '/user/login';
+                    } else {
+                        this.emailError = 'Ocorreu um erro inesperado';
+                    }
+                })
+                .catch(error => {
+                    if (error.response) {
+                        this.emailError = error.response.data.message || 'Erro no servidor';
+                    } else if (error.request) {
+                        this.emailError = 'Nenhuma resposta do servidor';
+                    } else {
+                        this.emailError = error.message;
+                    }
+                });
 
+        },
+        mergeLocalCart() {
+            const localCart = localStorage.getItem('cart');
+            if (localCart) {
+                axios.post('/api/merge-local-cart', { localCartItems: JSON.parse(localCart) })
+                    .then(response => {
+                        localStorage.removeItem('cart');
+                    })
+                    .catch(error => {
+                        console.error("Erro na mesclagem do carrinho", error);
+                    });
+            }
         }
 
     }
+
+
 }
 
 </script>

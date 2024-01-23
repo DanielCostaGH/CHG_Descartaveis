@@ -17,14 +17,15 @@
                     <div v-for="product in products" :key="product.id"
                         class="p-5 my-5 shadow-lg flex items-center justify-between">
                         <div class="flex items-center">
-                            <div class="mx-5 mr-10">
-                                <img :src="product.imagePath" alt="Imagem do Produto" class="avatar-img">
+                            <div class="mx-5 mr-10 w-[10vh] flex justify-center items-center">
+                                <img :src="product.imagePath" alt="Imagem do Produto" class="max-h-[10vh]">
                             </div>
 
                             <div>
                                 <h1>{{ product.name }}</h1>
-                                <v-label class="my-1">preço: {{ product.price }}</v-label>
-
+                                <v-label>preço: {{ product.price }}</v-label> <br>
+                                <v-label>variação: {{ product.variation }}</v-label> <br>
+                                <v-label>cor: {{ product.color }}</v-label>
 
                                 <div class="flex">
                                     <div class="flex gap-4">
@@ -42,6 +43,7 @@
                                     </div>
                                 </div>
                             </div>
+
 
                         </div>
 
@@ -117,6 +119,8 @@ export default {
                         return {
                             ...product,
                             quantity: localCartItem ? localCartItem.quantity : 0,
+                            color: localCartItem ? localCartItem.color : '', 
+                            variation: localCartItem ? localCartItem.variation : '',
                         };
                     });
                     this.checkEmptyCart();

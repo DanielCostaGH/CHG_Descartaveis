@@ -12,8 +12,8 @@
                             selectedMainAddress.state }}</v-label>
                     </div>
                     <div class="w-full flex justify-end gap-2 items-center">
-                        <v-btn text color="primary" @click="openEditModal">EDITAR</v-btn>
-                        <v-btn text color="primary" @click="openSelectModal">SELECIONAR OUTRO</v-btn>
+                        <v-btn text color="indigo" @click="openEditModal">EDITAR</v-btn>
+                        <v-btn text color="indigo" @click="openSelectModal">SELECIONAR OUTRO</v-btn>
 
                     </div>
                 </div>
@@ -29,15 +29,15 @@
                     </div>
                     <div v-for="product in products" :key="product.id"
                         class="p-5 my-5 shadow-lg flex items-center justify-between">
+
                         <div class="flex items-center">
-                            <div class="mx-5 mr-10">
-                                <img :src="product.imagePath" alt="Imagem do Produto" class="avatar-img">
+                            <div class="mx-5 mr-10 w-[10vh] flex justify-center items-center">
+                                <img :src="product.imagePath" alt="Imagem do Produto" class="max-h-[10vh]">
                             </div>
 
                             <div>
-                                <h1>{{ product.name }}</h1>
-                                <v-label class="my-1">preço: {{ product.price }}</v-label>
-
+                                <a :href="`/products/${product.id}`" class="product-link">{{ product.name }}</a> <br>
+                                <v-label>preço: {{ product.price }}, variação: {{ product.variation }}, cor: {{ product.color }}</v-label>
 
                                 <div class="flex">
                                     <div class="flex gap-4">
@@ -120,7 +120,7 @@
                                 @blur="buscarEnderecoPorCEP"></v-text-field>
                             <v-text-field v-model="formData.street" label="Rua" outlined dense
                                 class="mb-4  w-2/3"></v-text-field>
-                            
+
                         </div>
 
                         <div class="flex w-full">
@@ -226,6 +226,7 @@ export default {
                         return {
                             ...item.product,
                             cartItemId: item.id,
+                            color: item.color,
                             quantity: item.quantity,
                             unitPrice: item.unit_price,
                             selectedColor: item.color,
@@ -370,8 +371,12 @@ export default {
 
 
 <style>
-.avatar-img {
-    width: 50px;
-    margin-right: 10px;
+.product-link {
+    font-weight: bold; /* Negrito */
+}
+.product-link:hover{
+    color: #0861c0; 
+    text-decoration: underline; 
+
 }
 </style>

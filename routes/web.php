@@ -106,6 +106,7 @@ Route::group(['prefix' => 'api'], function () {
     Route::delete('/remove_cart_item/{cartItemId}', [ShoppingCartController::class, 'deleteCartItem']);
     Route::get('/get_total_price/{cartItemId}', [ShoppingCartController::class, 'getTotalPrice']);
     Route::post('/get_local_cart_products', [ShoppingCartController::class, 'getLocalCartProducts']);
+    Route::post('/merge-local-cart', [ShoppingCartController::class, 'mergeLocalCartToUserCart']);
     Route::post('/calculate-frete', [MelhorEnvioController::class, 'calculate']);
 });
 

@@ -84,6 +84,9 @@ export default {
         product: Object,
     },
     computed: {
+        userInfo() {
+            return this.$store.state.user;
+        },
         productVariations() {
             return this.product.variation.split(';').filter(variation => variation.trim() !== '');
         },
@@ -98,13 +101,13 @@ export default {
       color: this.selectedColor,
       variation: this.selectedVariation,
       productId: this.product.id,
-      quantity: 1 // Supondo que a quantidade padrão seja 1
+      quantity: 1 
     };
 
     if (this.userInfo) {
       axios.post(`http://localhost/api/add_cart/`, cartItem)
         .then(response => {
-          console.log("Produto adicionado ao carrinho", response.data);
+          alert("Produto adicionado ao carrinho");
         })
         .catch(error => {
           console.error("Erro ao adicionar produto ao carrinho", error);

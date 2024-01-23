@@ -11,7 +11,7 @@
         </div>
 
         <div class="p-7">
-            <span class="font-weight-bold">Valor dos Produtos: <span class="p-2 text-white rounded bg-primary">R$ {{
+            <span class="font-weight-bold">Valor dos Produtos: <span class="p-2 text-white rounded bg-indigo">R$ {{
                 totalPrice }}</span></span>
             <hr class="my-5">
             <div class="py-5">
@@ -31,7 +31,7 @@
                 {{ button1Text }}
             </v-btn>
 
-            <v-btn :href="button2Href" color="primary" block large dark class="my-5 text-h6" rounded="lg"
+            <v-btn :href="button2Href" color="indigo" block large dark class="my-5 text-h6" rounded="lg"
                 style="padding-top: 1.6rem; padding-bottom: 1.6rem;">
                 <v-icon left class="mr-3 text-h4">
                     mdi-arrow-left

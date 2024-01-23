@@ -11,22 +11,25 @@ class ShoppingCartController extends Controller
 {
 
 
-    public function index(){
+    public function index()
+    {
         return view('cart.shopping_cart');
     }
 
-    public function payment(){
+    public function payment()
+    {
         return view('cart.payment_cart');
     }
 
-    public function confirmation(){
+    public function confirmation()
+    {
         return view('cart.confirmation_cart');
     }
 
     public function localCart()
-{
-    return view('cart.local');
-}
+    {
+        return view('cart.local');
+    }
 
 
     public function addToCart(Request $request)
@@ -44,10 +47,12 @@ class ShoppingCartController extends Controller
             );
 
             $cartItem = CartItem::where('product_id', $productId)
-                                ->where('cart_id', $shoppingCart->id)
-                                ->first();
+                ->where('cart_id', $shoppingCart->id)
+                ->where('color', $color)
+                ->where('variation', $variation)
+                ->first();
 
-            if ($cartItem && $cartItem->$color && $cartItem->$variation) {
+            if ($cartItem) {
                 $cartItem->quantity += 1;
                 $cartItem->save();
             } else {
@@ -70,70 +75,109 @@ class ShoppingCartController extends Controller
     }
 
 
-    public function getCart(){
+    public function getCart()
+    {
         $user = auth('user')->user();
         $userId = $user->id;
         $shoppingCart = ShoppingCart::getUserCart($userId);
         $cartItems = CartItem::where('cart_id', $shoppingCart->id)
-                         ->with('product')
-                         ->get();
+            ->with('product')
+            ->get();
 
-    return response()->json($cartItems);
+        return response()->json($cartItems);
     }
 
-    public function getLocalCartProducts(Request $request) {
+    public function getLocalCartProducts(Request $request)
+    {
         $productIds = $request->input('productIds', []);
         $products = Product::whereIn('id', $productIds)
-                           ->get()
-                           ->map(function ($product) {
-                               $firstImageName = explode(';', $product->images)[0];
-                               $product->imagePath = "/images/products/{$product->id}/{$firstImageName}";
-                               return $product;
-                           });
-    
+            ->get()
+            ->map(function ($product) {
+                $firstImageName = explode(';', $product->images)[0];
+                $product->imagePath = "/images/products/{$product->id}/{$firstImageName}";
+                return $product;
+            });
+
         return response()->json($products);
     }
 
 
     public function updateCartItem(Request $request, $cartItemId)
+    {
+        $newQuantity = $request->input('quantity');
+
+        $cartItem = CartItem::find($cartItemId);
+        if (!$cartItem) {
+            return response()->json(['message' => 'Item do carrinho não encontrado'], 404);
+        }
+
+        $cartItem->quantity = $newQuantity;
+        $cartItem->save();
+
+        return response()->json(['message' => 'Quantidade atualizada com sucesso']);
+    }
+
+
+    public function deleteCartItem($cartItemId)
+    {
+        $cartItem = CartItem::find($cartItemId);
+
+        if (!$cartItem) {
+            return response()->json(['message' => 'Item do carrinho não encontrado'], 404);
+        }
+
+        $cartItem->delete();
+
+        return response()->json(['message' => 'Item removido do carrinho com sucesso']);
+    }
+
+
+    public function getTotalPrice($cartItemId)
+    {
+        $cartItem = CartItem::find($cartItemId);
+
+        if (!$cartItem) {
+            return response()->json(['message' => 'Item do carrinho não encontrado'], 404);
+        }
+    }
+
+    public function mergeLocalCartToUserCart(Request $request)
 {
-    $newQuantity = $request->input('quantity');
-
-    $cartItem = CartItem::find($cartItemId);
-    if (!$cartItem) {
-        return response()->json(['message' => 'Item do carrinho não encontrado'], 404);
+    $user = auth('user')->user();
+    if (!$user) {
+        return response()->json(['message' => 'Usuário não logado.'], 401);
     }
 
-    $cartItem->quantity = $newQuantity;
-    $cartItem->save();
+    $localCartItems = $request->input('localCartItems', []); // Itens do carrinho local
 
-    return response()->json(['message' => 'Quantidade atualizada com sucesso']);
-}
+    $shoppingCart = ShoppingCart::firstOrCreate(
+        ['user_id' => $user->id, 'status' => 'active'],
+        ['total_price' => 0]
+    );
 
+    foreach ($localCartItems as $localItem) {
+        $cartItem = CartItem::where('product_id', $localItem['productId'])
+            ->where('cart_id', $shoppingCart->id)
+            ->where('color', $localItem['color'])
+            ->where('variation', $localItem['variation'])
+            ->first();
 
-public function deleteCartItem($cartItemId)
-{
-    $cartItem = CartItem::find($cartItemId);
-
-    if (!$cartItem) {
-        return response()->json(['message' => 'Item do carrinho não encontrado'], 404);
+        if (!$cartItem) {
+            // Se o item não existe no carrinho do usuário, adicione-o.
+            $unitPrice = Product::getProductPrice($localItem['productId'])['price'];
+            $newCartItem = new CartItem([
+                'product_id' => $localItem['productId'],
+                'cart_id'    => $shoppingCart->id,
+                'quantity'   => $localItem['quantity'],
+                'unit_price' => $unitPrice,
+                'color'      => $localItem['color'],
+                'variation'  => $localItem['variation']
+            ]);
+            $newCartItem->save();
+        }
     }
 
-    $cartItem->delete();
-
-    return response()->json(['message' => 'Item removido do carrinho com sucesso']);
+    return response()->json(['message' => 'Carrinho mesclado com sucesso'], 200);
 }
-
-
-public function getTotalPrice($cartItemId){
-    $cartItem = CartItem::find($cartItemId);
-
-    if (!$cartItem) {
-        return response()->json(['message' => 'Item do carrinho não encontrado'], 404);
-    }
-
-    
-}
-
 
 }
