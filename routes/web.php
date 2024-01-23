@@ -80,7 +80,7 @@ Route::group(['prefix' => 'dashboard', 'middleware' => 'AdminAuthMiddleware'], f
 
 
 Route::group(['prefix' => 'api'], function () {
-    Route::get('/products', [DashboardController::class, 'show']);
+    // Route::get('/products', [DashboardController::class, 'show']);
     Route::get('/products/active', [DashboardController::class, 'show']);
     Route::get('/products', [ProductsController::class, 'getProducts']);
     Route::get('/category', [CategoryController::class, 'index']);

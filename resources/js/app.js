@@ -53,6 +53,11 @@ const routes = [
         name: 'confirmation_cart',
         component: confirmationCart
     },
+    {
+        path: '/products',
+        name: 'getProducts',
+        component: productsIndex
+    },
 ];
 
 const router = createRouter({

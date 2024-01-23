@@ -31,8 +31,17 @@ class ProductsController extends Controller
 
     public function getProducts(Request $request)
     {
+        $parameters = $request->all();
+
+        if ($request->has('query')) {
+            $parameters['productName'] = $request->query('query');
+        }
+        if ($request->has('categoryId')) {
+            $parameters['selectedCategories'] = [$request->input('categoryId')];
+        }
+
         if ($this->hasFilters($request)) {
-            $products = $this->filterService->filter($request->all());
+            $products = $this->filterService->filter($parameters);
         } else {
             $products = Product::getAvailableProducts();
         }
@@ -40,10 +49,18 @@ class ProductsController extends Controller
         return response()->json($products);
     }
 
+
     protected function hasFilters(Request $request)
     {
-        return $request->hasAny(['productName', 'priceSort', 'selectedCategories', 'selectedColors']);
+        return $request->hasAny([
+            'priceSort',
+            'selectedCategories',
+            'selectedColors',
+            'categoryId',
+        ]) || ($request->has('productName') && $request->get('productName') !== $request->get('query'));
     }
+
+
 
     public function search(Request $request)
     {
@@ -94,8 +111,8 @@ class ProductsController extends Controller
         return view('products.product_details', compact('product'));
     }
 
-    public function filter($id) {
-
+    public function filter($id)
+    {
     }
 
 
@@ -106,10 +123,10 @@ class ProductsController extends Controller
     }
 
     public function countProducts()
-{
-    $count = Product::count();
-    return response()->json($count);
-}
+    {
+        $count = Product::count();
+        return response()->json($count);
+    }
 
 
 

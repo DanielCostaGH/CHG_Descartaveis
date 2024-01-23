@@ -21,7 +21,7 @@
                 <div v-for="category in categories" :key="'mobile-' + category.name" class="mx-3 text-center">
                     <v-sheet class="d-flex justify-center align-center overflow-hidden" tile shaped>
 
-                        <a :href="`products/${category.name}`">
+                        <a :href="`/products?categoryId=${category.category_id}`">
                             <v-avatar class="border-lg" size="208">
                                 <img :src="category.image" :alt="category.name" class="fill-avatar">
                             </v-avatar>
@@ -58,7 +58,7 @@
                 <div v-for="category in categories" :key="'mobile-' + category.name" class="mx-3 text-center">
                     <v-sheet class="d-flex justify-center align-center overflow-hidden" tile shaped>
 
-                        <a :href="`products/${category.name}`">
+                        <a :href="`/products?categoryId=${category.category_id}`">
                             <v-avatar class="border-lg" size="208">
                                 <img :src="category.image" :alt="category.name" class="fill-avatar">
                             </v-avatar>

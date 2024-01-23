@@ -7,15 +7,16 @@
                     <div class="flex flex-wrap">
 
                         <div class="flex w-full">
+                            <v-text-field v-model="formData.zipcode" label="CEP" outlined dense class="mb-4 mr-5 w-1/3"
+                                @blur="buscarEnderecoPorCEP"></v-text-field>
                             <v-text-field v-model="formData.street" label="Rua" outlined dense
-                                class="mb-4 mr-5 w-1/2"></v-text-field>
-                            <v-text-field v-model="formData.neighborhood" label="Bairro" outlined dense
-                                class="mb-4 ml-5 w-1/2"></v-text-field>
+                                class="mb-4  w-2/3"></v-text-field>
+                            
                         </div>
 
                         <div class="flex w-full">
-                            <v-text-field v-model="formData.zipcode" label="CEP" outlined dense class="mb-4  w-2/6"
-                                @blur="buscarEnderecoPorCEP"></v-text-field>
+                            <v-text-field v-model="formData.neighborhood" label="Bairro" outlined dense
+                                class="mb-4  w-2/6"></v-text-field>
                             <v-text-field v-model="formData.number" label="Número" outlined dense
                                 class="mb-4 ml-5 w-1/6"></v-text-field>
 

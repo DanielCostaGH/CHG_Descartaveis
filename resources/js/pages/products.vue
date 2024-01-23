@@ -20,8 +20,31 @@ export default {
             products: []
         };
     },
+    watch: {
+        '$route'(to, from) {
+            if (to.path === '/products') {
+                this.fetchFilteredProducts();
+            }
+        }
+    },
+
     methods: {
+        fetchFilteredProducts() {
+            const filters = { ...this.$route.query };
+
+            if (filters.query) {
+                filters.productName = filters.query;
+                delete filters.query;
+            }
+            if (this.$route.query.categoryId) {
+                filters.categoryId = this.$route.query.categoryId;
+            }
+
+            this.fetchProducts(filters);
+        },
+
         fetchProducts(filters = {}) {
+            console.log('Filtros aplicados:', filters);
             axios.get('/api/products', { params: filters })
                 .then(response => {
                     this.products = response.data;
@@ -31,13 +54,16 @@ export default {
                 });
         },
 
+
+
         handleFilterApplied(filters) {
             this.fetchProducts(filters);
         },
     },
     mounted() {
-        this.fetchProducts();
+        this.fetchFilteredProducts();
     },
+
     components: {
         navbar,
         filters,

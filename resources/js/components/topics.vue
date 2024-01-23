@@ -13,11 +13,12 @@
                 </v-menu>
             </v-col>
 
-            <v-col cols="auto" v-for="topics in topicOptions" :key="topics.name">
-                <v-btn :href="`products/${topics.name}`" text color="blue-grey-lighten-4" class="mx-2">
-                    {{ topics.name }}
+            <v-col cols="auto" v-for="topic in topicOptions" :key="topic.id">
+                <v-btn :href="`/products?categoryId=${topic.id}`" text color="blue-grey-lighten-4" class="mx-2">
+                    {{ topic.name }}
                 </v-btn>
             </v-col>
+
 
             <v-col cols="auto">
                 <v-btn color="green-accent-4" class="mx-2 text-white" :href="'/'">
@@ -38,14 +39,6 @@
                             Ver Produtos
                         </v-btn>
                     </template>
-
-                    <v-list>
-                        <v-list-item v-for="(item, index) in items" :key="index" link>
-                            <v-list-item-content>
-                                <v-list-item-title>{{ item.title }}</v-list-item-title>
-                            </v-list-item-content>
-                        </v-list-item>
-                    </v-list>
                 </v-menu>
 
                 <v-btn text color="green-accent-4" class="mx-2 white--text" :href="'/'">
@@ -68,7 +61,7 @@ export default {
         };
     },
 
-    methods:{
+    methods: {
         async loadTopicOptions() {
             try {
                 const response = await axios.get('/api/category');
@@ -79,7 +72,7 @@ export default {
         },
     },
 
-    mounted(){
+    mounted() {
         this.loadTopicOptions();
     }
 };

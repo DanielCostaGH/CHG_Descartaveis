@@ -49,10 +49,15 @@ class ProductFilterService
         return $query;
     }
 
-    protected function applyCategoryFilter($query, $categories)
+    protected function applyCategoryFilter($query, $category)
     {
-        return $query->whereIn('category_id', $categories);
+        if (is_array($category)) {
+            return $query->whereIn('category_id', $category);
+        } else {
+            return $query->where('category_id', $category);
+        }
     }
+
 
     protected function applyColorFilter($query, $colors)
     {
@@ -60,5 +65,4 @@ class ProductFilterService
             $q->whereIn('color_id', $colors);
         });
     }
-
 }

@@ -11,9 +11,10 @@
 
             <div class="w-5/6 md:w-3/6 px-4 mt-4 md:mt-0 relative">
                 <img class="absolute left-4 top-1/2 transform -translate-y-1/2 px-4" :src="search" alt="icon">
-                <input type="text" v-model="searchQuery" @input="fetchSuggestions"
-                    class="rounded-lg bg-[#F3F9FB]  p-4 pl-12 w-full shadow focus:shadow-lg focus:outline-none focus:border-gray-400 text-lg"
+                <input type="text" v-model="searchQuery" @input="fetchSuggestions" @keyup.enter="searchProducts"
+                    class="rounded-lg bg-[#F3F9FB] p-4 pl-12 w-full shadow focus:shadow-lg focus:outline-none focus:border-gray-400 text-lg"
                     placeholder="Pesquise o que procura" />
+
 
                 <div v-if="suggestions.length > 0" class="absolute z-10 w-5/6 bg-white border-b mt-1 rounded-lg">
                     <ul>
@@ -111,12 +112,12 @@ export default {
         },
 
         cartUrl() {
-        if (this.userInfo) {
-            return `/cart/${this.userInfo.id}`;
-        } else {
-            return '/local/cart';
-        }
-    },
+            if (this.userInfo) {
+                return `/cart/${this.userInfo.id}`;
+            } else {
+                return '/local/cart';
+            }
+        },
     },
 
     methods: {
@@ -137,11 +138,18 @@ export default {
                 this.suggestions = [];
             }
         },
-        
+
 
         redirectToProduct(productId) {
             window.location.href = `/products/${productId}`;
         },
+
+        searchProducts() {
+            if (this.searchQuery.trim()) {
+                window.location.href = `/products?productName=${encodeURIComponent(this.searchQuery)}`;
+            }
+        },
+
     },
 
 }

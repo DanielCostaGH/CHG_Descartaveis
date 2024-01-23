@@ -19,7 +19,7 @@
                 </div>
                 <div v-else class="p-4 flex shadow-lg rounded-lg mx-5 my-10 justify-between">
                     <v-label>Nenhum endereço principal definido.</v-label>
-                    <v-btn text color="primary">Adicionar Endereço</v-btn>
+                    <v-btn @click="openNewAddress" text color="primary">Adicionar Endereço</v-btn>
                 </div>
 
                 <div class="mx-5 my-10 shadow-lg rounded-lg p-5">
@@ -71,7 +71,7 @@
             </div>
 
 
-            <cartSummary :totalPrice="totalPrice" :products="products"/>
+            <cartSummary :totalPrice="totalPrice" :products="products" />
         </div>
     </div>
 
@@ -106,6 +106,48 @@
             </v-card-text>
         </v-card>
     </v-dialog>
+
+
+    <v-dialog v-model="showNewAddressModal">
+        <v-card class="w-3/6 mx-auto flex flex-wrap">
+            <v-card-title class="text-xl font-medium">Gerenciar Endereços</v-card-title>
+            <v-card-text>
+                <v-form ref="form" v-model="valid" lazy-validation>
+                    <div class="flex flex-wrap">
+
+                        <div class="flex w-full">
+                            <v-text-field v-model="formData.zipcode" label="CEP" outlined dense class="mb-4 mr-5 w-1/3"
+                                @blur="buscarEnderecoPorCEP"></v-text-field>
+                            <v-text-field v-model="formData.street" label="Rua" outlined dense
+                                class="mb-4  w-2/3"></v-text-field>
+                            
+                        </div>
+
+                        <div class="flex w-full">
+                            <v-text-field v-model="formData.neighborhood" label="Bairro" outlined dense
+                                class="mb-4  w-2/6"></v-text-field>
+                            <v-text-field v-model="formData.number" label="Número" outlined dense
+                                class="mb-4 ml-5 w-1/6"></v-text-field>
+
+                            <v-text-field v-model="formData.city" label="Cidade" outlined dense
+                                class="mb-4 ml-5 w-3/6"></v-text-field>
+                        </div>
+
+                        <div class="flex w-full">
+                            <v-text-field v-model="formData.state" label="Estado" outlined dense
+                                class="mb-4 mr-5"></v-text-field>
+
+                            <v-btn @click="adicionarEndereco" class="rounded-full bg-blue-darken-2 pt-5 pb-9">
+                                <v-icon class="mr-2">mdi-plus</v-icon>
+                                Adicionar Endereço
+                            </v-btn>
+                        </div>
+
+                    </div>
+                </v-form>
+            </v-card-text>
+        </v-card>
+    </v-dialog>
 </template>
 
 <script>
@@ -123,7 +165,17 @@ export default {
             empty: false,
             showEditModal: false,
             showSelectModal: false,
+            showNewAddressModal: false,
             editAddress: {},
+
+            formData: {
+                street: '',
+                number: '',
+                city: '',
+                state: '',
+                zipcode: '',
+                neighborhood: '',
+            },
         };
     },
 
@@ -255,7 +307,54 @@ export default {
         selectAddress(address) {
             this.selectedMainAddress = address;
             this.showSelectModal = false;
-        }
+        },
+
+        openNewAddress() {
+            console.log('aqui');
+            this.showNewAddressModal = true;
+        },
+
+
+        adicionarEndereco() {
+            const { street, number, city, state, zipcode, neighborhood } = this.formData;
+
+            axios.post(`/user/add_address/${this.userInfo.id}`, {
+                street,
+                number,
+                city,
+                state,
+                zipcode,
+                neighborhood
+            })
+                .then(response => {
+                    console.log('Endereço salvo com sucesso:', response);
+                    this.fetchAddresses();
+                    this.showNewAddressModal = false;
+                })
+                .catch(error => {
+                    console.error('Erro ao salvar endereço:', error);
+                });
+
+
+        },
+
+        buscarEnderecoPorCEP() {
+            if (/^\d{5}[-]?\d{3}$/.test(this.formData.zipcode)) {
+                axios.get(`https://viacep.com.br/ws/${this.formData.zipcode}/json/`)
+                    .then(response => {
+                        this.formData.street = response.data.logradouro || '';
+                        this.formData.city = response.data.localidade || '';
+                        this.formData.state = response.data.uf || '';
+                        this.formData.neighborhood = response.data.bairro || '';
+                    })
+                    .catch(error => {
+                        alert('Erro ao buscar endereço por CEP:', error);
+                    });
+            } else {
+                console.warn('CEP inválido');
+            }
+        },
+
 
 
     },
