@@ -37,7 +37,8 @@
 
                             <div>
                                 <a :href="`/products/${product.id}`" class="product-link">{{ product.name }}</a> <br>
-                                <v-label>preço: {{ product.price }}, variação: {{ product.variation }}, cor: {{ product.color }}</v-label>
+                                <v-label>preço: {{ product.price }}, variação: {{ product.variation }}, cor: {{
+                                    product.color }}</v-label>
 
                                 <div class="flex">
                                     <div class="flex gap-4">
@@ -71,11 +72,12 @@
             </div>
 
 
-            <cartSummary :totalPrice="totalPrice" :products="products" />
+            <cartSummary :totalPrice="totalPrice" :products="products" :selectedMainAddress="selectedMainAddress" />
         </div>
     </div>
 
 
+    <!-- Editar endereço -->
     <v-dialog v-model="showEditModal">
         <v-card class="container mx-auto w-3/5">
             <v-card-title>Editar Endereço</v-card-title>
@@ -94,6 +96,7 @@
         </v-card>
     </v-dialog>
 
+    <!-- Selecionar Endereço -->
     <v-dialog v-model="showSelectModal">
         <v-card class="container mx-auto w-3/5">
             <v-card-title>Selecionar Novo Endereço</v-card-title>
@@ -108,6 +111,7 @@
     </v-dialog>
 
 
+    <!-- Adicionar endereço -->
     <v-dialog v-model="showNewAddressModal">
         <v-card class="w-3/6 mx-auto flex flex-wrap">
             <v-card-title class="text-xl font-medium">Gerenciar Endereços</v-card-title>
@@ -372,11 +376,12 @@ export default {
 
 <style>
 .product-link {
-    font-weight: bold; /* Negrito */
+    font-weight: bold;
+    /* Negrito */
 }
-.product-link:hover{
-    color: #0861c0; 
-    text-decoration: underline; 
 
-}
-</style>
+.product-link:hover {
+    color: #0861c0;
+    text-decoration: underline;
+
+}</style>

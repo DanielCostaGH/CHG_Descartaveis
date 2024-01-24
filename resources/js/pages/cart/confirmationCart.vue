@@ -22,7 +22,8 @@
                   <v-list-item-content>
                     <v-list-item-title>Endereço de Entrega</v-list-item-title>
                     <v-list-item-subtitle>{{ order.address.street }}, {{ order.address.number }} - {{
-                      order.address.neighborhood }}, {{ order.address.city }}, {{ order.address.state }}</v-list-item-subtitle>
+                      order.address.neighborhood }}, {{ order.address.city }}, {{ order.address.state
+  }}</v-list-item-subtitle>
                   </v-list-item-content>
                 </v-list-item>
                 <v-list-item>
@@ -33,31 +34,24 @@
                 </v-list-item>
                 <v-list-item>
                   <v-list-item-content>
-                    <v-list-item-title>Produtos</v-list-item-title>
+                    <v-list-item-title class="font-weight-bold mt-5">Produtos:</v-list-item-title>
                     <div v-for="product in order.products" :key="product.id"
-                        class="p-5 my-5 shadow-lg flex items-center justify-between">
-                        <div class="flex items-center">
-                            <div class="mx-5 mr-10">
-                                <img :src="product.imagePath" alt="Imagem do Produto" class="avatar-img">
-                            </div>
-
-                            <div>
-                                <h1>{{ product.name }}</h1>
-                                <v-label class="my-1">Preço: {{ product.price }}</v-label>
-                                <div>
-                                    <v-label class="my-1">Quantidade: {{ product.quantity }}</v-label>
-                                </div>
-                            </div>
+                      class="p-5 my-5 shadow-lg flex items-center justify-between">
+                      <div class="flex items-center">
+                        <div class="mx-5 mr-10 w-[10vh] flex justify-center items-center">
+                          <img :src="product.imagePath" alt="Imagem do Produto" class="max-h-[10vh]">
                         </div>
+
+                        <div>
+                          <h1 class="font-weight-bold">{{ product.name }}</h1>
+                          <v-label>preço: {{ product.price }}, variação: {{ product.variation }}, cor: {{
+                            product.color }}</v-label>
+                        </div>
+                      </div>
                     </div>
                   </v-list-item-content>
                 </v-list-item>
-                <v-list-item>
-                  <v-list-item-content>
-                    <v-list-item-title>Total</v-list-item-title>
-                    <v-list-item-subtitle>R$ {{ order.total }}</v-list-item-subtitle>
-                  </v-list-item-content>
-                </v-list-item>
+
               </v-list>
             </v-card-text>
             <v-card-text v-else>
@@ -76,35 +70,59 @@ import navbar from '../../components/navbar/navbar.vue';
 import cartSummary from '../../components/cart-summary.vue';
 
 export default {
-    data() {
-        return {
-            order: null,
-        };
+  data() {
+    return {
+      order: null,
+    };
+  },
+
+  components: {
+    navbar,
+    cartSummary,
+  },
+
+  computed: {
+    totalPrice() {
+      return this.order ? this.order.total : '0.00';
+    },
+  },
+
+  mounted() {
+    this.loadOrder();
+  },
+
+  methods: {
+    loadOrder() {
+      const orderString = localStorage.getItem('order');
+      if (orderString) {
+        this.order = JSON.parse(orderString);
+      }
     },
 
-    components: {
-        navbar,
-        cartSummary,
-    },
 
-    computed: {
-        totalPrice() {
-            return this.order ? this.order.total : '0.00';
-        },
-    },
+    saveOrder() {
+      const orderData = JSON.parse(localStorage.getItem('orders'));
+      const simplifiedOrder = {
+        userId: orderData.userData.id,
+        addressId: orderData.address.id,
+        paymentMethod: orderData.paymentMethod.id,
+        products: orderData.products.map(product => ({
+          id: product.id,
+          quantity: product.quantity
+        })),
+        total: orderData.total
+      };
 
-    mounted() {
-        this.loadOrder();
-    },
+      axios.post('/api/create-order', simplifiedOrder)
+        .then(response => {
+          
+        })
+        .catch(error => {
+        });
 
-    methods: {
-        loadOrder() {
-            const orderString = localStorage.getItem('order');
-            if (orderString) {
-                this.order = JSON.parse(orderString);
-            }
-        },
-    },
+
+    }
+  },
 };
 </script>
 

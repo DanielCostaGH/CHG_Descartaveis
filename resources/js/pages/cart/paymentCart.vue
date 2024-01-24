@@ -46,26 +46,25 @@
                     <div v-for="product in products" :key="product.id"
                         class="p-5 my-5 shadow-lg flex items-center justify-between">
                         <div class="flex items-center">
-                            <div class="mx-5 mr-10">
-                                <img :src="product.imagePath" alt="Imagem do Produto" class="avatar-img">
+                            <div class="mx-5 mr-10 w-[10vh] flex justify-center items-center">
+                                <img :src="product.imagePath" alt="Imagem do Produto" class="max-h-[10vh]">
                             </div>
 
                             <div>
-                                <h1>{{ product.name }}</h1>
-                                <v-label class="my-1">Preço: {{ product.price }}</v-label>
-                                <div>
-                                    <v-label class="my-1">Quantidade: {{ product.quantity }}</v-label>
-                                </div>
+                                <h1 class="font-weight-bold">{{ product.name }}</h1>
+                                <v-label>preço: {{ product.price }}, variação: {{ product.variation }}, cor: {{
+                                    product.color }}</v-label>
                             </div>
                         </div>
                     </div>
-                    
+
                 </div>
 
             </div>
 
 
-            <cartSummary :totalPrice="totalPrice" @continueToConfirmation="createOrder" />
+            <cartSummary :totalPrice="totalPrice" :selectedMainAddress="selectedMainAddress"
+                :selectedPaymentMethod="selectedPaymentMethod" @continueToConfirmation="createOrder" />
         </div>
     </div>
 
@@ -219,6 +218,7 @@ export default {
                             ...item.product,
                             cartItemId: item.id,
                             quantity: item.quantity,
+                            color: item.color,
                             unitPrice: item.unit_price,
                             selectedColor: item.color,
                             selectedVariation: item.variation,
@@ -341,7 +341,7 @@ export default {
 
     mounted() {
         this.fetchAddresses(),
-        this.fetchProducts()
+            this.fetchProducts()
     }
 
 

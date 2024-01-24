@@ -23,8 +23,8 @@
         </div>
 
         <div class="w-5/6 mx-auto px-5">
-            <v-btn :href="button1Href" @click="onButton1Click" color="#2B9D44" block large dark class="my-5 text-h6"
-                rounded="lg" style="padding-top: 1.6rem; padding-bottom: 1.6rem;">
+            <v-btn @click="onButton1Click" color="#2B9D44" block large dark class="my-5 text-h6" rounded="lg"
+                style="padding-top: 1.6rem; padding-bottom: 1.6rem;">
                 <v-icon left class="mr-3 text-h4">
                     mdi-cash
                 </v-icon>
@@ -55,6 +55,35 @@
         </div>
 
     </div>
+
+
+    <!-- Endereço obrigatorio -->
+    <v-dialog v-model="showDialogAddress">
+        <v-card class="mx-auto">
+            <v-card-title class="headline">Atenção</v-card-title>
+            <v-card-text>
+                É necessário preencher um endereço para continuar com a compra.
+            </v-card-text>
+            <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="green darken-1" text @click="showDialogAddress = false">Fechar</v-btn>
+            </v-card-actions>
+        </v-card>
+    </v-dialog>
+
+     <!-- Metodo de pagamento obrigatorio -->
+     <v-dialog v-model="showDialogPayment">
+        <v-card class="mx-auto">
+            <v-card-title class="headline">Atenção</v-card-title>
+            <v-card-text>
+                É necessário preencher um metodo de pagamento para continuar com a compra.
+            </v-card-text>
+            <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="green darken-1" text @click="showDialogPayment = false">Fechar</v-btn>
+            </v-card-actions>
+        </v-card>
+    </v-dialog>
 </template>
 
 
@@ -66,6 +95,8 @@ export default {
         return {
             destinationPostalCode: '',
             freteList: [],
+            showDialogAddress: false,
+            showDialogPayment: false,
         }
     },
 
@@ -76,6 +107,8 @@ export default {
         },
 
         products: Array,
+        selectedMainAddress: Object,
+        selectedPaymentMethod: Object,
     },
 
     computed: {
@@ -119,25 +152,55 @@ export default {
         },
 
         button2Text() {
-            return this.cartStep === 'index' ? 'Continuar comprando' : 'Voltar';
+            return (this.cartStep === 'payment' || this.cartStep === 'confirmation')
+                ? 'Voltar'
+                : 'Continuar comprando';
         },
 
         button2Href() {
             const id = this.userInfo ? this.userInfo.id : '';
-            return this.cartStep === 'index' ? '/' : `/cart/${id}`;
+            switch (this.cartStep) {
+                case 'confirmation':
+                    return `/cart/payment/${id}`;
+                case 'index':
+                    return '/';
+                default:
+                    return `/cart/${id}`;
+            }
         },
+
 
     },
 
     methods: {
 
         onButton1Click() {
-            if (this.cartStep === 'payment') {
-                this.$emit('continueToConfirmation');
-                this.$router.push(this.button1Href);
-            } else {
-                this.$router.push(this.button1Href);
+
+            if (!this.selectedMainAddress) {
+                this.showDialogAddress = true;
+                return; // Impede a continuação do método
             }
+            // Verificar se o método de pagamento está selecionado na etapa de pagamento
+            if (this.cartStep === 'payment' && !this.selectedPaymentMethod) {
+                this.showDialogPayment = true;
+                return;
+            }
+
+            let nextUrl = '';
+            const id = this.userInfo ? this.userInfo.id : '';
+            switch (this.cartStep) {
+                case 'payment':
+                    nextUrl = `/cart/confirmation/${id}`;
+                    break;
+                case 'confirmation':
+                    nextUrl = `/cart/buy/${id}`;
+                    break;
+                default:
+                    nextUrl = `/cart/payment/${id}`;
+                    break;
+            }
+            window.location.href = nextUrl;
+
         },
 
         calculateFrete() {
@@ -152,16 +215,16 @@ export default {
                 quantity: product.quantity
             }));
 
-             axios.post('/api/calculate-frete', {
+            axios.post('/api/calculate-frete', {
                 to: { postal_code: this.destinationPostalCode },
                 products: productDetails
             })
-            .then(response => {
-                this.freteList = response.data;
-            })
-            .catch(error => {
-                console.error('Erro ao calcular o frete:', error);
-            });
+                .then(response => {
+                    this.freteList = response.data;
+                })
+                .catch(error => {
+                    console.error('Erro ao calcular o frete:', error);
+                });
         },
 
 
