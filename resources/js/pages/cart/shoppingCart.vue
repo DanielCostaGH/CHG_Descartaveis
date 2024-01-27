@@ -343,25 +343,6 @@ export default {
 
         },
 
-        buscarEnderecoPorCEP() {
-            if (/^\d{5}[-]?\d{3}$/.test(this.formData.zipcode)) {
-                axios.get(`https://viacep.com.br/ws/${this.formData.zipcode}/json/`)
-                    .then(response => {
-                        this.formData.street = response.data.logradouro || '';
-                        this.formData.city = response.data.localidade || '';
-                        this.formData.state = response.data.uf || '';
-                        this.formData.neighborhood = response.data.bairro || '';
-                    })
-                    .catch(error => {
-                        alert('Erro ao buscar endereço por CEP:', error);
-                    });
-            } else {
-                console.warn('CEP inválido');
-            }
-        },
-
-
-
     },
 
     mounted() {
@@ -384,4 +365,5 @@ export default {
     color: #0861c0;
     text-decoration: underline;
 
-}</style>
+}
+</style>

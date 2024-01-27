@@ -110,7 +110,9 @@ Route::group(['prefix' => 'api'], function () {
     Route::get('/get_total_price/{cartItemId}', [ShoppingCartController::class, 'getTotalPrice']);
     Route::post('/get_local_cart_products', [ShoppingCartController::class, 'getLocalCartProducts']);
     Route::post('/merge-local-cart', [ShoppingCartController::class, 'mergeLocalCartToUserCart']);
-    Route::post('/calculate-frete', [MelhorEnvioController::class, 'calculate']);
+    Route::post('get-config', [SettingsController::class, 'getConfigValue']);
+    Route::get('/redirect-to-melhor-envio', [MelhorEnvioController::class,'redirectToProvider']);
+    Route::post('calculate-frete', [MelhorEnvioController::class, 'calculate']);
 });
 
 Route::middleware('auth:user')->get('/api/get', [UserController::class, 'getUser']);
@@ -122,7 +124,6 @@ Route::group(['prefix' => 'cart', 'middleware' => 'UserAuthMiddleware'], functio
     Route::get('/confirmation/{id}', [ShoppingCartController::class, 'confirmation']);
 });
 
+// Rotas a parte
 Route::get('/local/cart', [ShoppingCartController::class, 'localCart']);
-
-Route::get('/melhor-envio/redirect', [MelhorEnvioController::class, 'redirectToProvider']);
-Route::get('/callback', [MelhorEnvioController::class, 'handleCallback']);
+Route::get('/auth', [MelhorEnvioController::class, 'handleProviderCallback']);
