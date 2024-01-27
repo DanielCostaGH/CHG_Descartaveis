@@ -35,6 +35,8 @@
                 </a>
             </li>
 
+           
+
             <li class="mb-4 mx-5">
                 <a href="/dashboard/appearence"
                     class="flex items-center p-5 rounded-lg hover:bg-[#F3F4F5] hover:shadow-lg active:bg-gray-200">
@@ -43,19 +45,18 @@
                 </a>
             </li>
 
-
-
             <li class="mb-4 mx-5">
-                <a
-                    class="flex items-center text-[#99A8CB] p-5 rounded-lg hover:bg-[#F3F4F5] hover:shadow-lg active:bg-gray-200">
+                <a href="/dashboard/orders"
+                    class="flex items-center p-5 rounded-lg hover:bg-[#F3F4F5] hover:shadow-lg active:bg-gray-200">
+
                     <img class="pr-6" :src="order_pending" alt="">
-                    <span>Pedidos pendentes</span>
+                    <span>Pedidos Pendentes</span>
                 </a>
             </li>
 
             <li class="mb-4 mx-5">
-                <a
-                    class="flex items-center text-[#99A8CB] p-5 rounded-lg hover:bg-[#F3F4F5] hover:shadow-lg active:bg-gray-200">
+                <a href="/dashboard/shipped"
+                    class="flex items-center p-5 rounded-lg hover:bg-[#F3F4F5] hover:shadow-lg active:bg-gray-200">
                     <img class="pr-6" :src="product_sent" alt="">
                     <span>Pedidos Enviados</span>
                 </a>
@@ -70,8 +71,8 @@
             </li>
 
             <li class="mb-4 mx-5">
-                <a
-                    class="flex items-center text-[#99A8CB] p-5 rounded-lg hover:bg-[#F3F4F5] hover:shadow-lg active:bg-gray-200">
+                <a href="/dashboard/config"
+                    class="flex items-center p-5 rounded-lg hover:bg-[#F3F4F5] hover:shadow-lg active:bg-gray-200">
                     <img class="pr-6" :src="config" alt="">
                     <span>Configurações</span>
                 </a>

@@ -225,4 +225,9 @@ class DashboardController extends Controller
             $color->delete();
         }
     }
+
+
+    public function config(){
+        return view('dashboard.config.index');
+    }
 }

@@ -63,6 +63,9 @@ Route::group(['prefix' => 'products'], function () {
 Route::group(['prefix' => 'dashboard', 'middleware' => 'AdminAuthMiddleware'], function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
     Route::get('/products', [DashboardController::class, 'showProducts'])->name('dashboard.products.index');
+    Route::get('/orders', [OrderController::class, 'index'])->name('index');
+    Route::get('/shipped', [OrderController::class, 'shipped'])->name('shipped');
+    Route::get('/config', [DashboardController::class, 'config'])->name('index');
     Route::get('/create', [DashboardController::class, 'createProduct'])->name('dashboard.products.create');
     Route::post('/store', [DashboardController::class, 'productStore'])->name('dashboard.products.store');
     Route::get('/products/edit/{id}', [DashboardController::class, 'editProduct'])->name('dashboard.products.edit');

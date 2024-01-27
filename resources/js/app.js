@@ -26,10 +26,14 @@ import dashboardIndex from './pages//dashboard/dashboard.vue';
 import productEdit from './pages/dashboard/productEdit.vue';
 import categoryEdit from './pages/dashboard/categoryEdit.vue';
 import productsList from './pages/dashboard/productsList.vue';
-import appearenceIndex from './pages/dashboard/appearence.vue'
-import categoriesIndex from './pages/dashboard/categories.vue'
-import productCreate from './pages/dashboard/productCreate.vue'
-import categoryCreate from './pages/dashboard/categoryCreate.vue'
+import appearenceIndex from './pages/dashboard/appearence.vue';
+import categoriesIndex from './pages/dashboard/categories.vue';
+import productCreate from './pages/dashboard/productCreate.vue';
+import categoryCreate from './pages/dashboard/categoryCreate.vue';
+import config from './pages/dashboard/config.vue';
+// Bloco de pedidos (orders)
+import orders from './pages/dashboard/orders.vue'
+import ShippedOrders from './pages/dashboard/ShippedOrders.vue'
 // Bloco do carrinho de compras
 import shoppingCart from './pages/cart/shoppingCart.vue'
 import paymentCart from './pages/cart/paymentCart.vue'
@@ -102,6 +106,10 @@ app.component('appearence-index', appearenceIndex);
 app.component('categories-index', categoriesIndex);
 app.component('product-create', productCreate);
 app.component('category-create', categoryCreate);
+app.component('Config', config);
+// Bloco de pedidos (orders)
+app.component('Orders', orders);
+app.component('shipped-orders', ShippedOrders);
 // Bloco do carrinho de compras
 app.component('shopping_cart', shoppingCart);
 app.component('payment_cart', paymentCart);
