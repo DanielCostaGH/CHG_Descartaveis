@@ -36,12 +36,7 @@
   <div class="lg:hidden container mx-auto w-full my-10  z-20 px-2">
     <div class="flex justify-between">
       <span class="text-xl">Top Marcas!</span>
-      <a class="flex items-center cursor-pointer">
-        <span class="px-4">Ver Todos</span>
-        <v-icon><img :src="simple_arrow" alt=""></v-icon>
-      </a>
     </div>
-    <hr class="border-b-2 border-[#212844] w-3/5 rounded-full my-2" />
 
     <div class="flex my-10 overflow-scroll">
       <div class="flex h-[30vh] w-auto py-2">

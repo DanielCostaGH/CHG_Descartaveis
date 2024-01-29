@@ -76,7 +76,7 @@ export default {
             ],
             selectedColor: null,
             selectedVariation: null,
-
+            
         }
 
     },

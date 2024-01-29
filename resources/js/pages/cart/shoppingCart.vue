@@ -1,6 +1,6 @@
 <template>
     <navbar />
-    <div class="container mx-auto my-5">
+    <div class="container mx-auto my-5 hidden lg:block">
         <div class="flex h-[60vh]">
             <div class="w-4/6">
                 <div v-if="selectedMainAddress" class="p-4 flex shadow-lg rounded-lg mx-5 my-10">
@@ -77,9 +77,88 @@
     </div>
 
 
+    <!-- MOBILE SECTION -->
+    <div class="lg:hidden">
+        <div class="flex flex-wrap">
+            <div class="w-full">
+                <div v-if="selectedMainAddress" class="p-4 flex flex-wrap shadow-lg rounded-lg my-5 mx-3">
+                    <div class="my-5">
+                        <h1 class="">Endereço Principal</h1>
+                        <v-label class="break-line">{{ selectedMainAddress.street }} - {{ selectedMainAddress.number }} - 
+                            {{selectedMainAddress.zipcode }} - {{selectedMainAddress.neighborhood }} - {{ selectedMainAddress.city }} - 
+                            {{selectedMainAddress.state }} 
+                        </v-label>
+                    </div>
+                    <div class="w-full flex justify-end gap-2 items-center">
+                        <v-btn text color="indigo" @click="openEditModal">EDITAR</v-btn>
+                        <v-btn text color="indigo" @click="openSelectModal">SELECIONAR OUTRO</v-btn>
+
+                    </div>
+                </div>
+                <div v-else class="p-4 flex shadow-lg rounded-lg mx-5 my-10 justify-between">
+                    <v-label>Nenhum endereço principal definido.</v-label>
+                    <v-btn @click="openNewAddress" text color="primary">Adicionar Endereço</v-btn>
+                </div>
+
+                <div class="my-10 p-2">
+
+                    <div v-if="empty">
+                        <v-label class="text-h6 break-line">Carrinho vazio. Adicione produtos!</v-label>
+                    </div>
+                    
+                    <div v-for="product in products" :key="product.id"
+                        class="py-5 shadow-lg flex items-center justify-between">
+
+                        <div class="flex items-center">
+                            <div class="mx-5 mr-10 w-[10vh] flex justify-center items-center">
+                                <img :src="product.imagePath" alt="Imagem do Produto" class="max-h-[10vh]">
+                            </div>
+
+                            <div>
+                                <a :href="`/products/${product.id}`" class="product-link">{{ product.name }}</a> <br>
+                                <v-label class="break-line">preço: {{ product.price }}, variação: {{ product.variation }}, cor: {{
+                                    product.color }}</v-label>
+
+                                <div class="flex">
+                                    <div class="flex gap-4">
+                                        <button @click="decreaseQuantity(product)">
+                                            <v-icon>mdi-minus-circle-outline</v-icon>
+                                        </button>
+
+                                        <div>
+                                            <span v-text="product.quantity"></span>
+                                        </div>
+
+                                        <button @click="increaseQuantity(product)">
+                                            <v-icon>mdi-plus-circle-outline</v-icon>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div>
+                            <button @click="removeProduct(product)">
+                                <v-icon size="25" class="hover hover:bg-indigo mx-4">mdi-delete-outline</v-icon>
+                            </button>
+                        </div>
+
+
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="lg:block flex mx-auto w-full">
+                <cartSummary :totalPrice="totalPrice" :products="products" :selectedMainAddress="selectedMainAddress" />
+            </div>
+        </div>
+    </div>
+
     <!-- Editar endereço -->
     <v-dialog v-model="showEditModal">
-        <v-card class="container mx-auto w-3/5">
+        <v-card class="container mx-auto w-full sm:w-4/5 md:w-3/5">
             <v-card-title>Editar Endereço</v-card-title>
             <v-card-text>
                 <v-text-field v-model="editAddress.street" label="Rua"></v-text-field>
@@ -98,7 +177,7 @@
 
     <!-- Selecionar Endereço -->
     <v-dialog v-model="showSelectModal">
-        <v-card class="container mx-auto w-3/5">
+        <v-card class="container mx-auto w-full sm:w-4/5 md:w-3/5">
             <v-card-title>Selecionar Novo Endereço</v-card-title>
             <v-card-text>
                 <v-list>
@@ -113,36 +192,35 @@
 
     <!-- Adicionar endereço -->
     <v-dialog v-model="showNewAddressModal">
-        <v-card class="w-3/6 mx-auto flex flex-wrap">
-            <v-card-title class="text-xl font-medium">Gerenciar Endereços</v-card-title>
+        <v-card class="container mx-auto w-full sm:w-4/5 md:w-3/5">
+            <v-card-title class="text-xl font-medium">Adicionar Endereço</v-card-title>
             <v-card-text>
                 <v-form ref="form" v-model="valid" lazy-validation>
                     <div class="flex flex-wrap">
 
-                        <div class="flex w-full">
-                            <v-text-field v-model="formData.zipcode" label="CEP" outlined dense class="mb-4 mr-5 w-1/3"
+                        <div class="flex flex-wrap w-full">
+                            <v-text-field v-model="formData.zipcode" label="CEP" outlined dense class="sm:mb-4 sm:mr-5 w-full sm:w-1/3"
                                 @blur="buscarEnderecoPorCEP"></v-text-field>
                             <v-text-field v-model="formData.street" label="Rua" outlined dense
-                                class="mb-4  w-2/3"></v-text-field>
-
+                                class="sm:mb-4 w-2/3"></v-text-field>
                         </div>
 
-                        <div class="flex w-full">
+                        <div class="flex flex-wrap w-full">
                             <v-text-field v-model="formData.neighborhood" label="Bairro" outlined dense
-                                class="mb-4  w-2/6"></v-text-field>
+                                class="sm:mb-4 w-full sm:w-2/6"></v-text-field>
                             <v-text-field v-model="formData.number" label="Número" outlined dense
-                                class="mb-4 ml-5 w-1/6"></v-text-field>
+                                class="sm:mb-4 w-full sm:ml-5 sm:w-1/6"></v-text-field>
 
                             <v-text-field v-model="formData.city" label="Cidade" outlined dense
-                                class="mb-4 ml-5 w-3/6"></v-text-field>
+                                class="sm:mb-4 w-full sm:ml-5 sm:w-3/6"></v-text-field>
                         </div>
 
-                        <div class="flex w-full">
+                        <div class="flex flex-wrap w-full">
                             <v-text-field v-model="formData.state" label="Estado" outlined dense
-                                class="mb-4 mr-5"></v-text-field>
+                                class="sm:mb-4 sm:mr-5 w-full"></v-text-field>
 
-                            <v-btn @click="adicionarEndereco" class="rounded-full bg-blue-darken-2 pt-5 pb-9">
-                                <v-icon class="mr-2">mdi-plus</v-icon>
+                            <v-btn @click="adicionarEndereco" class="w-full sm:w-auto rounded-full bg-blue-darken-2 pt-5 pb-9">
+                                <v-icon class="sm:mr-2">mdi-plus</v-icon>
                                 Adicionar Endereço
                             </v-btn>
                         </div>
@@ -343,6 +421,23 @@ export default {
 
         },
 
+        buscarEnderecoPorCEP() {
+            if (/^\d{5}[-]?\d{3}$/.test(this.formData.zipcode)) {
+                axios.get(`https://viacep.com.br/ws/${this.formData.zipcode}/json/`)
+                    .then(response => {
+                        this.formData.street = response.data.logradouro || '';
+                        this.formData.city = response.data.localidade || '';
+                        this.formData.state = response.data.uf || '';
+                        this.formData.neighborhood = response.data.bairro || '';
+                    })
+                    .catch(error => {
+                        alert('Erro ao buscar endereço por CEP:', error);
+                    });
+            } else {
+                console.warn('CEP inválido');
+            }
+        },
+
     },
 
     mounted() {
@@ -366,4 +461,10 @@ export default {
     text-decoration: underline;
 
 }
+
+.break-line {
+    white-space: normal;
+    word-wrap: break-word;
+}
+
 </style>

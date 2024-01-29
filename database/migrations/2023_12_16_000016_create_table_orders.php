@@ -19,8 +19,8 @@ return new class extends Migration
             $table->foreignId('cart_id')->constrained('shopping_carts')->onDelete('cascade');
             $table->foreignId('address_id')->constrained('user_addresses')->onDelete('cascade');
             $table->decimal('total_price', 8, 2);
-            $table->enum('payment_method', ['credit_card', 'paypal', 'bank_transfer']);
-            $table->enum('status', ['processing', 'shipped', 'delivered', 'cancelled'])->default('processing');
+            $table->enum('payment_method', ['credit_card', 'boleto', 'pix']);
+            $table->enum('status', ['pending', 'shipped', 'delivered', 'cancelled'])->default('pending');
             $table->timestamps();
         });
 

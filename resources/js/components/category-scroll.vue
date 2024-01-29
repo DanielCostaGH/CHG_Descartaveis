@@ -43,14 +43,6 @@
                 <v-col cols="auto">
                     <span class="text-h6 ml-2">Top Categorias!</span>
                 </v-col>
-                <v-col cols="auto" class="text-right">
-                    <v-btn class="mx-2" text :href="'/products'">
-                        Ver Todos
-                        <v-icon right>
-                            mdi-arrow-right
-                        </v-icon>
-                    </v-btn>
-                </v-col>
             </v-row>
 
 

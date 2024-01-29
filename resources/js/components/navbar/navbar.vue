@@ -64,11 +64,14 @@
 
 
             </div>
-            <div class="w-5/6 mx-auto px-4 my-4 relative">
-                <img class="absolute left-4 top-1/2 transform -translate-y-1/2 px-4" :src="search" alt="icon">
-                <input type="text"
-                    class="rounded-lg bg-[#F3F9FB] shadow-md p-4 pl-12 w-full focus:border-2 focus:outline-none focus:border-gray-400 text-lg"
+            <div class="mx-auto px-6 my-4 relative flex">
+                <input type="text" v-model="searchQuery" @keyup.enter="searchProducts"
+                    class="rounded-lg bg-[#F3F9FB] p-4 pl-12 w-full shadow focus:shadow-lg focus:outline-none focus:border-gray-400 text-lg"
                     placeholder="Pesquise o que procura" />
+
+                <button @click="searchProducts" class="relative p-2">
+                    <img class="h-6 w-6" :src="search" alt="Ícone de pesquisa">
+                </button>
             </div>
 
             <div :class="{ 'mobile-menu': menuOpen }" class="relative duration-300 border-white md:hidden">
@@ -80,7 +83,7 @@
                     </li>
                     <li class="my-4 flex items-center justify-center hover:underline">
                         <img class="mr-2" :src="cart" alt="">
-                        <a :href="userInfo ? `/cart/${userInfo.id}` : '#'">Carrinho</a>
+                        <a :href="cartUrl">Carrinho</a>
                     </li>
                 </ul>
             </div>

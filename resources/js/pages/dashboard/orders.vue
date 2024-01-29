@@ -19,6 +19,7 @@ import axios from 'axios';
 export default {
     data() {
         return {
+            orders: []
         };
     },
 
@@ -28,10 +29,17 @@ export default {
     },
 
     mounted() {
+        
     },
 
     methods: {
-       
+        getPendingOrders() {
+            axios.get('api/get-pedings-orders')
+            .then(response => {
+                console.log(response.data);
+                this.orders = response.data;
+            })
+        }
     },
 };
 </script>

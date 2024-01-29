@@ -11,4 +11,9 @@ class TokenFrete extends Model
 
     protected $table = 'token_frete';
     protected $fillable = ['access_token', 'expires_at', 'user_id'];
+
+
+    public static function getToken(){
+        return self::where('expires_at', '>', now())->first();
+    }
 }

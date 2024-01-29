@@ -60,6 +60,32 @@
         </v-expansion-panel>
     </v-expansion-panels>
 
+    <v-dialog v-model="dialogDeleteSuccess" transition="dialog-bottom-transition" persistent max-width="500">
+        <v-card height="300" class="pa-3 rounded-xl">
+            <v-card-text>
+                <div class="flex flex-wrap justify-center items-center">
+                    <div class="w-full flex justify-center my-5">
+                        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130.2 130.2" class="svg2">
+                            <circle class="path circle" fill="none" stroke="#73AF55" stroke-width="6" stroke-miterlimit="10"
+                                cx="65.1" cy="65.1" r="62.1" />
+                            <polyline class="path check" fill="none" stroke="#73AF55" stroke-width="6"
+                                stroke-linecap="round" stroke-miterlimit="10" points="100.2,40.2 51.5,88.8 29.8,67.5 " />
+                        </svg>
+                    </div>
+
+                    <div>
+                        <span class="font-weight-bold text-green-darken-3">Categorias atualizadas com sucesso!</span>
+                    </div>
+                </div>
+
+
+            </v-card-text>
+            <v-card-actions class="justify-center">
+                <v-btn class="bg-green-darken-3" color="gray darken-1" text @click="closeDialogDeleteSuccess">OK</v-btn>
+            </v-card-actions>
+        </v-card>
+    </v-dialog>
+
     <v-alert class="alert-container text-xl elevation-5 custom-border " v-model="alert.show" :type="alert.type" dismissible>
         {{ alert.text }}
     </v-alert>
@@ -75,10 +101,11 @@ export default {
             categories: [],
             editedCategories: [],
             selectedCategories: [],
+            dialogDeleteSuccess: false,
             alert: {
                 show: false,
                 text: '',
-                type: '' // 'success' para sucesso e 'error' para erro
+                type: '' 
             },
         };
     },
@@ -131,7 +158,7 @@ export default {
         saveChanges() {
             axios.post('/api/main-categories/update', { categories: this.editedCategories })
                 .then(response => {
-                    this.showAlert('Principais categorias atualizadas com sucesso!', 'success');
+                    this.openDialogDeleteSuccess();
                 })
                 .catch(error => {
                     console.error('Erro ao salvar categorias:', error);
@@ -147,7 +174,14 @@ export default {
             setTimeout(() => {
                 this.alert.show = false;
             }, 2000); // 3000 milissegundos = 3 segundos
-        }
+        },
+
+        openDialogDeleteSuccess() {
+            this.dialogDeleteSuccess = true;
+        },
+        closeDialogDeleteSuccess() {
+            this.dialogDeleteSuccess = false;
+        },
 
 
     },

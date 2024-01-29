@@ -24,4 +24,8 @@ class Order extends Model
         return $this->belongsTo(UserAddress::class, 'address_id');
     }
 
+    public static function getPendingOrders(){
+        return self::where('status','pending')->get();
+    }
+
 }

@@ -1,10 +1,7 @@
 <template>
     <!-- Resumo -->
-    <div class="w-2/6 min-h-[80vh] mx-5 my-10 rounded-lg shadow-lg">
+    <div class="w-full md:w-full lg:w-2/6 sm:min-h-[80vh] sm:mx-5 my-10 rounded-lg shadow-lg">
 
-        <div>
-
-        </div>
         <div class="p-7 text-h5 font-weight-bold flex items-center">
             <v-icon color="#2B9D44">mdi-file-search</v-icon>
             <span class="text-gray-600 mx-4">Resumo</span>
@@ -22,7 +19,7 @@
             }}</span> </span>
         </div>
 
-        <div class="w-5/6 mx-auto px-5">
+        <div class="sm:w-5/6 lg:w-5/6  md:w-3/6 w-full mx-auto px-5">
             <v-btn @click="onButton1Click" color="#2B9D44" block large dark class="my-5 text-h6" rounded="lg"
                 style="padding-top: 1.6rem; padding-bottom: 1.6rem;">
                 <v-icon left class="mr-3 text-h4">
@@ -40,13 +37,13 @@
             </v-btn>
         </div>
 
-        <div v-if="cartStep !== 'confirmation'" class="w-5/6 mx-auto px-5">
+        <div v-if="cartStep !== 'confirmation'" class="lg:w-5/6 md:w-3/6 mx-auto px-5 my-5">
             <v-label>Calcular frete</v-label>
             <v-text-field v-model="destinationPostalCode" placeholder="Digite o CEP de destino"></v-text-field>
             <v-btn @click="calculateFrete">Calcular</v-btn>
         </div>
 
-        <div v-if="freteList.length > 0">
+        <div v-if="freteList.length > 0" class="my-10">
             <v-list>
                 <v-list-item v-for="(frete, index) in freteList" :key="index">
                     {{ frete.service_name }} - R$ {{ frete.price }}

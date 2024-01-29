@@ -113,6 +113,8 @@ Route::group(['prefix' => 'api'], function () {
     Route::post('get-config', [SettingsController::class, 'getConfigValue']);
     Route::get('/redirect-to-melhor-envio', [MelhorEnvioController::class,'redirectToProvider']);
     Route::post('calculate-frete', [MelhorEnvioController::class, 'calculate']);
+    Route::get('/get-access-token', [GetApiDataController::class,'getAccessToken']);
+    Route::get('get-pedings-orders', [OrderController::class,'getPendingOrders']);
 });
 
 Route::middleware('auth:user')->get('/api/get', [UserController::class, 'getUser']);

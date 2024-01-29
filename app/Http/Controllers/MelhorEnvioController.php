@@ -36,12 +36,19 @@ class MelhorEnvioController extends Controller
             return response()->json(['error' => 'Token de acesso não recebido.'], 500);
         }
 
-        $token = new TokenFrete();
-        $token->access_token = $tokenResponse['access_token'];
-        $token->expires_at = now()->addSeconds($tokenResponse['expires_in']);
-        $token->save();
+        $tokenData = [
+            'access_token' => $tokenResponse['access_token'],
+            'expires_at' => now()->addSeconds($tokenResponse['expires_in']),
+        ];
 
-        return redirect('/dashboard');
+        $existingToken = TokenFrete::first();
+        if ($existingToken) {
+            $existingToken->update($tokenData);
+        } else {
+            TokenFrete::create($tokenData);
+        }
+
+        return redirect('/dashboard/config');
     }
 
 
@@ -59,14 +66,16 @@ class MelhorEnvioController extends Controller
 
         $response = $client->request('POST', 'https://sandbox.melhorenvio.com.br/api/v2/me/shipment/calculate', [
             'headers' => [
-                'Authorization' => 'Bearer ' . $token,
-                'Content-Type' => 'application/json',
+              'Accept' => 'application/json',
+              'Authorization' => 'Bearer ' . $token,
+              'Content-Type' => 'application/json',
+              'User-Agent' => 'CHG Descatáveis (dfscs.costa@gmail.com)'
             ],
             'json' => [
                 'from' => ['postal_code' => $fromPostalCode],
                 'to' => ['postal_code' => $toPostalCode],
                 'volumes' => $products,
-                'services' => '1,2,3,4,12,15,16,17,22,27,28,29,30,31,32,33',
+                'services' => '1,2,3,4,17',
                 'options' => [
                     'receipt' => false,
                     'own_hand' => false

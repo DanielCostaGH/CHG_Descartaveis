@@ -14,7 +14,7 @@
                         <p class="text-3xl font-bold">{{ totalProducts }}</p>
                     </div>
                     <div
-                        class="bg-gradient-to-br from-purple_gradient-light to-purple_gradient-dark text-white p-4 rounded-lg">
+                        class="bg-gradient-to-br from-blue_gradient-light to-blue_gradient-dark p-4 text-white rounded-lg text-white p-4 rounded-lg">
                         <h3 class="text-xl font-semibold">Total de Categorias</h3>
                         <p class="text-3xl font-bold">{{ this.totalCategories }}</p>
                     </div>

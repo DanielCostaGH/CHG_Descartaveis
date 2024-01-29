@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Color;
 use App\Models\Product;
+use App\Models\TokenFrete;
 use Illuminate\Http\Request;
 
 class GetApiDataController extends Controller
@@ -18,5 +19,10 @@ class GetApiDataController extends Controller
     {
         $variations = explode(';', Product::find($id)->variation);
         return response()->json($variations);
+    }
+
+    public function getAccessToken(){
+        $token = TokenFrete::getToken();
+        return response()->json($token);
     }
 }
