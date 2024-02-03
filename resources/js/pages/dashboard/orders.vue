@@ -36,7 +36,6 @@ export default {
         getPendingOrders() {
             axios.get('api/get-pedings-orders')
             .then(response => {
-                console.log(response.data);
                 this.orders = response.data;
             })
         }

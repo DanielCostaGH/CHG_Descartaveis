@@ -319,7 +319,6 @@ export default {
                     this.emptyCart();
                 })
                 .catch(error => {
-                    console.log("Erro ao recuperar os itens do carrinho", error);
                 })
         },
 
@@ -393,7 +392,6 @@ export default {
         },
 
         openNewAddress() {
-            console.log('aqui');
             this.showNewAddressModal = true;
         },
 
@@ -410,7 +408,6 @@ export default {
                 neighborhood
             })
                 .then(response => {
-                    console.log('Endereço salvo com sucesso:', response);
                     this.fetchAddresses();
                     this.showNewAddressModal = false;
                 })

@@ -44,7 +44,6 @@ export default {
         },
 
         fetchProducts(filters = {}) {
-            console.log('Filtros aplicados:', filters);
             axios.get('/api/products', { params: filters })
                 .then(response => {
                     this.products = response.data;

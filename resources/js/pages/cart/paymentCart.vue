@@ -212,7 +212,6 @@ export default {
                     this.products = response.data.map(item => {
                         const firstImageName = item.product.images.split(';')[0];
                         const imagePath = `/images/products/${item.product.id}/${firstImageName}`;
-                        console.log(this.userInfo.id);
 
                         return {
                             ...item.product,
@@ -228,7 +227,7 @@ export default {
                     this.emptyCart();
                 })
                 .catch(error => {
-                    console.log("Erro ao recuperar os itens do carrinho", error);
+                    console.error("Erro ao recuperar os itens do carrinho:", error);
                 })
         },
 

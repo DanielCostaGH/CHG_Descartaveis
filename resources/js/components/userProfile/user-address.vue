@@ -135,7 +135,6 @@ export default {
                 neighborhood
             })
                 .then(response => {
-                    console.log('Endereço salvo com sucesso:', response);
                     this.fetchAddresses();
                 })
                 .catch(error => {
@@ -220,7 +219,6 @@ export default {
                 const enderecoPrincipal = this.userAddresses[this.selectedMainAddress];
 
                 if (enderecoPrincipal && enderecoPrincipal.id) {
-                    console.log('Endereço Principal:', enderecoPrincipal);
 
                     axios.post(`/user/set_main_address`, { addressId: enderecoPrincipal.id })
                         .then(response => {
@@ -246,7 +244,6 @@ export default {
                 this.showEditModal = true;
             } else {
                 console.error("Índice de endereço inválido");
-                console.log(this.userAddresses, index);
             }
         }
 

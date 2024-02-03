@@ -81,7 +81,6 @@ axios.get('/api/get')
         store.dispatch('setUser', response.data);
     })
     .catch(error => {
-        console.error('Erro:', error);
     });
 
 app.component('app', App);

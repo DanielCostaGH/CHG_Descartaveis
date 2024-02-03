@@ -191,7 +191,6 @@ export default {
             axios.get('/api/slides/get')
                 .then(response => {
                     this.computedImages = response.data;
-                    console.log(response.data)
                     if (this.computedImages.length > 0) {
                         this.selectImage(this.computedImages[0]);
                     }
