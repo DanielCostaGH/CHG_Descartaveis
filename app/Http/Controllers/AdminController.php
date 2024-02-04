@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\AdminRequest;
 use App\Models\Admin;
+use App\Models\PersonalAccessTokens;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -31,6 +33,9 @@ class AdminController extends Controller
 
     public function login(Request $request)
     {
+        $currentDateTime = Carbon::now();
+        $expiresAt = $currentDateTime->addMonth();
+
         $request->validate([
             'email' => 'required|string',
             'password' => 'required|string',
@@ -39,6 +44,11 @@ class AdminController extends Controller
         if (Auth::guard('admin')->attempt($request->only('email', 'password'))) {
             $admin = Admin::where('email', $request->email)->first();
             $token = $admin->createToken('auth_token')->accessToken;
+            $token->admin_id = $admin->id;
+            $token->expires_at = $expiresAt;
+            $token->user_id = null;
+
+            $token->save();
 
             $response = ['admin' => $admin, 'token' => $token];
             return response()->json($response, 200);
@@ -132,9 +142,16 @@ class AdminController extends Controller
         //
     }
 
-    public function logout()
+    public function logout(Request $request)
     {
-        auth()->user()->currentAccessToken()->delete();
-        return redirect()->route('admin.login');
+        $admin = Admin::where('email', $request->email)->first();
+
+        $tokens = PersonalAccessTokens::where('user_id', $admin->id)->get();
+
+        foreach ($tokens as $token) {
+            $token->delete();
+        }
+        
+        return response()->json(['message' => 'Logout realizado com sucesso'], 200);
     }
 }

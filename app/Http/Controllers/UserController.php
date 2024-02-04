@@ -5,13 +5,16 @@ namespace App\Http\Controllers;
 use App\Http\Requests\UserRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\Http\Requests\UserAddAdressRequest;
+use App\Models\PersonalAccessTokens;
 use App\Models\User;
 use App\Models\UserAddress;
+use Carbon\Carbon;
 use Error;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
+use Laravel\Sanctum\PersonalAccessToken;
 
 class UserController extends Controller
 {
@@ -42,6 +45,9 @@ class UserController extends Controller
 
     public function login(Request $request)
     {
+        $currentDateTime = Carbon::now();
+        $expiresAt = $currentDateTime->addMonth();
+
         $request->validate([
             'email' => 'required|string',
             'password' => 'required|string',
@@ -50,7 +56,11 @@ class UserController extends Controller
         if (Auth::guard('user')->attempt($request->only('email', 'password'))) {
             $user = User::where('email', $request->email)->first();
             $token = $user->createToken('auth_token_user')->accessToken;
-
+            $token->user_id = $user->id;
+            $token->expires_at = $expiresAt;
+            $token->admin_id = null;
+            
+            $token->save();
 
             $response = ['user' => $user, 'token' => $token];
             return response()->json($response, 200);
@@ -281,5 +291,18 @@ class UserController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function logout(Request $request)
+    {
+        $user = User::where('email', $request->email)->first();
+
+        $tokens = PersonalAccessTokens::where('user_id', $user->id)->get();
+
+        foreach ($tokens as $token) {
+            $token->delete();
+        }
+        
+        return response()->json(['message' => 'Logout realizado com sucesso'], 200);
     }
 }

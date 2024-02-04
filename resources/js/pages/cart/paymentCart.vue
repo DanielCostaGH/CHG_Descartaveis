@@ -129,10 +129,10 @@
         <v-card>
             <v-card-title class="headline">Adicionar Novo Cartão</v-card-title>
             <v-card-text>
-                <v-text-field label="Número do Cartão"></v-text-field>
-                <v-text-field label="Nome no Cartão"></v-text-field>
-                <v-text-field label="Data de Validade"></v-text-field>
-                <v-text-field label="CVC"></v-text-field>
+                <v-text-field v-model="cardNumber" label="Número do Cartão"></v-text-field>
+                <v-text-field v-model="cardHolder" label="Nome no Cartão"></v-text-field>
+                <v-text-field v-model="cardExpiration" label="Data de Validade"></v-text-field>
+                <v-text-field v-model="cardCvv" label="CVV"></v-text-field>
             </v-card-text>
             <v-card-actions>
                 <v-spacer></v-spacer>
@@ -321,6 +321,27 @@ export default {
         },
         addNewCard() {
             this.showAddCardDialog = false;
+
+            const expirationParts = this.cardExpiration.split('/');
+            const expirationMonth = expirationParts[0]; // Mês
+            const expirationYear = expirationParts[1]; // Ano
+
+            const cardData = {
+                card_number: this.cardNumber,
+                card_holder: this.cardHolder,
+                expiration_mouth: expirationMonth,
+                expiration_year: expirationYear,
+                card_cvv: this.cardCvv,
+                user_id: this.userInfo ? this.userInfo.id : '',
+            };
+
+            axios.post('/user/createcard', cardData)
+                .then(response => {
+                    console.log(response.data);
+                })
+                .catch(error => {
+                    console.error(error);
+                });
         },
 
         createOrder() {

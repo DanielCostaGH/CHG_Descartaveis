@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\PersonalAccessTokens;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -18,8 +19,13 @@ class AdminAuthMiddleware
     public function handle(Request $request, Closure $next)
         {
             if (Auth::guard('admin')->check()) {
+                $token = PersonalAccessTokens::where('admin_id', Auth::guard('admin')->id())
+                                          ->first();
+
+            if ($token && $token->expires_at > now()) {
                 return $next($request);
             }
+        }
     
             return redirect()->route('admin.login');
         }

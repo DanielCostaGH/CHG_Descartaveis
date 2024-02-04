@@ -67,18 +67,13 @@
                         </a>
                     </li>
 
-                    <li class="my-4  w-full">
-                        <a class="flex w-full items-center p-5 rounded-lg hover:bg-[#F3F4F5] hover:shadow-lg active:bg-gray-200 cursor-pointer text-gray-500"
-                            @click="logoutAction">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
-                                stroke="currentColor" class="w-6 h-6 mr-3">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
-                            </svg>
+                    <button @click="logout" class="flex w-full items-center p-5 rounded-lg hover:bg-[#F3F4F5] hover:shadow-lg active:bg-gray-200 cursor-pointer text-gray-500">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6 mr-3">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
+                        </svg>
+                        Sair
+                    </button>
 
-
-                            Sair</a>
-                    </li>
 
                 </ul>
 
@@ -133,6 +128,24 @@ export default {
         selectComponent(componentName) {
             this.selectedComponent = componentName;
         },
+        async logout() {
+            try {
+                // Realiza uma requisição para a rota de logout
+                const response = await axios.post('/user/logout', {
+                    email: this.userInfo.email,
+                });
+
+                // Verifica o status da resposta
+                if (response.status === 200) {
+                    // Se a requisição for bem-sucedida, redirecione o usuário para a página de login
+                    window.location.href = '/user/login'; 
+                } else {
+                    console.error('Falha ao efetuar logout');
+                }
+            } catch (error) {
+                console.error('Erro ao efetuar logout:', error);
+            }
+        }
     },
 };
 </script>
