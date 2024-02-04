@@ -15,13 +15,14 @@ return new class extends Migration
     {
         Schema::create('payment', function (Blueprint $table) {
             $table->id();
+            $table->string('surname', 100);
             $table->string('cardtype', 255);
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
             $table->string('last_four', 255);
-            $table->string('card_token', 255);
+            $table->string('card_token', 255)->nullable();
             $table->integer('is_default');
-            $table->string('encrypted', 255);
+            $table->text('encrypted');
             $table->timestamps();
         });
     }

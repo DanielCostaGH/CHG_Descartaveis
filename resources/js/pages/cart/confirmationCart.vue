@@ -29,7 +29,7 @@
                 <v-list-item>
                   <v-list-item-content>
                     <v-list-item-title>Método de Pagamento</v-list-item-title>
-                    <v-list-item-subtitle>{{ order.paymentMethod.name }}</v-list-item-subtitle>
+                    <v-list-item-subtitle>{{ order.paymentMethod }}</v-list-item-subtitle>
                   </v-list-item-content>
                 </v-list-item>
                 <v-list-item>
@@ -115,7 +115,7 @@ export default {
 
       axios.post('/api/create-order', simplifiedOrder)
         .then(response => {
-          
+
         })
         .catch(error => {
         });

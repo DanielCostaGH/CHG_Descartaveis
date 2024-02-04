@@ -1,6 +1,8 @@
 <template>
     <navbar />
-    <div class="container mx-auto my-5">
+
+    <!-- DESKTOP -->
+    <div class="container mx-auto my-5 hidden lg:block">
         <div class="flex h-[60vh]">
             <div class="w-4/6">
 
@@ -61,6 +63,71 @@
 
 
             <cartSummary :totalPrice="totalPrice" />
+        </div>
+    </div>
+
+     <!-- MOBILE SECTION -->
+     <div class="lg:hidden">
+        <div class="flex flex-wrap">
+            <div class="w-full">
+
+                <div class="p-4 flex shadow-lg rounded-lg mx-5 my-10 justify-between">
+                    <v-btn href="/user/login" text color="primary">Adicionar Endereço</v-btn>
+                </div>
+
+                <div class="my-10 p-2">
+
+                    <div v-if="empty">
+                        <v-label class="text-h6 break-line">Carrinho vazio. Adicione produtos!</v-label>
+                    </div>
+                    
+                    <div v-for="product in products" :key="product.id"
+                        class="py-5 shadow-lg flex items-center justify-between">
+
+                        <div class="flex items-center">
+                            <div class="mx-5 mr-10 w-[10vh] flex justify-center items-center">
+                                <img :src="product.imagePath" alt="Imagem do Produto" class="max-h-[10vh]">
+                            </div>
+
+                            <div>
+                                <a :href="`/products/${product.id}`" class="product-link">{{ product.name }}</a> <br>
+                                <v-label class="break-line">preço: {{ product.price }}, variação: {{ product.variation }}, cor: {{
+                                    product.color }}</v-label>
+
+                                <div class="flex">
+                                    <div class="flex gap-4">
+                                        <button @click="decreaseQuantity(product)">
+                                            <v-icon>mdi-minus-circle-outline</v-icon>
+                                        </button>
+
+                                        <div>
+                                            <span v-text="product.quantity"></span>
+                                        </div>
+
+                                        <button @click="increaseQuantity(product)">
+                                            <v-icon>mdi-plus-circle-outline</v-icon>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div>
+                            <button @click="removeProduct(product)">
+                                <v-icon size="25" class="hover hover:bg-indigo mx-4">mdi-delete-outline</v-icon>
+                            </button>
+                        </div>
+
+
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="lg:block flex mx-auto w-full">
+                <cartSummary :totalPrice="totalPrice" :products="products" :selectedMainAddress="selectedMainAddress" />
+            </div>
         </div>
     </div>
 </template>

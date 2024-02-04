@@ -28,12 +28,11 @@
                 <div class="p-4 flex shadow-lg rounded-lg mx-5">
                     <div class="w-4/6">
                         <h1 class="">Método de pagamento</h1>
-                        <v-label v-if="selectedPaymentMethod">{{ selectedPaymentMethod.name }}</v-label>
+                        <v-label v-if="selectedPaymentMethod">{{ selectedPaymentMethod }}</v-label>
                         <v-label v-else>Selecione um método de pagamento</v-label>
                     </div>
                     <div class="w-full flex justify-end gap-2 items-center">
                         <v-btn text color="primary" @click="openPaymentMethod">TROCAR</v-btn>
-
                     </div>
                 </div>
 
@@ -104,24 +103,39 @@
         <v-card>
             <v-card-title class="headline flex justify-between align-center">
                 <span class="font-weight-bold text-gray-500">Métodos de pagamento</span>
-                <v-btn icon="mdi-close" variant="text" @click="showPaymentMethod = false"></v-btn>
+                <v-btn icon @click="showPaymentMethod = false"><v-icon>mdi-close</v-icon></v-btn>
             </v-card-title>
             <v-list>
-                <v-list-item v-for="method in paymentMethods" :key="method.id" @click="selectedPaymentMethod = method"
-                    :class="{ 'selected-method': selectedPaymentMethod === method }">
+                <!-- Opção PIX -->
+                <v-list-item @click="selectPaymentMethod('PIX')">
                     <v-list-item-content>
-                        <v-list-item-title>{{ method.name }}</v-list-item-title>
+                        <v-list-item-title>PIX</v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
+
+                <!-- Opção Boleto Bancário -->
+                <v-list-item @click="selectPaymentMethod('Boleto Bancário')">
+                    <v-list-item-content>
+                        <v-list-item-title>Boleto Bancário</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+
+                <!-- Opção Cartões de Crédito -->
+
+                <v-select label="Cartões de Crédito"
+                    :items="cards.map(card => `${card.cardtype.toUpperCase()} ${card.display}`)" v-model="selectedCard">
+                </v-select>
+
 
             </v-list>
             <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="primary" text @click="showAddCardDialog = true">Adicionar cartão</v-btn>
+                <v-btn color="primary" text @click="showAddCardDialog = true">Adicionar Novo Cartão</v-btn>
                 <v-btn color="primary" @click="confirmPaymentMethod">Confirmar</v-btn>
             </v-card-actions>
         </v-card>
     </v-dialog>
+
 
 
     <!-- Formulário para adicionar cartão -->
@@ -161,11 +175,15 @@ export default {
             showPaymentMethod: false,
             showAddCardDialog: false,
             editAddress: {},
+            selectedCard: '',
             selectedPaymentMethod: '',
-            paymentMethods: [
-                { id: 1, name: 'PIX' },
-                { id: 2, name: 'Boleto Bancário' }
-            ],
+            selectedPayMode: '',
+            cardNumber: '',
+            cardHolder: '',
+            cardExpiration: '',
+            cardCvv: '',
+            cards: [],
+
         };
     },
 
@@ -191,6 +209,23 @@ export default {
 
 
     methods: {
+
+        fetchCards() {
+            axios.post('/user/get-cards')
+                .then(response => {
+                    this.cards = response.data.map(card => ({
+                        id: card.id,
+                        cardtype: card.cardtype,
+                        display: `**** **** **** ${card.last_four}`,
+                        last_four: card.last_four
+                    }));
+                })
+                .catch(error => {
+                    console.error('Erro ao buscar cartões:', error);
+                });
+        },
+
+
         fetchAddresses() {
             axios.get(`/user/get_address`)
                 .then(response => {
@@ -296,18 +331,30 @@ export default {
         },
 
         openPaymentMethod() {
+            this.selectedPaymentMethod = '';
+            this.selectedCard = '';
             this.showPaymentMethod = true;
         },
 
-        selectPaymentMethod(item) {
-            this.selectedPaymentMethod = item;
+        selectPaymentMethod(selection) {
+            this.selectedPayMode = selection;
         },
 
         confirmPaymentMethod() {
+            // Verifica se existe uma seleção de cartão.
+            if (this.selectedCard) {
+                // Atualiza o método de pagamento para o cartão selecionado.
+                this.selectedPaymentMethod = this.selectedCard;
+            } else if (this.selectedPayMode) {
+                // Se não houver cartão selecionado, mas outro método de pagamento foi selecionado (PIX ou Boleto).
+                this.selectedPaymentMethod = this.selectedPayMode;
+            } else {
+                // Se nenhum método de pagamento foi selecionado.
+                alert('Por favor, selecione um método de pagamento.');
+            }
+            // Fecha o diálogo de método de pagamento se um método foi selecionado.
             if (this.selectedPaymentMethod) {
                 this.showPaymentMethod = false;
-            } else {
-                alert('Por favor, selecione um método de pagamento.');
             }
         },
 
@@ -361,7 +408,8 @@ export default {
 
     mounted() {
         this.fetchAddresses(),
-            this.fetchProducts()
+            this.fetchProducts(),
+            this.fetchCards()
     }
 
 

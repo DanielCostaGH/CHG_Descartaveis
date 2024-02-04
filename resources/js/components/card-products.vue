@@ -1,5 +1,5 @@
 <template>
-    <div class="container mx-auto">
+    <div class="container mx-auto hidden md:block lg:block">
         <div class="flex py-8">
             <v-card v-for="(product, index) in productsWithImagePaths" :key="index" :loading="loading" class="card my-4"
                 width="320">
@@ -23,6 +23,35 @@
             </v-card>
         </div>
     </div>
+
+
+
+    <!-- Mobile version -->
+<div class="mobile-container mx-auto md:hidden lg:hidden">
+    <div class="mobile-flex py-8">
+        <v-card v-for="(product, index) in productsWithImagePaths" :key="index" :loading="loading" class="mobile-card my-2"
+            width="180">
+
+            <v-img :src="product.imagePath" fit height="130" class="mb-2"></v-img>
+
+            <v-card-item class="mobile-border-top">
+                <v-card-title class="overflow-hidden text--secondary">{{ product.name }}</v-card-title>
+                <span class="font-weight-bold" style="color: #38a169;">{{ product.price }}</span>
+            </v-card-item>
+
+            <v-card-actions class="justify-center">
+                <v-btn :href="`products/${product.id}`" class="my-custom-button text-white" color="green-accent-4"
+                    variant="flat">
+                    <v-icon class="mx-2">
+                        mdi-eye
+                    </v-icon>
+                    Ver Produto
+                </v-btn>
+            </v-card-actions>
+        </v-card>
+    </div>
+</div>
+
 </template>
 
 <script>
@@ -82,6 +111,24 @@ export default {
 }
 
 .border-top {
+    border-top: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+
+
+/* mobile */
+.mobile-container {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.mobile-flex {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.mobile-border-top {
     border-top: 1px solid rgba(0, 0, 0, 0.12);
 }
 </style>

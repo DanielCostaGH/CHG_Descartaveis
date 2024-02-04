@@ -106,6 +106,7 @@ export default {
             user: '/images/user.svg',
             cart: '/images/buy.svg',
             menuOpen: true,
+            userData: [],
         };
     },
 
@@ -116,14 +117,26 @@ export default {
 
         cartUrl() {
             if (this.userInfo) {
-                return `/cart/${this.userInfo.id}`;
+                return `/cart/${this.userData.id}`;
             } else {
                 return '/local/cart';
             }
         },
     },
 
+    watch: {
+        '$store.state.user': {
+            handler(newValue, oldValue) {
+                this.setUserData();
+            },
+            deep: true,
+        },
+    },
+
     methods: {
+        setUserData() {
+            this.userData = this.userInfo;
+        },
         toggleMenu() {
             this.menuOpen = !this.menuOpen;
         },

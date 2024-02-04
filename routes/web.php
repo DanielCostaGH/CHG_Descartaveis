@@ -52,9 +52,9 @@ Route::group(['prefix' => 'user', 'middleware' => 'UserAuthMiddleware'], functio
     Route::put('/edit_address', [UserController::class, 'updateAddress']);
     Route::delete('/delete_address/{addressId}', [UserController::class, 'deleteAddress']);
     Route::post('/logout', [UserController::class, 'logout'])->name('user.logout');
-
     Route::post('/createcard', [PaymentController::class, 'createCard'])->name('user.createcard');
     Route::get('/get_cards_by_user', [PaymentController::class, 'getCardsByUserId'])->name('user.getcards');
+    Route::post('get-cards', [GetApiDataController::class, 'getCards']);
 });
 
 Route::group(['prefix' => 'products'], function () {
@@ -122,6 +122,7 @@ Route::group(['prefix' => 'api'], function () {
 });
 
 Route::middleware('auth:user')->get('/api/get', [UserController::class, 'getUser']);
+Route::middleware('auth:admin')->get('/api/get-admin', [AdminController::class, 'getAdmin']);
 
 
 Route::group(['prefix' => 'cart', 'middleware' => 'UserAuthMiddleware'], function () {

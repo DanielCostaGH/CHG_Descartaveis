@@ -68,8 +68,8 @@
         </v-card>
     </v-dialog>
 
-     <!-- Metodo de pagamento obrigatorio -->
-     <v-dialog v-model="showDialogPayment">
+    <!-- Metodo de pagamento obrigatorio -->
+    <v-dialog v-model="showDialogPayment">
         <v-card class="mx-auto">
             <v-card-title class="headline">Atenção</v-card-title>
             <v-card-text>
@@ -136,18 +136,6 @@ export default {
             }
         },
 
-        button1Href() {
-            const id = this.userInfo ? this.userInfo.id : '';
-            switch (this.cartStep) {
-                case 'payment':
-                    return `/cart/confirmation/${id}`;
-                case 'confirmation':
-                    return `/cart/buy/${id}`;
-                default:
-                    return `/cart/payment/${id}`;
-            }
-        },
-
         button2Text() {
             return (this.cartStep === 'payment' || this.cartStep === 'confirmation')
                 ? 'Voltar'
@@ -187,6 +175,7 @@ export default {
             const id = this.userInfo ? this.userInfo.id : '';
             switch (this.cartStep) {
                 case 'payment':
+                    this.$emit('continueToConfirmation');
                     nextUrl = `/cart/confirmation/${id}`;
                     break;
                 case 'confirmation':

@@ -83,6 +83,14 @@ axios.get('/api/get')
     .catch(error => {
     });
 
+// Definindo admin global
+axios.get('/api/get-admin')
+.then(response => {
+    store.dispatch('setAdmin', response.data);
+})
+.catch(error => {
+});
+
 app.component('app', App);
 // Bloco de templates do admin
 app.component('admin-login', adminLogin);

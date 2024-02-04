@@ -142,11 +142,21 @@ class AdminController extends Controller
         //
     }
 
+    public function getAdmin() {
+        $adminId = Auth::guard('admin')->id();
+        if ($adminId) {
+            $admin = Admin::getAdminData($adminId);
+            return response()->json($admin);
+        } else {
+            return response()->json(null);
+        }
+    }
+
     public function logout(Request $request)
     {
         $admin = Admin::where('email', $request->email)->first();
 
-        $tokens = PersonalAccessTokens::where('user_id', $admin->id)->get();
+        $tokens = PersonalAccessTokens::where('admin_id', $admin->id)->get();
 
         foreach ($tokens as $token) {
             $token->delete();

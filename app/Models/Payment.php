@@ -31,4 +31,9 @@ class Payment extends Model
 
 		return $this->encrypted;
     }
+
+
+    public static function GetAvaillableCards($userId){
+        return self::where('id', $userId)->get();
+    }
 }
