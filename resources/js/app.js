@@ -34,6 +34,7 @@ import config from './pages/dashboard/config.vue';
 // Bloco de pedidos (orders)
 import orders from './pages/dashboard/orders.vue'
 import ShippedOrders from './pages/dashboard/ShippedOrders.vue'
+import orderDetails from './pages/user/orderDetails.vue'
 // Bloco do carrinho de compras
 import shoppingCart from './pages/cart/shoppingCart.vue'
 import paymentCart from './pages/cart/paymentCart.vue'
@@ -117,6 +118,7 @@ app.component('Config', config);
 // Bloco de pedidos (orders)
 app.component('Orders', orders);
 app.component('shipped-orders', ShippedOrders);
+app.component('order-details', orderDetails)
 // Bloco do carrinho de compras
 app.component('shopping_cart', shoppingCart);
 app.component('payment_cart', paymentCart);

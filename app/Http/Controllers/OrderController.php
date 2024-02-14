@@ -19,4 +19,9 @@ class OrderController extends Controller
         $orders = Order::getPendingOrders();
         return response()->json($orders);
     }
+
+
+    public function orderDetails(){
+        return view("user.order_details");
+    }
 }

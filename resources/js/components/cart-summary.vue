@@ -179,6 +179,7 @@ export default {
                     nextUrl = `/cart/confirmation/${id}`;
                     break;
                 case 'confirmation':
+                    this.$emit('confirmPurchase');
                     nextUrl = `/cart/buy/${id}`;
                     break;
                 default:

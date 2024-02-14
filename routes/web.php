@@ -55,6 +55,7 @@ Route::group(['prefix' => 'user', 'middleware' => 'UserAuthMiddleware'], functio
     Route::post('/createcard', [PaymentController::class, 'createCard'])->name('user.createcard');
     Route::get('/get_cards_by_user', [PaymentController::class, 'getCardsByUserId'])->name('user.getcards');
     Route::post('get-cards', [GetApiDataController::class, 'getCards']);
+    Route::get('/order-details', [OrderController::class, 'orderDetails']);
 });
 
 Route::group(['prefix' => 'products'], function () {
@@ -119,6 +120,7 @@ Route::group(['prefix' => 'api'], function () {
     Route::post('calculate-frete', [MelhorEnvioController::class, 'calculate']);
     Route::get('/get-access-token', [GetApiDataController::class,'getAccessToken']);
     Route::get('get-pedings-orders', [OrderController::class,'getPendingOrders']);
+    Route::post('/save-order', [OrderController::class, 'store']);
 });
 
 Route::middleware('auth:user')->get('/api/get', [UserController::class, 'getUser']);
@@ -130,6 +132,8 @@ Route::group(['prefix' => 'cart', 'middleware' => 'UserAuthMiddleware'], functio
     Route::get('/payment/{id}', [ShoppingCartController::class, 'payment']);
     Route::get('/confirmation/{id}', [ShoppingCartController::class, 'confirmation']);
 });
+
+Route::get('/order-details', [OrderController::class, 'orderDetails']);
 
 // Rotas a parte
 Route::get('/local/cart', [ShoppingCartController::class, 'localCart']);

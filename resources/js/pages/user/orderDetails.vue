@@ -1,7 +1,8 @@
 <template>
   <navbar />
-  <div class="container mx-auto my-5">
-    <div class="flex flex-col md:flex-row">
+  <div class="container mx-auto my-5 flex">
+
+    <div class="flex flex-col md:flex-row w-4/6">
       <div class="flex-grow">
         <div class="mx-5  p-5">
           <v-card class="my-5 h-full">
@@ -23,7 +24,7 @@
                     <v-list-item-title>Endereço de Entrega</v-list-item-title>
                     <v-list-item-subtitle>{{ order.address.street }}, {{ order.address.number }} - {{
                       order.address.neighborhood }}, {{ order.address.city }}, {{ order.address.state
-  }}</v-list-item-subtitle>
+                    }}</v-list-item-subtitle>
                   </v-list-item-content>
                 </v-list-item>
                 <v-list-item>
@@ -60,11 +61,15 @@
           </v-card>
         </div>
       </div>
-      <cartSummary :totalPrice="totalPrice" @confirmPurchase="saveOrder" />
+    </div>
+
+
+    <div class="w-2/6 min-h-[20vh] shadow-lg">
+      <span>Aqui vai o pagamento</span>
     </div>
   </div>
 </template>
-
+  
 <script>
 import navbar from '../../components/navbar/navbar.vue';
 import cartSummary from '../../components/cart-summary.vue';
@@ -113,9 +118,9 @@ export default {
         total: orderData.total
       };
 
-      axios.post('/api/save-order', simplifiedOrder)
+      axios.post('/api/create-order', simplifiedOrder)
         .then(response => {
-          
+
         })
         .catch(error => {
         });
@@ -125,5 +130,6 @@ export default {
   },
 };
 </script>
-
-
+  
+  
+  
