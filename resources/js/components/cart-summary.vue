@@ -94,6 +94,7 @@ export default {
             freteList: [],
             showDialogAddress: false,
             showDialogPayment: false,
+            pendingOrder: '',
         }
     },
 
@@ -159,13 +160,20 @@ export default {
 
     methods: {
 
+        getPendingOrder() {
+            const orderString = localStorage.getItem('order');
+            if (orderString) {
+                this.pendingOrder = JSON.parse(orderString);
+            }
+        },
+
         onButton1Click() {
 
-            if (!this.selectedMainAddress) {
+            if (this.cartStep !== 'confirmation' && !this.selectedMainAddress) {
                 this.showDialogAddress = true;
-                return; // Impede a continuação do método
+                return;
             }
-            // Verificar se o método de pagamento está selecionado na etapa de pagamento
+                // Verificar se o método de pagamento está selecionado na etapa de pagamento
             if (this.cartStep === 'payment' && !this.selectedPaymentMethod) {
                 this.showDialogPayment = true;
                 return;
@@ -180,7 +188,7 @@ export default {
                     break;
                 case 'confirmation':
                     this.$emit('confirmPurchase');
-                    nextUrl = `/cart/buy/${id}`;
+                    nextUrl = `/order-details`;
                     break;
                 default:
                     nextUrl = `/cart/payment/${id}`;
