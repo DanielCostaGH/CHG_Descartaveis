@@ -106,7 +106,7 @@ export default {
       const simplifiedOrder = {
         userId: orderData.userData.id,
         addressId: orderData.address.id,
-        paymentMethod: orderData.paymentMethod.id,
+        paymentMethod: orderData.paymentMethod,
         products: orderData.products.map(product => ({
           id: product.id,
           quantity: product.quantity
@@ -116,7 +116,7 @@ export default {
 
       axios.post('/api/save-order', simplifiedOrder)
         .then(response => {
-
+          window.location.href = '/user/order-details'
         })
         .catch(error => {
         });

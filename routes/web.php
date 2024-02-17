@@ -56,6 +56,7 @@ Route::group(['prefix' => 'user', 'middleware' => 'UserAuthMiddleware'], functio
     Route::get('/get_cards_by_user', [PaymentController::class, 'getCardsByUserId'])->name('user.getcards');
     Route::post('get-cards', [GetApiDataController::class, 'getCards']);
     Route::get('/order-details', [OrderController::class, 'orderDetails']);
+    Route::post('/retrievecardpayment', [PaymentController::class, 'retrieveCardPatyment'])->name('user.retrievecardpayment');
 });
 
 Route::group(['prefix' => 'products'], function () {

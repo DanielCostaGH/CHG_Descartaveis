@@ -20,7 +20,7 @@ return new class extends Migration
             $table->foreignId('address_id')->constrained('user_addresses')->onDelete('cascade');
             $table->decimal('total_price', 8, 2);
             $table->enum('payment_method', ['credit_card', 'boleto', 'pix']);
-            $table->enum('status', ['pending', 'shipped', 'delivered', 'cancelled'])->default('pending');
+            $table->enum('status', ['pending', 'paid', 'shipped', 'delivered', 'cancelled'])->default('pending');
             $table->timestamps();
         });
 
