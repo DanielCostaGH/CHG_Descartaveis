@@ -1,12 +1,10 @@
 <?php
 
-namespace Lib;
+namespace app\Lib;
 
-use Payment;
-use Provider;
-use Transaction;
-use User;
-use LedgerBankAccount;
+use App\Models\Payment;
+use App\Models\Transaction;
+use App\Models\User;
 
 interface IPayment
 {
@@ -24,7 +22,7 @@ interface IPayment
      * 
      * @return Array ['success', 'status', 'captured', 'paid', 'transaction_id']
      */
-    public function chargeWithSplit(Payment $payment, Provider $provider, $totalAmount, $providerAmount, $description, $capture = true, User $user = null);
+    public static function chargeWithSplit(Payment $payment, $totalAmount, $description, $capture = true, User $user = null);
 
     /**
      * Charge a credit card
@@ -72,7 +70,7 @@ interface IPayment
      * 
      * @return Array ['success', 'status', 'captured', 'paid', 'transaction_id']
      */
-    public function captureWithSplit(Transaction $transaction, Provider $provider, $totalAmount, $providerAmount, Payment $payment = null);
+    public function captureWithSplit(Transaction $transaction, $totalAmount, $providerAmount, Payment $payment = null);
 
     /**
      * Capture the payment of an existing, uncaptured, charge
@@ -142,7 +140,7 @@ interface IPayment
      * 
      * @return Array ['success', 'recipient_id']
      */
-    public function createOrUpdateAccount(LedgerBankAccount $ledgerBankAccount);
+    // public function createOrUpdateAccount(LedgerBankAccount $ledgerBankAccount);
 
     /**
      *  Return a gateway fee
@@ -204,24 +202,24 @@ interface IPayment
      */
     public function debit(Payment $payment, $amount, $description);
 
-    /**
-     * Paid the debit transaction with split rules
-     *
-     * @param Object        $payment        Object that represents requester card.
-     * @param Object        $provider       Object that represents provider of the service.
-     * @param Decimal       $totalAmount    A positive decimal representing how much to debit.
-     * @param Decimal       $providerAmount A positive decimal representing how much provider recives into the transaction.
-     * @param String        $description    String that represents details of transaction.
-     *
-     * @return Array       [
-     *                      'success',
-	 *                      'captured',
-	 *                      'paid',
-	 *                      'status',
-	 *                      'transaction_id'
-     *                     ]
-     */
-    public function debitWithSplit(Payment $payment, Provider $provider, $totalAmount, $providerAmount, $description);
+    // /**
+    //  * Paid the debit transaction with split rules
+    //  *
+    //  * @param Object        $payment        Object that represents requester card.
+    //  * @param Object        $provider       Object that represents provider of the service.
+    //  * @param Decimal       $totalAmount    A positive decimal representing how much to debit.
+    //  * @param Decimal       $providerAmount A positive decimal representing how much provider recives into the transaction.
+    //  * @param String        $description    String that represents details of transaction.
+    //  *
+    //  * @return Array       [
+    //  *                      'success',
+	//  *                      'captured',
+	//  *                      'paid',
+	//  *                      'status',
+	//  *                      'transaction_id'
+    //  *                     ]
+    //  */
+    // public function debitWithSplit(Payment $payment, Provider $provider, $totalAmount, $providerAmount, $description);
 
     /**
      * Create a pix charge

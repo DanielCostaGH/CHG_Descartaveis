@@ -1,22 +1,22 @@
 <?php
 
-namespace Lib;
+namespace app\Lib;
 
 use Carbon\Carbon;
 
-use Lib\PagarmeApi;
+use App\Lib\PagarmeApi;
 
 use ApiErrors;
+use App\Models\Payment;
+use App\Models\User;
 use Codificar\PaymentGateways\Libs\handle\pagarme\HandleResponsePagarmeV5;
 use Codificar\PaymentGateways\Libs\handle\message\MessageExceptionPagarme;
-use Codificar\PaymentGateways\Libs\IPayment;
 use Codificar\PaymentGateways\Utils\Functions;
 use Exception;
-use Payment;
 use Provider;
-use Transaction;
-use User;
+use App\Models\Transaction;
 use LedgerBankAccount;
+use App\Lib\IPayment;
 use Settings;
 use Log;
 
@@ -60,6 +60,106 @@ class PagarmeLib implements IPayment
     const PAYMENT_ERROR        =   'error';
 
     const WAITING_PAYMENT = 'waiting_payment';
+
+    /**
+     * Charge a credit card with split rules
+     *
+     * @param Payment       $payment
+     * @param Provider      $provider
+     * @param Decimal       $totalAmount        A positive decimal representing how much to charge
+     * @param Decimal       $providerAmount
+     * @param String        $description        An arbitrary string which you can attach to describe a Charge object
+     * @param Boolean       $capture            Whether to immediately capture the charge. When false, the charge issues an authorization (or pre-authorization), and will need to be captured later.
+     * @param User          $user               The customer that will be charged in this request
+     *
+     * @return Array ['success', 'status', 'captured', 'paid', 'transaction_id']
+     */
+    public static function chargeWithSplit(Payment $payment = null, $totalAmount, $description, $capture = true, User $user = null, $payment_opt = null, $order_id = null, $address_id = null)
+        {
+        if ($payment_opt == 0) {
+            try {
+                    $response = PagarmeApi::chargeWithOrNotSplit($payment, $totalAmount, $capture, $payment_opt, $user, $order_id, $address_id);
+                    if (
+                        isset($response->success) &&
+                        $response->success &&
+                        isset($response->data) &&
+                        (
+                            $response->data->charges[0]->last_transaction->status == self::GATEWAY_CAPTURED ||
+                            $response->data->charges[0]->last_transaction->status == self::GATEWAY_AUTHORIZED_PENDING_CAPTURE
+                        )
+                    ) {
+                        $statusMessage = $response->data->charges[0]->last_transaction->status;
+                        $result = array(
+                            'success' 		    => true,
+                            'status' 		    => $statusMessage == self::GATEWAY_CAPTURED ? 'paid' : 'authorized',
+                            'captured' 			=> $statusMessage == self::GATEWAY_CAPTURED ? true	 : false,
+                            'paid' 		        => $statusMessage == self::GATEWAY_CAPTURED ? 'paid' : 'denied',
+                            'transaction_id'    => (string)$response->data->charges[0]->id
+                        );
+                        return $result;
+                    } else {
+                        return array(
+                            "success" 	=> false ,
+                            'data' 		=> null,
+                            'error' 	=> array(
+                                // "code" 		=> ApiErrors::CARD_ERROR,
+                                "messages" 	=> array(trans('creditCard.customerCreationFail'))
+                            )
+                        );
+                    }
+            } catch (Exception $th) {
+                return array(
+                    "success"           =>  false ,
+                    'data'              =>  null,
+                    'transaction_id'    =>  '',
+                    'error'     => array(
+                        // "code"          => ApiErrors::CARD_ERROR,
+                        "messages"      => array(trans('creditCard.customerCreationFail'))
+                    )
+                );
+            }
+        }
+        elseif ($payment_opt == 9){
+            try {
+                $response = PagarmeApi::pixCharge($totalAmount, $user, $providerAmount, $provider);
+                if (
+                    isset($response->success) ||
+                    $response->success ||
+                    isset($response->data->charges[0]->id)
+                ) {
+                    return array(
+                        'success'                   =>  true,
+                        'captured'                  =>  true,
+                        'paid'                      =>  false,
+                        'status'                    =>  self::WAITING_PAYMENT,
+                        'transaction_id'            =>  (string)$response->data->charges[0]->id,
+                        'billet_expiration_date'    =>  $response->data->charges[0]->last_transaction->qr_code,
+                        'expires_at'                =>  $response->data->charges[0]->last_transaction->expires_at
+                    );
+                } else {
+                    return array(
+                        "success" 				=>  false,
+                        "type" 					=>  'api_charge_error',
+                        "code" 					=>  '',
+                        "message" 				=>  '',
+                        "transaction_id"		=>  '',
+                        'billet_expiration_date'=>  ''
+                    );
+                }
+            } catch (\Throwable $th) {
+                Log::error($th->getMessage() . $th->getTraceAsString());
+    
+                return array(
+                    "success" 				=>  false,
+                    "type" 					=>  'api_charge_error',
+                    "code" 					=>  '',
+                    "message"               => MessageExceptionPagarme::handleMessagePagarmeException($th->getMessage()),
+                    "transaction_id"		=>  '',
+                    'billet_expiration_date'=>  ''
+                );
+            }
+        }
+    }
     
     /**
      * Charge a credit card
@@ -217,7 +317,7 @@ class PagarmeLib implements IPayment
      *
      * @return Array ['success', 'status', 'captured', 'paid', 'transaction_id']
      */
-    public function captureWithSplit(Transaction $transaction, Provider $provider, $totalAmount, $providerAmount, Payment $payment = null)
+    public function captureWithSplit(Transaction $transaction, $totalAmount, $providerAmount, Payment $payment = null)
     {
         try {
             $retrievedCharge =  $this->retrieve($transaction);
@@ -339,6 +439,31 @@ class PagarmeLib implements IPayment
                     "code" 		=> ApiErrors::CARD_ERROR,
                     "messages" 	=> array(trans('creditCard.customerCreationFail'))
                 )
+            );
+        }
+    }
+
+    /**
+     * Refund a charge that has previously been created with split rules
+     *
+     * @param Transaction   $transaction
+     * @param Payment       $payment
+     *
+     * @return Array ['success', 'status', 'transaction_id']
+     */
+    public function refundWithSplit(Transaction $transaction, Payment $payment)
+    {
+        try {
+            return $this->refund($transaction, $payment);
+        } catch (\Throwable $ex) {
+            Log::error($ex->getMessage() . $ex->getTraceAsString());
+
+            return array(
+                "success" 			=> false ,
+                "type" 				=> 'api_refund_error' ,
+                "code" 				=> 'api_refund_error',
+                "message" 			=> $ex->getMessage(),
+                "transaction_id" 	=> ''
             );
         }
     }
@@ -473,50 +598,50 @@ class PagarmeLib implements IPayment
         return $result;
     }
 
-    /**
-     *  Create accounts for users
-     *
-     * @param LedgerBankAccount       $ledgerBankAccount
-     *
-     * @return Array ['success', 'recipient_id']
-     */
-    public function createOrUpdateAccount(LedgerBankAccount $ledgerBankAccount)
-    {
-        try {
-            $newAccount = PagarmeApi::createOrUpdateAccount($ledgerBankAccount);
+    // /**
+    //  *  Create accounts for users
+    //  *
+    //  * @param LedgerBankAccount       $ledgerBankAccount
+    //  *
+    //  * @return Array ['success', 'recipient_id']
+    //  */
+    // public function createOrUpdateAccount(LedgerBankAccount $ledgerBankAccount)
+    // {
+    //     try {
+    //         $newAccount = PagarmeApi::createOrUpdateAccount($ledgerBankAccount);
 
-            if ($newAccount->success && isset($newAccount->data->id)) {
-                $ledgerBankAccount->recipient_id = $newAccount->data->id;
-                if($ledgerBankAccount->gateway) {
-                    $ledgerBankAccount->gateway = 'pagarme';
-                }
-                $ledgerBankAccount->save();
-                $result = array(
-                    'success'       =>  true,
-                    'recipient_id'  =>  $ledgerBankAccount->recipient_id
-                );
-            } else {
-                $result = array(
-                    'success'       =>  false,
-                    'recipient_id'  =>  null
-                );
-            }
+    //         if ($newAccount->success && isset($newAccount->data->id)) {
+    //             $ledgerBankAccount->recipient_id = $newAccount->data->id;
+    //             if($ledgerBankAccount->gateway) {
+    //                 $ledgerBankAccount->gateway = 'pagarme';
+    //             }
+    //             $ledgerBankAccount->save();
+    //             $result = array(
+    //                 'success'       =>  true,
+    //                 'recipient_id'  =>  $ledgerBankAccount->recipient_id
+    //             );
+    //         } else {
+    //             $result = array(
+    //                 'success'       =>  false,
+    //                 'recipient_id'  =>  null
+    //             );
+    //         }
 
-            return $result;
-        } catch (\Throwable $ex) {
-            Log::error($ex->getMessage() . $ex->getTraceAsString());
+    //         return $result;
+    //     } catch (\Throwable $ex) {
+    //         Log::error($ex->getMessage() . $ex->getTraceAsString());
 
-            $result = array(
-                "success"               =>  false ,
-                "recipient_id"          =>  null,
-                "type"                  =>  'api_bankaccount_error' ,
-                "code"                  =>  500 ,
-                "message"               => MessageExceptionPagarme::handleMessagePagarmeException($ex->getMessage()),
-            );
+    //         $result = array(
+    //             "success"               =>  false ,
+    //             "recipient_id"          =>  null,
+    //             "type"                  =>  'api_bankaccount_error' ,
+    //             "code"                  =>  500 ,
+    //             "message"               => MessageExceptionPagarme::handleMessagePagarmeException($ex->getMessage()),
+    //         );
 
-            return $result;
-        }
-    }
+    //         return $result;
+    //     }
+    // }
 
     /**
      *  Return a gateway fee
@@ -628,29 +753,29 @@ class PagarmeLib implements IPayment
         }
     }
 
-    /**
-     * Make a debit charge with split
-     *
-     * @param Payment        $payment 
-     * @param Provider       $provider   
-     * @param Decimal        $totalAmount
-     * @param Decimal        $providerAmount 
-     * @param string         $description 
-     *  
-     * @return array 
-     */
-    public function debitWithSplit(Payment $payment, Provider $provider, $totalAmount, $providerAmount, $description)
-    {
-        Log::error('debit_split_not_implemented');
+    // /**
+    //  * Make a debit charge with split
+    //  *
+    //  * @param Payment        $payment 
+    //  * @param Provider       $provider   
+    //  * @param Decimal        $totalAmount
+    //  * @param Decimal        $providerAmount 
+    //  * @param string         $description 
+    //  *  
+    //  * @return array 
+    //  */
+    // public function debitWithSplit(Payment $payment, Provider $provider, $totalAmount, $providerAmount, $description)
+    // {
+    //     Log::error('debit_split_not_implemented');
 
-        return array(
-            "success" 			=> false,
-            "type" 				=> 'api_debit_error',
-            "code" 				=> 'api_debit_error',
-            "message" 			=> 'split_not_implementd',
-            "transaction_id" 	=> ''
-        );
-    }
+    //     return array(
+    //         "success" 			=> false,
+    //         "type" 				=> 'api_debit_error',
+    //         "code" 				=> 'api_debit_error',
+    //         "message" 			=> 'split_not_implementd',
+    //         "transaction_id" 	=> ''
+    //     );
+    // }
 
     /**
      * Returns status string based on status code
@@ -767,7 +892,7 @@ class PagarmeLib implements IPayment
      */
     public function retrievePix($transaction_id, $request = null)
     {
-        \Log::error('retrieve_pix_not_implemented');
+        // \Log::error('retrieve_pix_not_implemented');
         return array(
             "success" 			=> false,
             'paid'				=> false,

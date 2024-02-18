@@ -59,6 +59,7 @@ Route::group(['prefix' => 'user', 'middleware' => 'UserAuthMiddleware'], functio
     Route::post('/favorite', [FavoritesController::class, 'update']);
     Route::get('/get-favorites', [FavoritesController::class, 'getUserFavorites']);
     Route::get('/favorite-products', [FavoritesController::class, 'getUserFavoritesProducts']);
+    Route::post('/retrievecardpayment', [PaymentController::class, 'retrieveCardPatyment'])->name('user.retrievecardpayment');
 });
 
 Route::group(['prefix' => 'products'], function () {

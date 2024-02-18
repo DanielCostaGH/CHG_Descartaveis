@@ -36,4 +36,39 @@ class Payment extends Model
     public static function GetAvaillableCards($userId){
         return self::where('user_id', $userId)->get();
     }
+    
+
+    public static function getCardNumber($encrypted){
+        $cardDecrypted = self::decryptCard($encrypted);
+        return $cardDecrypted['number'];
+	}
+
+    public static function getCardExpirationMonth($encrypted) {
+        $cardDecrypted = self::decryptCard($encrypted);
+        return $cardDecrypted['exp_month'];
+    }
+
+    public static function getCardExpirationYear($encrypted){
+		$cardDecrypted = self::decryptCard($encrypted);
+		return $cardDecrypted['exp_year'];
+	}
+
+    public static function getCardHolder($encrypted){
+		$cardDecrypted = self::decryptCard($encrypted);
+		return $cardDecrypted['name'];
+	}
+
+    public static function getCardCvc($encrypted){
+		$cardDecrypted = self::decryptCard($encrypted);
+		return $cardDecrypted['cvc'];
+	}
+
+    private static function decryptCard($encrypted) {
+        $cardDecrypted = ['number' => null]; 
+        if ($encrypted && $cardDecrypted['number'] == null) {
+            $decrypted = Crypt::decrypt($encrypted->encrypted);
+            $cardDecrypted = unserialize($decrypted);
+        }
+        return $cardDecrypted;
+    }
 }
