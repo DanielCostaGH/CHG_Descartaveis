@@ -13,17 +13,18 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('payment', function (Blueprint $table) {
+        Schema::create('favorites', function (Blueprint $table) {
             $table->id();
-            $table->string('surname', 100);
-            $table->string('cardtype', 255);
             $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->string('last_four', 255);
-            $table->string('card_token', 255)->nullable();
-            $table->integer('is_default');
-            $table->text('encrypted');
+            $table->unsignedBigInteger('product_id');
             $table->timestamps();
+
+            $table->foreign('user_id')->references('id')->on('users')
+                  ->onDelete('cascade');
+            $table->foreign('product_id')->references('id')->on('product')
+                  ->onDelete('cascade');
+
+            $table->unique(['user_id', 'product_id'], 'user_product_unique');
         });
     }
 
@@ -34,6 +35,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('payment');
+        Schema::dropIfExists('favorites');
     }
 };

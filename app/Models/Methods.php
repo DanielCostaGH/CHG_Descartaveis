@@ -11,5 +11,11 @@ class Methods extends Model
 
     protected $table = 'payment_methods';
 
-    protected $fillable = ['id', 'name'];
+    protected $fillable = ['id', 'card_id', 'name'];
+
+
+    public function creditCards()
+    {
+        return $this->belongsTo(CreditCard::class, 'id');
+    }
 }

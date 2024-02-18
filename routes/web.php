@@ -56,6 +56,9 @@ Route::group(['prefix' => 'user', 'middleware' => 'UserAuthMiddleware'], functio
     Route::get('/get_cards_by_user', [PaymentController::class, 'getCardsByUserId'])->name('user.getcards');
     Route::post('get-cards', [GetApiDataController::class, 'getCards']);
     Route::get('/order-details', [OrderController::class, 'orderDetails']);
+    Route::post('/favorite', [FavoritesController::class, 'update']);
+    Route::get('/get-favorites', [FavoritesController::class, 'getUserFavorites']);
+    Route::get('/favorite-products', [FavoritesController::class, 'getUserFavoritesProducts']);
 });
 
 Route::group(['prefix' => 'products'], function () {
@@ -83,7 +86,9 @@ Route::group(['prefix' => 'dashboard', 'middleware' => 'AdminAuthMiddleware'], f
     Route::get('/categories/edit/{id}', [CategoryController::class, 'editCategory'])->name('dashboard.categories.edit');
     Route::post('/category/update/{id}', [CategoryController::class, 'categoryUpdate'])->name('dashboard.category.update');
     Route::delete('/category/delete/{id}', [CategoryController::class, 'categoryDelete'])->name('dashboard.category.delete');
-
+    Route::get('/condition-terms', [TermsController::class, 'index']);
+    Route::post('/update-terms', [TermsController::class, 'store']);
+    Route::get('/get-terms', [TermsController::class, 'getServiceTerms']);
 });
 
 
@@ -121,6 +126,8 @@ Route::group(['prefix' => 'api'], function () {
     Route::get('/get-access-token', [GetApiDataController::class,'getAccessToken']);
     Route::get('get-pedings-orders', [OrderController::class,'getPendingOrders']);
     Route::post('/save-order', [OrderController::class, 'store']);
+    Route::post('/reviews', [ReviewController::class, 'store']);
+    Route::get('/products/{product}/reviews', [ReviewController::class, 'index']);
 });
 
 Route::middleware('auth:user')->get('/api/get', [UserController::class, 'getUser']);

@@ -34,6 +34,6 @@ class Payment extends Model
 
 
     public static function GetAvaillableCards($userId){
-        return self::where('id', $userId)->get();
+        return self::where('user_id', $userId)->get();
     }
 }

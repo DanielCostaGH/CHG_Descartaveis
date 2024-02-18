@@ -15,15 +15,15 @@ return new class extends Migration
     {
         Schema::table('personal_access_tokens', function (Blueprint $table) {
             // Adiciona a coluna user_id
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('user_id')->nullable();
 
             // Adiciona a chave estrangeira
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('user_id')->references('id')->on('users')->nullable();
 
-            $table->unsignedBigInteger('admin_id');
+            $table->unsignedBigInteger('admin_id')->nullable();
 
             // Adiciona a chave estrangeira
-            $table->foreign('admin_id')->references('id')->on('admin');
+            $table->foreign('admin_id')->references('id')->on('admin')->nullable();
         });
     }
 

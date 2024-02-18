@@ -30,6 +30,15 @@
                 </v-btn>
 
             </div>
+
+            <div class="bg-white p-10 rounded-lg my-10">
+                <h2 class="text-xl font-weight-bold text-gray-600 mb-5">Editar termos de serviço</h2>
+
+                <v-btn href="/dashboard/condition-terms">
+                    <v-icon class="mr-3">mdi-plus</v-icon>Adicionar / Editar
+                </v-btn>
+
+            </div>
         </main>
     </div>
 </template>

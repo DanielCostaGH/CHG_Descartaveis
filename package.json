@@ -20,6 +20,7 @@
         "16": "^0.0.2",
         "@mdi/font": "^7.3.67",
         "@syncfusion/ej2-vue-inputs": "^23.1.38",
+        "@vueup/vue-quill": "^1.2.0",
         "api": "^2.6.0",
         "babel-loader": "^9.1.3",
         "swiper": "^10.3.1",

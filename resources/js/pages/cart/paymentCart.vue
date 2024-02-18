@@ -385,6 +385,7 @@ export default {
             axios.post('/user/createcard', cardData)
                 .then(response => {
                     console.log(response.data);
+                    this.fetchCards();
                 })
                 .catch(error => {
                     console.error(error);
@@ -407,9 +408,9 @@ export default {
     },
 
     mounted() {
-        this.fetchAddresses(),
-            this.fetchProducts(),
-            this.fetchCards()
+            this.fetchCards(),
+            this.fetchAddresses(),
+            this.fetchProducts()
     }
 
 

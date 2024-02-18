@@ -33,6 +33,10 @@
                 <similar_product />
             </div>
 
+            <div>
+                <product_reviews />
+            </div>
+
         </div>
         <footer>
             <foot />
@@ -68,6 +72,10 @@
 
             <div>
                 <similar_product />
+            </div>
+
+            <div>
+                <product_reviews />
             </div>
 
         </div>

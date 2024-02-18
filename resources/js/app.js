@@ -31,6 +31,7 @@ import categoriesIndex from './pages/dashboard/categories.vue';
 import productCreate from './pages/dashboard/productCreate.vue';
 import categoryCreate from './pages/dashboard/categoryCreate.vue';
 import config from './pages/dashboard/config.vue';
+import ConditionTerms from './pages/dashboard/ConditionTerms.vue';
 // Bloco de pedidos (orders)
 import orders from './pages/dashboard/orders.vue'
 import ShippedOrders from './pages/dashboard/ShippedOrders.vue'
@@ -115,6 +116,7 @@ app.component('categories-index', categoriesIndex);
 app.component('product-create', productCreate);
 app.component('category-create', categoryCreate);
 app.component('Config', config);
+app.component('condition-terms', ConditionTerms);
 // Bloco de pedidos (orders)
 app.component('Orders', orders);
 app.component('shipped-orders', ShippedOrders);
@@ -124,6 +126,7 @@ app.component('shopping_cart', shoppingCart);
 app.component('payment_cart', paymentCart);
 app.component('confirmation_cart', confirmationCart);
 app.component('cart_local', cartLocal);
+
 
 
 

@@ -22,6 +22,21 @@
         <div class="flex overflow-x-scroll py-8">
             <v-card v-for="(product, index) in products" :key="index" :loading="loading" class="card my-4 mx-4" width="320">
 
+                <div class="flex justify-between items-center p-2 border-b-2 mb-4 overflow-hidden">
+                    <div class="flex items-center">
+                        <v-rating hover :length="5" :size="27" :model-value="3" active-color="warning" readonly />
+                        <v-label>(544)</v-label>
+                    </div>
+
+                    <!-- <div>
+                        <button @click="favoriteProduct(product)" class="ma-2">
+                            <v-icon :color="favorites.includes(product.id) ? 'red' : ''">
+                                mdi-heart{{ favorites.includes(product.id) ? '' : '-outline' }}
+                            </v-icon>
+                        </button>
+                    </div> -->
+                </div>
+                
                 <v-img :src="product.imagePath" fit height="200"></v-img>
 
                 <v-card-item class="border-top my-2">
