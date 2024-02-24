@@ -26,6 +26,5 @@ export default defineConfig({
     },
     optimizeDeps: {
         include: ["swiper/vue"], 
-        include: ['@vueup/vue-quill']
     },
 });

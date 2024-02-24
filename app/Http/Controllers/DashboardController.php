@@ -90,11 +90,11 @@ class DashboardController extends Controller
         return view('dashboard.products.edit', compact('product'));
     }
 
-    public function productUpdate($id, ProductUpdateRequest $request)
+    public function productUpdate(ProductUpdateRequest $request)
     {
-        $category = Category::where('name', $request->category)->first();
+        $productId = $request->id;
 
-        $product = Product::find($id);
+        $product = Product::find($productId);
         $product->sku           = $request->input('sku') ?? 'teste';
         $product->name          = $request->input('name');
         $product->description   = $request->input('description');
@@ -105,16 +105,15 @@ class DashboardController extends Controller
         $product->width         = $request->input('width');
         $product->length        = $request->input('length');
         $product->weight        = $request->input('weight');
-        $deletedImages = $request->input('deletedImages');
-
-
-        $product->variation = implode(';', $request->variation);
-        $product->quantity = $request->input('quantity');
-        $product->category_id = $category->id;
+        $deletedImages          = $request->input('deletedImages');
+        $product->variation     = implode(';', $request->variation);
+        $product->quantity      = $request->input('quantity');
 
         $product->save();
 
-        $teste = self::updateColors($product, $request->input('colors'));
+        if ($request->colors){
+            self::updateColors($product, $request->input('colors'));
+        }
 
         if($request->input('images')[0] !== 'undefined') {
             $this->uploadImages($request, $product);
@@ -123,14 +122,13 @@ class DashboardController extends Controller
         if ($request->has('deletedImages')) {
             $this->deleteImages($product, $deletedImages);
         }
-        return redirect()->route('dashboard.products.index')
-            ->with('success', 'Produto atualizado com sucesso!');
+        return response()->json(['message' => 'Produto atualizado com sucesso!']);
     }
 
 
     public function updateColors(Product $product, array $newColorIds)
     {
-
+        
         $existingColorIds = ProductColors::where('product_id', $product->id)->get()->pluck('color_id')->toArray();
 
         $colorsToRemove = array_diff($existingColorIds, $newColorIds);

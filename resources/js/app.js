@@ -18,6 +18,10 @@ import adminCreate from './pages/admin/create.vue';
 import userLogin from './pages/user/login.vue';
 import userIndex from './pages/user/index.vue';
 import userCreate from './pages/user/create.vue';
+import userInfo from './pages/user/info.vue';
+import userAddresses from './pages/user/addresses.vue';
+import userFavorites from './pages/user/favorites.vue';
+import userOrders from './pages/user/orders.vue';
 // Bloco de produtos
 import productsIndex from './pages/products.vue'
 import productDetails from './pages/productDetails.vue';
@@ -102,7 +106,12 @@ app.component('admin-create', adminCreate);
 app.component('user-login', userLogin);
 app.component('user-index', userIndex);
 app.component('user-create', userCreate);
+app.component('user-info', userInfo);
+app.component('user-addresses', userAddresses);
+app.component('user-favorites', userFavorites);
+app.component('user-orders', userOrders);
 app.component('home', Home);
+
 // Bloco de produtos
 app.component('products', productsIndex);
 app.component('product_details', productDetails);

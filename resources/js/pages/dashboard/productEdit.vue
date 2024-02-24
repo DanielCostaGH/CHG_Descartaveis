@@ -110,10 +110,11 @@
                             <v-col cols="12" md="6">
                                 <v-select
                                 v-model="editedProduct.categoryId"
-                                :items="categoryNames"
+                                :items="categories"
+                                item-title="name"
+                                item-value="id"
                                 label="Categoria"
                                 outlined
-                                @change="updateCategoryId"
                                 ></v-select>
                             </v-col>
 
@@ -171,12 +172,12 @@
         </main>
     </div>
 
-    <v-dialog v-model="dialog" persistent max-width="50%">
-        <v-card color="success">
+    <v-dialog v-model="dialogSuccess" persistent max-width="30%">
+        <v-card color="success" class="rounded-lg">
             <v-card-text class="white--text text-h5 pt-15">
                 <v-row align="center" justify="center">
                     <v-icon class="mr-2" size="x-large">mdi-check-circle</v-icon>
-                    O produto foi editado com sucesso.
+                    Produto editado com sucesso.
                 </v-row>
             </v-card-text>
             <v-card-actions>
@@ -223,7 +224,7 @@ export default {
             productVariations: [],
             colors: [],
             deletedImages: [],
-            dialog: false,
+            dialogSuccess: false,
         };
     },
     created() {
@@ -242,6 +243,7 @@ export default {
                     return { id: parseInt(colorId.trim()) };
                 });
             }
+            this.editedProduct.categoryId = product.category_id;
             this.editedProduct.variation = product.variation;
             this.editedProduct.height = product.height;
             this.editedProduct.width = product.width;
@@ -275,18 +277,6 @@ export default {
         }
     },
     methods: {
-
-        updateCategoryId() {
-            const selectedCategory = this.categories.find(
-                category => category.name === this.editedProduct.categoryName
-            );
-
-            if (selectedCategory) {
-                this.editedProduct.categoryId = selectedCategory.id;
-            }
-        },
-
-
         addImage() {
             if (this.newImage && this.newImage.length > 0) {
                 const reader = new FileReader();
@@ -337,14 +327,14 @@ export default {
 
         updateProduct() {
             const formData = new FormData();
-
+            formData.append('id', this.editedProduct.id);
             formData.append('name', this.editedProduct.name);
             formData.append('description', this.editedProduct.description);
             formData.append('price', this.formattedPrice);
             formData.append('brand', this.editedProduct.brand);
             formData.append('quantity', this.editedProduct.quantity);
             formData.append('status', this.editedProduct.status);
-            formData.append('category', this.editedProduct.categoryId);
+            formData.append('category_id', this.editedProduct.categoryId);
             formData.append('height', this.editedProduct.height);
             formData.append('width', this.editedProduct.width);
             formData.append('length', this.editedProduct.length);
@@ -387,14 +377,13 @@ export default {
                 });
             }
 
-            axios.post(`/dashboard/update/${this.editedProduct.id}`, formData, {
+            axios.post('/dashboard/update', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
             })
                 .then(response => {
-                    this.product = response.data;
-                    this.dialog = true;
+                    this.dialogSuccess = true;
                 })
                 .catch(error => {
                     console.error('Erro ao atualizar produto', error);
@@ -402,7 +391,7 @@ export default {
         },
 
         confirmProductCreation() {
-            this.dialog = false; // Fecha o diálogo
+            this.dialogSuccess = false; // Fecha o diálogo
             window.location.href = '/dashboard/products'; // Redireciona o usuário
         },
 

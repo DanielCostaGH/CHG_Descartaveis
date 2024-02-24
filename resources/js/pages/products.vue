@@ -3,6 +3,7 @@
     <div id="main" class="container mx-auto">
         <filters @filter-applied="handleFilterApplied" />
         <cards :products="products" />
+        <v-pagination v-model="page" :length="totalPages" rounded="circle"></v-pagination>
     </div>
     <foot />
 </template>
@@ -17,7 +18,9 @@ import axios from 'axios';
 export default {
     data() {
         return {
-            products: []
+            products: [],
+            page: 1,
+            totalPages: 0,
         };
     },
     watch: {
@@ -25,6 +28,9 @@ export default {
             if (to.path === '/products') {
                 this.fetchFilteredProducts();
             }
+        },
+        page(newVal, oldVal) {
+            if (newVal !== oldVal) this.fetchProducts(); // Recarregar os dados quando a página mudar
         }
     },
 
@@ -44,9 +50,10 @@ export default {
         },
 
         fetchProducts(filters = {}) {
-            axios.get('/api/products', { params: filters })
+            axios.get(`/api/products?page=${this.page}`, { params: filters })
                 .then(response => {
-                    this.products = response.data;
+                    this.products = response.data.data;
+                    this.totalPages = response.data.last_page;
                 })
                 .catch(error => {
                     console.error('Erro ao buscar produtos:', error);

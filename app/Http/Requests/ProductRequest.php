@@ -36,7 +36,7 @@ class ProductRequest extends FormRequest
             'variation.*' => 'required|string',
             'quantity' => 'required|integer|min:1',
             'status' => 'required|in:active,inactive,out_of_stock',
-            'category' => 'required',
+            'category_id' => 'required',
             'height' => 'required|numeric|min:1|max:500',
             'width' => 'required|numeric|min:1|max:500',
             'length' => 'required|numeric|min:1|max:500',

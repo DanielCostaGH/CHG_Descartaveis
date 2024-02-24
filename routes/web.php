@@ -45,6 +45,10 @@ Route::post('/user/store', [UserController::class, 'store'])->name('user.store')
 
 Route::group(['prefix' => 'user', 'middleware' => 'UserAuthMiddleware'], function () {
     Route::get('/', [UserController::class, 'index'])->name('user.name');
+    Route::get('/info', [UserController::class, 'basicInfo']);
+    Route::get('/address', [UserController::class, 'adresses']);
+    Route::get('/favorites', [UserController::class, 'favorites']);
+    Route::get('/orders', [UserController::class, 'orders']);
     Route::put('/update_basic/{id}', [UserController::class, 'updateBasic'])->name('user.update_basic');
     Route::post('/add_address/{id}', [UserController::class, 'addAddress'])->name('user.add_address');
     Route::get('/get_address', [UserController::class, 'getUserAddresses']);
@@ -78,7 +82,7 @@ Route::group(['prefix' => 'dashboard', 'middleware' => 'AdminAuthMiddleware'], f
     Route::get('/create', [DashboardController::class, 'createProduct'])->name('dashboard.products.create');
     Route::post('/store', [DashboardController::class, 'productStore'])->name('dashboard.products.store');
     Route::get('/products/edit/{id}', [DashboardController::class, 'editProduct'])->name('dashboard.products.edit');
-    Route::post('/update/{id}', [DashboardController::class, 'productUpdate'])->name('dashboard.products.update');
+    Route::post('/update', [DashboardController::class, 'productUpdate'])->name('dashboard.products.update');
     Route::delete('/delete/{id}', [DashboardController::class, 'productDelete'])->name('dashboard.products.delete');
     Route::get('/appearence', [DashboardController::class, 'appearence'])->name('dashboard.appearence.index');
     Route::get('/categories', [CategoryController::class, 'showCategories'])->name('dashboard.categories.index');
@@ -94,7 +98,6 @@ Route::group(['prefix' => 'dashboard', 'middleware' => 'AdminAuthMiddleware'], f
 
 
 Route::group(['prefix' => 'api'], function () {
-    // Route::get('/products', [DashboardController::class, 'show']);
     Route::get('/products/active', [DashboardController::class, 'show']);
     Route::get('/products', [ProductsController::class, 'getProducts']);
     Route::get('/category', [CategoryController::class, 'index']);

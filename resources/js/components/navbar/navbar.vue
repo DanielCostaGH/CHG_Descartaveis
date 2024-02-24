@@ -31,7 +31,7 @@
                 <div class="flex items-center hover:underline">
 
                     <img class="mr-2" :src="user" alt="">
-                    <a v-if="userInfo" href="/user">Minha conta</a>
+                    <a v-if="userInfo" href="/user/info">Minha conta</a>
                     <a v-else href="/user/login">Login/Cadastro</a>
                 </div>
                 <div class="flex items-center hover:underline">

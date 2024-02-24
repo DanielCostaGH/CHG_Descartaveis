@@ -58,34 +58,40 @@
                 <v-col cols="12 my-15 border-t-2">
                     <v-form @submit.prevent="storeProduct">
                         <v-row>
+                            <!-- Nome -->
                             <v-col cols="12" md="6">
                                 <v-text-field label="Nome do Produto" v-model="editedProduct.name" outlined
                                     placeholder="Nome do Produto">
                                 </v-text-field>
                             </v-col>
 
+                            <!-- Marca -->
                             <v-col cols="12" md="6">
                                 <v-text-field label="Marca" v-model="editedProduct.brand" outlined placeholder="Marca">
                                 </v-text-field>
                             </v-col>
 
+                            <!-- Descrição -->
                             <v-col cols="12">
                                 <v-textarea label="Descrição" v-model="editedProduct.description" outlined
                                     placeholder="Descrição do Produto" rows="4">
                                 </v-textarea>
                             </v-col>
 
+                            <!-- Preço -->
                             <v-col cols="12" md="6">
                                 <v-text-field label="Preço" v-model="editedProduct.price" type="number" step="0.01" outlined
                                     placeholder="Preço" :prefix="'R$ '"></v-text-field>
                             </v-col>
 
+                            <!-- Cores -->
                             <v-col cols="12" md="6">
                                 <v-autocomplete v-model="editedProduct.colors" :items="colors" label="Cor" item-title="name"
                                     chips small-chips multiple class="pa-0" :menu-props="{ maxHeight: '300' }" hide-details
                                     return-object></v-autocomplete>
                             </v-col>
 
+                            <!-- Variação -->
                             <v-col cols="12" md="6">
                                 <v-text-field label="Variação" v-model="newVariation" outlined
                                     placeholder="Variação"></v-text-field>
@@ -100,10 +106,12 @@
                                 <v-btn @click="addVariation" color="blue" dark>Adicionar Variação</v-btn>
                             </v-col>
 
+                            <!-- Categorias -->
                             <v-col cols="12" md="6">
-                                <v-select v-model="editedProduct.categoryId" :items="categoryNames" label="Categoria"
-                                    outlined @change="updateCategoryId"></v-select>
+                                <v-select v-model="editedProduct.categoryId" :items="categories" item-title="name" item-value="id"
+                                    label="Categoria" outlined></v-select>
                             </v-col>
+
 
                             <v-col cols="12" md="12">
                                 <v-label>
@@ -202,6 +210,7 @@ export default {
             selectedImage: '',
             images: [],
             categories: [],
+            selectedCategory: '',
             editedProduct: {
                 name: '',
                 description: '',
@@ -222,45 +231,7 @@ export default {
             dialog: false,
         };
     },
-    created() {
-        // Verifique se selectedProduct está disponível e carregado corretamente
-        if (this.$props.product) {
-            const product = this.$props.product;
-            this.editedProduct.id = product.id;
-            this.editedProduct.name = product.name;
-            this.editedProduct.description = product.description;
-            this.editedProduct.price = product.price;
-            this.editedProduct.images = product.images;
-            this.editedProduct.selectedImage = product.selectedImage;
-            this.editedProduct.brand = product.brand;
-            this.editedProduct.colors = product.colors;
-            this.editedProduct.variation = product.variation;
-            this.editedProduct.quantity = product.quantity;
-            this.editedProduct.heigth = product.heigth;
-            this.editedProduct.width = product.width;
-            this.editedProduct.length = product.length;
-            this.editedProduct.wieght = product.wieght;
-            this.editedProduct.status = product.status;
-        }
-        if (this.$props.product) {
-            const product = this.$props.product;
-            // ...outras atribuições...
-            this.editedProduct.images = product.images;
 
-            // Dividindo a string de imagens e criando a lista de imagens
-            this.images = product.images.split(';').filter(imgName => imgName).map(imgName => {
-                return {
-                    src: `/images/products/${product.id}/${imgName.trim()}`,
-                    name: imgName.trim()
-                };
-            });
-
-            // Se houver imagens, defina a primeira como a imagem selecionada
-            if (this.images.length > 0) {
-                this.selectedImage = this.images[0].src;
-            }
-        }
-    },
     filters: {
         formatPrice(value) {
             if (!value) return 'R$ 0,00';
@@ -270,16 +241,6 @@ export default {
         }
     },
     methods: {
-
-        updateCategoryId() {
-            const selectedCategory = this.categories.find(
-                category => category.name === this.editedProduct.categoryName
-            );
-
-            if (selectedCategory) {
-                this.editedProduct.categoryId = selectedCategory.id;
-            }
-        },
 
         addImage() {
             if (this.newImage && this.newImage.length > 0) {
@@ -324,14 +285,13 @@ export default {
 
         storeProduct() {
             const formData = new FormData();
-
             formData.append('name', this.editedProduct.name);
             formData.append('description', this.editedProduct.description);
             formData.append('price', this.formattedPrice);
             formData.append('brand', this.editedProduct.brand);
             formData.append('quantity', this.editedProduct.quantity);
             formData.append('status', this.editedProduct.status);
-            formData.append('category', this.editedProduct.categoryId);
+            formData.append('category_id', this.editedProduct.categoryId);
             formData.append('height', this.editedProduct.height);
             formData.append('width', this.editedProduct.width);
             formData.append('length', this.editedProduct.length);
@@ -377,6 +337,7 @@ export default {
             axios.get('/api/colors')
                 .then(response => {
                     this.colors = response.data
+                    console.log(this.colors);
                 })
                 .catch(error => {
                     console.error("Erro ao buscar cores", error)
@@ -386,7 +347,18 @@ export default {
         fetchCategories() {
             axios.get('/api/category')
                 .then(response => {
-                    this.categories = response.data;
+                    const categoriesData = JSON.parse(JSON.stringify(response.data));
+
+                    // Mapear os dados recebidos para criar um novo array de objetos com apenas id e name
+                    this.categories = categoriesData.map(category => {
+                        return {
+                            id: category.id,
+                            name: category.name
+                        };
+                    });
+                    console.log("category (objeto completo sem filtros):", JSON.parse(JSON.stringify(this.categories)));
+                    console.log("category ids:", this.categories.map(category => category.id));
+                    console.log("category names:", this.categories.map(category => category.name));
                 })
                 .catch(error => {
                     console.error("Erro ao buscar categorias", error);

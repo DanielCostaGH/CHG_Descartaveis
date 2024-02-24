@@ -2,34 +2,45 @@
     <div class="flex">
         <sidebar />
 
-        <main class="w-4/5 p-6 bg-gray-100">
+        <main class="w-4/5 p-6 border-l">
             <header>
                 <painel />
             </header>
 
             <div>
-                <div class="bg-white">
+                <div class="bg-white p-4">
+                    <!-- Botão para adicionar categoria -->
+                    <div class="flex justify-end">
+                        <v-btn href="/dashboard/create" color="success">
+                            <v-icon class="mr-3">mdi-plus</v-icon>
+                            Adicionar Produto</v-btn>
+                    </div>
                     <filters @filter-applied="handleFilterApplied" />
+
+
                 </div>
 
-                <section class="bg-white h-[75vh] overflow-y-scroll">
+                <section class="bg-white h-auto">
                     <v-row>
                         <v-col>
-                            <v-card class="pa-4 shadow-md rounded-lg">
+                            <div class="pa-4 rounded-lg">
                                 <v-card-title class="text-h5 font-medium">Lista de Produtos</v-card-title>
                                 <v-row>
-                                    <v-col v-for="(product, index) in products" :key="index" cols="12" md="6" lg="4">
-                                        <v-card class="pa-4 shadow-md rounded-lg">
+                                    <v-col v-for="(product, index) in products" :key="index" cols="12" md="6" lg="3">
+                                        <v-card class="pa-4">
                                             <v-card-title class="text-h6 font-medium mt-2">{{ product.name }}</v-card-title>
                                             <v-img :src="getFirstImage(product)" class="my-4" aspect-ratio="2.0"
-                                                contain></v-img>
-                                            <v-card-actions class="justify-around px-5">
-                                                <v-btn :href="'/dashboard/products/edit/' + product.id" prepend-icon="mdi-pencil" color="indigo" size="large" rounded="lg" class="px-5">
-                                                    Editar
+                                                cover></v-img>
+                                            <v-card-actions class="justify-around">
+                                                <v-btn :href="'/dashboard/products/edit/' + product.id" color="indigo"
+                                                    size="base" rounded="lg">
+                                                    <v-icon class="pr-4">mdi-pencil</v-icon>
+                                                    <span>Editar</span>
                                                 </v-btn>
 
-                                                <v-btn @click="confirmDelete(product.id)" prepend-icon="mdi-delete" color="red" size="large" rounded="lg" class="px-5">
-                                                    Excluir produto
+                                                <v-btn @click="confirmDelete(product.id)" prepend-icon="mdi-delete"
+                                                    color="red" size="base" rounded="lg" class="">
+                                                    remover
                                                 </v-btn>
                                             </v-card-actions>
                                         </v-card>
@@ -38,10 +49,12 @@
                                         </div>
                                     </v-col>
                                 </v-row>
-                            </v-card>
+                            </div>
                         </v-col>
                     </v-row>
                 </section>
+                <v-pagination v-model="page" :length="totalPages" rounded="circle"></v-pagination>
+
             </div>
         </main>
     </div>
@@ -80,6 +93,8 @@ export default {
             payment: '/images/pay_icon.svg',
             config: '/images/config_icon.svg',
             products: [],
+            page: 1,
+            totalPages: 0,
         };
     },
 
@@ -92,12 +107,19 @@ export default {
     mounted() {
         this.fetchProducts();
     },
+    watch: {
+        page(newVal, oldVal) {
+            if (newVal !== oldVal) this.fetchProducts(); // Recarregar os dados quando a página mudar
+        }
+    },
 
     methods: {
         fetchProducts(filters = {}) {
-            axios.get('/api/products', { params: filters })
+            axios.get(`/api/products?page=${this.page}`, { params: filters })
                 .then(response => {
-                    this.products = response.data;
+                    console.log("dadosretornados:", response.data)
+                    this.products = response.data.data;
+                    this.totalPages = response.data.last_page;
                 })
                 .catch(error => {
                     console.error('Erro ao buscar produtos:', error);

@@ -36,6 +36,30 @@ class UserController extends Controller
         ]);
     }
 
+    public function basicInfo(){
+        $user = auth('user')->user();
+        return view('user.basic-info', [
+            'userData' => $user,
+        ]);
+    }
+
+    public function adresses(){
+        $user = auth('user')->user();
+        $addresses = UserAddress::where('user_id', $user->id)->get();
+        return view('user.adresses', [
+            'userData' => $user,
+            'userAddresses' => $addresses,
+        ]);
+    }
+
+    public function favorites(){
+        return view('user.favorites');
+    }
+
+    public function orders(){
+        return view('user.orders');
+    }
+
 
     public function showLoginForm()
     {

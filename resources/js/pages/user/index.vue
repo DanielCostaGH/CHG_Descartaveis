@@ -2,12 +2,13 @@
     <div>
         <navbar />
 
-        <main class="flex container mx-auto  my-10  rounded-lg min-h-[75vh]">
+        <!-- Sessão desktop -->
+        <main class="hidden lg:flex container mx-auto  my-10  rounded-lg min-h-[75vh]">
 
             <section class="w-1/4 h-full flex flex-wrap border-r-2">
-                <ul class="text-lg w-full">
+                <ul class="text-lg w-full mx-4">
                     <li class="my-4  w-full">
-                        <a class="flex w-full items-center p-5 rounded-lg hover:bg-[#F3F4F5] hover:shadow-lg active:bg-gray-200 cursor-pointer text-gray-500"
+                        <a class="flex w-full items-center p-5 rounded-lg hover:bg-indigo-500 hover:text-white duration-500 hover:shadow-lg active:bg-gray-200 cursor-pointer text-gray-700"
                             @click="selectComponent('userInfo')">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
                                 stroke="currentColor" class="w-6 h-6 mr-3">
@@ -19,7 +20,7 @@
                     </li>
 
                     <li class="my-4  w-full">
-                        <a class="flex w-full items-center p-5 rounded-lg hover:bg-[#F3F4F5] hover:shadow-lg active:bg-gray-200 cursor-pointer text-gray-500"
+                        <a class="flex w-full items-center p-5 rounded-lg hover:bg-indigo-500 hover:text-white duration-500 hover:shadow-lg active:bg-gray-200 cursor-pointer text-gray-700"
                             @click="selectComponent('userAddress')">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
                                 stroke="currentColor" class="w-6 h-6 mr-3">
@@ -33,7 +34,7 @@
                     </li>
 
                     <li class="my-4  w-full">
-                        <a class="flex w-full items-center p-5 rounded-lg hover:bg-[#F3F4F5] hover:shadow-lg active:bg-gray-200 cursor-pointer text-gray-500"
+                        <a class="flex w-full items-center p-5 rounded-lg hover:bg-indigo-500 hover:text-white duration-500 hover:shadow-lg active:bg-gray-200 cursor-pointer text-gray-700"
                             @click="selectComponent('userFavorites')">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
                                 stroke="currentColor" class="w-6 h-6 mr-3">
@@ -45,7 +46,7 @@
                     </li>
 
                     <li class="my-4  w-full">
-                        <a class="flex w-full items-center p-5 rounded-lg hover:bg-[#F3F4F5] hover:shadow-lg active:bg-gray-200 cursor-pointer text-gray-500"
+                        <a class="flex w-full items-center p-5 rounded-lg hover:bg-indigo-500 hover:text-white duration-500 hover:shadow-lg active:bg-gray-200 cursor-pointer text-gray-700"
                             @click="selectComponent('userRequests')">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
                                 stroke="currentColor" class="w-6 h-6 mr-3">
@@ -57,7 +58,7 @@
                     </li>
 
                     <li class="my-4  w-full">
-                        <a :href="userInfo ? `/cart/${userInfo.id}` : '#'" class="flex w-full items-center p-5 rounded-lg hover:bg-[#F3F4F5] hover:shadow-lg active:bg-gray-200 cursor-pointer text-gray-500">
+                        <a :href="userInfo ? `/cart/${userInfo.id}` : '#'" class="flex w-full items-center p-5 rounded-lg duration-500 hover:bg-indigo-500 hover:text-white hover:shadow-lg active:bg-gray-200 cursor-pointer text-gray-700">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
                                 stroke="currentColor" class="w-6 h-6 mr-3">
                                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -67,7 +68,7 @@
                         </a>
                     </li>
 
-                    <button @click="logout" class="flex w-full items-center p-5 rounded-lg hover:bg-[#F3F4F5] hover:shadow-lg active:bg-gray-200 cursor-pointer text-gray-500">
+                    <button @click="logout" class="flex w-full items-center p-5 rounded-lg hover:bg-indigo-500 hover:text-white duration-500 hover:shadow-lg active:bg-gray-200 cursor-pointer text-gray-700">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6 mr-3">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
                         </svg>
@@ -84,6 +85,16 @@
                 <component :is="selectedComponent" :user-data="userData" />
             </section>
         </main>
+
+
+
+
+        <!-- Sessão Mobile -->
+        <div>
+
+        </div>
+
+
     </div>
 </template>
 
