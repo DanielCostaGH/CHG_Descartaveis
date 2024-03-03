@@ -12,6 +12,13 @@
 
         </main>
 
+        <!-- MOBILE SECTION -->
+        <section>
+            <div class="lg:hidden h-full">
+                <favorites :user-data="userData" />
+            </div>
+        </section>
+
        
     </div>
 </template>

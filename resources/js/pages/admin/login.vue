@@ -4,7 +4,6 @@
             <div class="w-full text-center">
                 <img class="w-[55vh] mx-auto" :src="logo_light" alt="Logo">
                 <div class="mb-5">
-                    <a href="/" class="text-blue-500 ">Voltar para pagina inicial?</a>
                 </div>
             </div>
 
@@ -46,10 +45,14 @@
                         <button
                             class="bg-[#F3F3F3] text-[#1A1A1A] w-full h-[6vh] my-4 rounded flex justify-center items-center"
                             type="submit">
-                            <v-icon class="p-4"><img :src="google_icon" alt=""></v-icon> Entre com sua conta Google</button>
+                            <v-icon class="p-4">mdi-account</v-icon>Criar conta</button>
                     </div>
                 </form>
             </div>
+            <div class="flex w-full justify-center my-10">
+                <a href="/" class="text-blue-500 ">Voltar para pagina inicial?</a>
+            </div>
+            
         </div>
     </div>
 </template>

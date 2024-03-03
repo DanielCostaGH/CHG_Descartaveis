@@ -19,7 +19,6 @@
                         </button>
                     </div>
                 </div>         
-                <img src="/images/products/1/imagem1.png" alt="nome da imagem">   
 
                 <a :href="`products/${product.id}`">
                   <v-img :src="product.imagePath" cover height="200"></v-img>

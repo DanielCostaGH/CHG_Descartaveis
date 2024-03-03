@@ -55,14 +55,13 @@
                     <img class="" :src="logo_light" alt="Logo">
                 </a>
 
-                <button @click="toggleMenu" class="md:hidden text-gray-600 mx-5 duration-300">
+                <v-btn  @click.stop="drawer = !drawer" class="md:hidden text-gray-600 mx-5 duration-300">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                         stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
                     </svg>
-                </button>
-
-
+                </v-btn>
+               
             </div>
             <div class="mx-auto px-6 my-4 relative flex">
                 <input type="text" v-model="searchQuery" @keyup.enter="searchProducts"
@@ -88,7 +87,12 @@
                 </ul>
             </div>
 
-
+            <v-layout>
+                <v-navigation-drawer v-model="drawer" temporary location="right">
+                    <sidebar/>
+                </v-navigation-drawer>
+            </v-layout>
+           
 
 
         </div>
@@ -96,6 +100,8 @@
 </template>
 
 <script>
+import sidebar from './sidebar.vue';
+
 export default {
     data() {
         return {
@@ -107,7 +113,12 @@ export default {
             cart: '/images/buy.svg',
             menuOpen: true,
             userData: [],
+            drawer: null,
         };
+    },
+
+    components: {
+        sidebar,
     },
 
     computed: {
@@ -137,8 +148,11 @@ export default {
         setUserData() {
             this.userData = this.userInfo;
         },
-        toggleMenu() {
-            this.menuOpen = !this.menuOpen;
+        // toggleMenu() {
+        //     this.menuOpen = !this.menuOpen;
+        // },
+        toggleSidebar() {
+            this.sidebar = !this.sidebar;
         },
 
         fetchSuggestions() {

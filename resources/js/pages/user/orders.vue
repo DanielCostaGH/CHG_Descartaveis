@@ -12,6 +12,13 @@
 
         </main>
 
+        <!-- MOBILE SECTION -->
+        <section>
+            <div class="h-full">
+                <orders :user-data="userData" />
+            </div>
+        </section>
+
        
     </div>
 </template>
