@@ -3,7 +3,7 @@
         <ul class="text-lg w-full mx-4">
             <li class="my-4  w-full">
                 <a href="/user/info"
-                    class="flex w-full items-center p-5 rounded-lg hover:bg-indigo-500 hover:text-white transition duration-300 ease-in-out hover:shadow-lg active:bg-gray-200 cursor-pointer text-gray-700">
+                    class="flex w-full items-center p-5 rounded-lg hover:bg-blue-900 hover:text-white transition duration-300 ease-in-out hover:shadow-lg active:bg-gray-200 cursor-pointer text-gray-700">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
                         stroke="currentColor" class="w-6 h-6 mr-3">
                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -15,7 +15,7 @@
 
             <li class="my-4  w-full">
                 <a href="/user/address"
-                    class="flex w-full items-center p-5 rounded-lg hover:bg-indigo-500 hover:text-white transition duration-300 ease-in-out hover:shadow-lg active:bg-gray-200 cursor-pointer text-gray-700">
+                    class="flex w-full items-center p-5 rounded-lg hover:bg-blue-900 hover:text-white transition duration-300 ease-in-out hover:shadow-lg active:bg-gray-200 cursor-pointer text-gray-700">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
                         stroke="currentColor" class="w-6 h-6 mr-3">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -28,7 +28,7 @@
 
             <li class="my-4  w-full">
                 <a href="/user/favorites"
-                    class="flex w-full items-center p-5 rounded-lg hover:bg-indigo-500 hover:text-white transition duration-300 ease-in-out hover:shadow-lg active:bg-gray-200 cursor-pointer text-gray-700">
+                    class="flex w-full items-center p-5 rounded-lg hover:bg-blue-900 hover:text-white transition duration-300 ease-in-out hover:shadow-lg active:bg-gray-200 cursor-pointer text-gray-700">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
                         stroke="currentColor" class="w-6 h-6 mr-3">
                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -40,7 +40,7 @@
 
             <li class="my-4  w-full">
                 <a href="/user/orders"
-                    class="flex w-full items-center p-5 rounded-lg hover:bg-indigo-500 hover:text-white transition duration-300 ease-in-out hover:shadow-lg active:bg-gray-200 cursor-pointer text-gray-700">
+                    class="flex w-full items-center p-5 rounded-lg hover:bg-blue-900 hover:text-white transition duration-300 ease-in-out hover:shadow-lg active:bg-gray-200 cursor-pointer text-gray-700">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
                         stroke="currentColor" class="w-6 h-6 mr-3">
                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -52,7 +52,7 @@
 
             <li class="my-4  w-full">
                 <a :href="`/cart/${userData.id}`"
-                    class="flex w-full items-center p-5 rounded-lg transition duration-300 ease-in-out hover:bg-indigo-500 hover:text-white hover:shadow-lg active:bg-gray-200 cursor-pointer text-gray-700">
+                    class="flex w-full items-center p-5 rounded-lg transition duration-300 ease-in-out hover:bg-blue-900 hover:text-white hover:shadow-lg active:bg-gray-200 cursor-pointer text-gray-700">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
                         stroke="currentColor" class="w-6 h-6 mr-3">
                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -63,7 +63,7 @@
             </li>
 
             <button @click="logoutDialog = true"
-                class="flex w-full items-center p-5 rounded-lg hover:bg-indigo-500 hover:text-white transition duration-300 ease-in-out hover:shadow-lg active:bg-gray-200 cursor-pointer text-gray-700">
+                class="flex w-full items-center p-5 rounded-lg hover:bg-red-600 hover:text-white transition duration-300 ease-in-out hover:shadow-lg active:bg-gray-200 cursor-pointer text-gray-700">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
                     stroke="currentColor" class="w-6 h-6 mr-3">
                     <path stroke-linecap="round" stroke-linejoin="round"

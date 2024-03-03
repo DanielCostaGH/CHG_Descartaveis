@@ -55,7 +55,7 @@
             <div class="bg-white p-6 rounded-lg shadow mb-6">
 
                 <h3 class="text-xl mb-4 px-4">Produtos Recentes</h3>
-                <v-table  class="custom-table-body">
+                <v-table class="custom-table-body">
                     <template v-slot:default>
                         <thead>
                             <tr>
@@ -68,21 +68,25 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="item in products" :key="item.id" >
+                            <tr v-for="item in products" :key="item.id">
                                 <td>{{ item.name }}</td>
                                 <td>{{ item.price }}</td>
                                 <td>{{ item.quantity }}</td>
                                 <td>{{ item.category_id }}</td>
                                 <td>{{ item.status }}</td>
-                                <td><a  :href="'/dashboard/products/edit/' + item.id"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="w-6 h-6">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
-                        </svg></a></td>
+                                <td><a :href="'/dashboard/products/edit/' + item.id"><svg xmlns="http://www.w3.org/2000/svg"
+                                            fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                            class="w-6 h-6">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+                                        </svg></a></td>
                             </tr>
                         </tbody>
                     </template>
                 </v-table>
+                <div class="flex w-full">
+                    <v-pagination class="w-full" v-model="page" :length="totalPages" @input="changePage"></v-pagination>
+                </div>
             </div>
 
         </main>
@@ -107,8 +111,8 @@ export default {
             config: '/images/config_icon.svg',
             totalProducts: 0,
             totalCategories: 0,
-
-
+            page: 1,
+            totalPages: 0,
             headers: [
                 { text: 'Nome do produto', value: 'name' },
                 { text: 'Preço', value: 'price' },
@@ -126,15 +130,29 @@ export default {
         this.fetchTotalProducts();
         this.fetchTotalCategories();
     },
+
+    watch: {
+        page(newVal, oldVal) {
+            if (newVal !== oldVal) this.fetchProducts(); // Recarregar os dados quando a página mudar
+        }
+    },
+
     methods: {
-        async fetchProducts() {
-            try {
-                const response = await axios.get('/api/products');
-                this.products = response.data;
-            } catch (error) {
-                console.error(error);
-            }
+        fetchProducts(filters = {}) {
+            axios.get(`/api/products?page=${this.page}`, { params: filters })
+                .then(response => {
+                    this.products = response.data.data;
+                    this.totalPages = response.data.last_page;
+                })
+                .catch(error => {
+                    console.error('Erro ao buscar produtos:', error);
+                });
         },
+        changePage(page) {
+            this.page = page;
+            this.fetchProducts();
+        },
+
         async fetchTotalProducts() {
             try {
                 const response = await axios.get('/api/products/count');

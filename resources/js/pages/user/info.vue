@@ -4,15 +4,22 @@
 
 
         <main class="hidden lg:flex container mx-auto my-10  rounded-lg min-h-[75vh]">
-            <sidebar :user-data="userData"/>
+            <sidebar :user-data="userData" />
 
             <div class="w-3/4 h-full">
-                <info :user-data="userData"/>
+                <info :user-data="userData" />
             </div>
-
         </main>
 
-       
+        <!-- MOBILE SECTION -->
+        <section>
+            <div class="h-full">
+                <info :user-data="userData" />
+            </div>
+        </section>
+
+        
+
     </div>
 </template>
 
@@ -25,6 +32,7 @@ export default {
     data() {
         return {
             userData: {},
+            
         };
     },
     props: {
@@ -39,7 +47,7 @@ export default {
     computed: {
 
     },
-    
+
     components: {
         navbar,
         sidebar,
@@ -47,7 +55,7 @@ export default {
     },
 
     methods: {
-       
+
     },
 };
 </script>

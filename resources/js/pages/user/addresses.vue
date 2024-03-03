@@ -4,15 +4,21 @@
 
 
         <main class="hidden lg:flex container mx-auto my-10  rounded-lg min-h-[75vh]">
-            <sidebar :user-data="userData"/>
+            <sidebar :user-data="userData" />
 
             <div class="w-3/4 h-full">
-                <addresses :user-data="userData"/>
+                <addresses :user-data="userData" />
             </div>
-
         </main>
 
-       
+        <!-- MOBILE SECTION -->
+        <section>
+            <div class="lg:hidden h-full mb-10">
+                <addresses :user-data="userData" />
+            </div>
+        </section>
+
+
     </div>
 </template>
 
@@ -36,7 +42,7 @@ export default {
     computed: {
 
     },
-    
+
     components: {
         navbar,
         sidebar,
@@ -44,7 +50,7 @@ export default {
     },
 
     methods: {
-       
+
     },
 };
 </script>

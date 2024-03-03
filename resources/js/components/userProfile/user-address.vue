@@ -1,32 +1,32 @@
 <template>
-    <div class="px-8">
+    <div class="px-2 lg:px-8">
         <v-card class="w-6/6">
-            <v-card-title class="text-xl font-medium">Gerenciar Endereços</v-card-title>
+            <v-card-title class="text-xl font-weight-bold text-gray-600 my-5">Meus Endereços</v-card-title>
             <v-card-text>
                 <v-form ref="form" v-model="valid" lazy-validation>
-                    <div class="flex flex-wrap">
+                    <div class="lg:flex lg:flex-wrap">
 
-                        <div class="flex w-full">
-                            <v-text-field v-model="formData.zipcode" label="CEP" outlined dense class="mb-4 mr-5 w-1/3"
-                                @blur="buscarEnderecoPorCEP"></v-text-field>
+                        <div class="lg:flex w-full">
+                            <v-text-field v-model="formData.zipcode" label="CEP" outlined dense
+                                class="lg:mb-4 lg:mr-5 lg:w-1/3" @blur="buscarEnderecoPorCEP"></v-text-field>
                             <v-text-field v-model="formData.street" label="Rua" outlined dense
-                                class="mb-4  w-2/3"></v-text-field>
-                            
+                                class="lg:mb-4  lg:w-2/3"></v-text-field>
+
                         </div>
 
-                        <div class="flex w-full">
+                        <div class="lg:flex lg:w-full">
                             <v-text-field v-model="formData.neighborhood" label="Bairro" outlined dense
-                                class="mb-4  w-2/6"></v-text-field>
+                                class="lg:mb-4  lg:w-2/6"></v-text-field>
                             <v-text-field v-model="formData.number" label="Número" outlined dense
-                                class="mb-4 ml-5 w-1/6"></v-text-field>
+                                class="lg:mb-4 lg:ml-5 lg:w-1/6"></v-text-field>
 
                             <v-text-field v-model="formData.city" label="Cidade" outlined dense
-                                class="mb-4 ml-5 w-3/6"></v-text-field>
+                                class="lg:mb-4 lg:ml-5 lg:w-3/6"></v-text-field>
                         </div>
 
-                        <div class="flex w-full">
+                        <div class="lg:flex lg:w-full">
                             <v-text-field v-model="formData.state" label="Estado" outlined dense
-                                class="mb-4 mr-5"></v-text-field>
+                                class="lg:mb-4 lg:mr-5"></v-text-field>
 
                             <v-btn @click="adicionarEndereco" class="rounded-full bg-blue-darken-2 pt-5 pb-9">
                                 <v-icon class="mr-2">mdi-plus</v-icon>
@@ -37,33 +37,68 @@
                     </div>
                 </v-form>
 
-                <v-divider class="my-4"></v-divider>
+                <v-divider class="hidden lg:block my-4"></v-divider>
 
-                <v-radio-group class="flex flex-wrap justify-center w-full" v-model="selectedMainAddress">
-                    <v-card v-for="(endereco, index) in userAddresses" :key="index" class="mb-4 w-[90vh]">
-                        <v-card-text>
-                            <v-row>
-                                <v-col cols="9" class="flex items-center">
-                                    <div>{{ endereco.street }}, {{ endereco.number }}, {{ endereco.neighborhood }}, {{
-                                        endereco.city }},
-                                        {{ endereco.state }}, {{ endereco.zipcode }}</div>
-                                </v-col>
-                                <v-col cols="2" class="flex items-center ">
-                                    <v-col>
-                                        <v-radio :value="index"></v-radio>
+
+                <!-- SESSÂO DESKTOP -->
+                <section class="hidden lg:block">
+                    <v-radio-group class="flex flex-wrap justify-center w-full" v-model="selectedMainAddress">
+                        <v-card v-for="(endereco, index) in userAddresses" :key="index" class="mb-4 w-full">
+                            <v-card-text>
+                                <v-row>
+                                    <v-col cols="9" class="flex items-center">
+                                        <div>{{ endereco.street }}, {{ endereco.number }}, {{ endereco.neighborhood }}, {{
+                                            endereco.city }},
+                                            {{ endereco.state }}, {{ endereco.zipcode }}</div>
                                     </v-col>
-                                    <v-btn @click="openEditModal(index)">
-                                        <v-icon>mdi-home-edit-outline</v-icon>
-                                    </v-btn>
+                                    <v-col cols="2" class="flex items-center ">
+                                        <v-col>
+                                            <v-radio :value="index"></v-radio>
+                                        </v-col>
+                                        <v-btn @click="openEditModal(index)">
+                                            <v-icon>mdi-home-edit-outline</v-icon>
+                                        </v-btn>
 
-                                    <v-btn
-                                        @click="deleteAddress(endereco.id)"><v-icon>mdi-delete-alert-outline</v-icon></v-btn>
-                                </v-col>
+                                        <v-btn
+                                            @click="deleteAddress(endereco.id)"><v-icon>mdi-delete-alert-outline</v-icon></v-btn>
+                                    </v-col>
 
-                            </v-row>
-                        </v-card-text>
-                    </v-card>
-                </v-radio-group>
+                                </v-row>
+                            </v-card-text>
+                        </v-card>
+                    </v-radio-group>
+                </section>
+
+                <!-- SESSÂO MOBILE -->
+                <section class="lg:hidden">
+                    <v-radio-group class="flex flex-wrap justify-center w-full" v-model="selectedMainAddress">
+                        <v-card v-for="(endereco, index) in userAddresses" :key="index" class="mb-4">
+                            <v-card-text>
+                                <v-row>
+                                    <v-col cols="12" class="flex items-center">
+                                        <div>{{ endereco.street }}, {{ endereco.number }}, {{ endereco.neighborhood }}, {{
+                                            endereco.city }},
+                                            {{ endereco.state }}, {{ endereco.zipcode }}</div>
+                                    </v-col>
+                                </v-row>
+                                <v-row>
+                                    <v-col cols="12" class="flex items-center ">
+                                        <v-col>
+                                            <v-radio :value="index"></v-radio>
+                                        </v-col>
+                                        <v-btn @click="openEditModal(index)">
+                                            <v-icon>mdi-home-edit-outline</v-icon>
+                                        </v-btn>
+
+                                        <v-btn
+                                            @click="deleteAddress(endereco.id)"><v-icon>mdi-delete-alert-outline</v-icon></v-btn>
+                                    </v-col>
+                                </v-row>
+                            </v-card-text>
+                        </v-card>
+                    </v-radio-group>
+                </section>
+
 
                 <v-divider class="my-4"></v-divider>
 
