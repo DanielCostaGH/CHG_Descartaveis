@@ -7,43 +7,71 @@ use App\Models\Payment;
 use App\Models\ShoppingCart;
 use App\Models\Transaction;
 use App\Models\User;
+use App\Models\UserAddress;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Route;
 
 class OrderController extends Controller
 {
-    public function index(){
+    public function index()
+    {
         return view("dashboard.order.index");
     }
 
-    public function shipped(){
+    public function shipped()
+    {
         return view("dashboard.order.shipped");
     }
 
-    public function getPendingOrders() {
+    public function getPendingOrders()
+    {
         $orders = Order::getPendingOrders();
         return response()->json($orders);
     }
 
+    public function orderDetails($id)
+    {
+        $order = Order::find($id);
 
-    public function orderDetails(){
-        return view("user.order_details");
+        if (!$order) {
+            return view('user.orders');
+        }
+
+        if (!$this->checkIfOrderBelongsToUser($order)) {
+            return view('user.orders');
+        }
+
+        $transaction = Transaction::where('order_id', $order->id)->first();
+        $user = User::find($order->user_id);
+        $userAddress = UserAddress::where('user_id', $user->id)->first();
+        return view("user.order_details", compact('order', 'transaction', 'user', 'userAddress'));
     }
 
-    public function store(Request $request){
 
+    public function checkIfOrderBelongsToUser($order)
+    {
+        if (!auth('user')->check()) {
+            return false;
+        }
+
+        $userId = auth('user')->user()->id;
+
+        return $order->user_id == $userId;
+    }
+
+
+    public function store(Request $request)
+    {
         if ($request->paymentMethod == "PIX") {
             $payment_method = "pix";
             $payment_opt = 9;
-        } else if ($request->paymentMethoD == "BOLETO") {
+        } elseif ($request->paymentMethod == "Boleto Bancário") {
             $payment_method = "boleto";
             $payment_opt = 1;
         } else {
             $payment_method = "credit_card";
             $payment_opt = 0;
         }
-
-        $payment_opt = 0;
-
 
         $order = new Order();
         $order->user_id = $request->userId;
@@ -59,12 +87,15 @@ class OrderController extends Controller
                     ->where('user_id', $request->userId)
                     ->first();
 
-        $payment = Payment::where('user_id', $user->id)->first();
-
-        if ($payment_method == "credit_card" && $order) {
+        if ($payment_method && $order) {
             $transaction = Transaction::createTransactionByOrderId($order->id, $payment, $order->total_price, $user, $payment_opt, $order->address_id);
-        };
 
-        
+            if ($payment_method == "credit_card" && isset($transaction)) {
+                $order = Order::find($order->id);
+                $order->status = ($transaction->status == 'paid') ? "paid" : "pending";
+                $order->save();
+            }
+        }
+        return $order;
     }
 }

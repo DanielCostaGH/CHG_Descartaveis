@@ -188,13 +188,12 @@ export default {
                     break;
                 case 'confirmation':
                     this.$emit('confirmPurchase');
-                    nextUrl = `/order-details`;
                     break;
                 default:
                     nextUrl = `/cart/payment/${id}`;
                     break;
             }
-            window.location.href = nextUrl;
+            // window.location.href = nextUrl;
 
         },
 

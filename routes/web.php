@@ -59,7 +59,7 @@ Route::group(['prefix' => 'user', 'middleware' => 'UserAuthMiddleware'], functio
     Route::post('/createcard', [PaymentController::class, 'createCard'])->name('user.createcard');
     Route::get('/get_cards_by_user', [PaymentController::class, 'getCardsByUserId'])->name('user.getcards');
     Route::post('get-cards', [GetApiDataController::class, 'getCards']);
-    Route::get('/order-details', [OrderController::class, 'orderDetails']);
+    Route::get('/order-details/{id}', [OrderController::class, 'orderDetails']);
     Route::post('/favorite', [FavoritesController::class, 'update']);
     Route::get('/get-favorites', [FavoritesController::class, 'getUserFavorites']);
     Route::get('/favorite-products', [FavoritesController::class, 'getUserFavoritesProducts']);
@@ -144,7 +144,7 @@ Route::group(['prefix' => 'cart', 'middleware' => 'UserAuthMiddleware'], functio
     Route::get('/confirmation/{id}', [ShoppingCartController::class, 'confirmation']);
 });
 
-Route::get('/order-details', [OrderController::class, 'orderDetails']);
+// Route::get('/order-details/{id}', [OrderController::class, 'orderDetails']);
 
 // Rotas a parte
 Route::get('/local/cart', [ShoppingCartController::class, 'localCart']);

@@ -10,10 +10,6 @@ use Illuminate\Support\Facades\Response;
 
 class PaymentController extends Controller
 {
-    public static function retrieveCardPayment(Request $request) {
-    }
-
-
     public function createCard(PaymentRequest $request){
         $cardNumber = $request->card_number;
         $cardExpirationMonth = $request->expiration_mouth;
@@ -52,4 +48,5 @@ class PaymentController extends Controller
         
         return $last_four;
     }    
+
 }

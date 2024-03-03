@@ -73,9 +73,8 @@ class PagarmeApi
         $url = sprintf('%s/orders/', self::URL);
 
         $header     =   self::getHeader(true);
-        $body       =   self::getBody($payment, $amount, $capture, $payment_opt, $client, $order_id, $address_id);
+        $body       =   self::getBody($payment, $amount, $capture, $payment_opt, $client, $order_id, $address_id, null);
         $chargeSplitRequest =   self::apiRequest($url, $body, $header, self::POST_REQUEST);
-        dd($chargeSplitRequest);
         return $chargeSplitRequest;
     }
 
@@ -312,12 +311,12 @@ class PagarmeApi
      *                      ?'message' //if it fails, with false success
      *                     }
      */
-    public static function billetCharge($amount, $client, $boletoExpirationDate)
+    public static function billetCharge($amount, $user, $payment_opt, $order_id, $address_id, $boletoExpirationDate)
     {
         $url = sprintf('%s/orders/', self::URL);
 
         $header     =   self::getHeader();
-        $body       =   self::getBody(null, $amount, null, false, null, $client, $boletoExpirationDate);
+        $body       =   self::getBody(null, $amount, true, $payment_opt, $user, $order_id, $address_id, $boletoExpirationDate);
         $billetRequest =   self::apiRequest($url, $body, $header, self::POST_REQUEST);
 
         return $billetRequest;
@@ -334,14 +333,13 @@ class PagarmeApi
      *                      ?'message' //if it fails, with false success
      *                     }
      */
-    public static function pixCharge($amount, $user, $providerAmount = null, $provider = null)
+    public static function pixCharge($amount, $user, $payment_opt, $order_id, $address_id)
     {
         $url = sprintf('%s/orders/', self::URL);
 
         $header     =   self::getHeader(true);
-        $body       =   self::getBody(null, $amount, $providerAmount, true, $provider, $user, null, true, false);
+        $body       =   self::getBody(null, $amount, true, $payment_opt, $user, $order_id, $address_id, null);
         $pixRequest =   self::apiRequest($url, $body, $header, self::POST_REQUEST);
-
         return $pixRequest;
     }
 
@@ -426,11 +424,11 @@ class PagarmeApi
      * @param  Boolean   $isDebit
      * @return Json
      */
-    private static function getBody($payment = null, $amount, $capture = false, $payment_opt, $client = null, $order_id, $address_id)
+    private static function getBody($payment = null, $amount, $capture = false, $payment_opt, $client = null, $order_id, $address_id, $boletoExpirationDate = null)
     {
         $paymentDocument = null;
 
-
+        $isPix = false;
         if (isset($payment_opt)) {
             if ($payment_opt == 0) {
                 $paymentType = "credit_card";
@@ -494,13 +492,14 @@ class PagarmeApi
             ),
             "closed"        =>  true
         );
+
+        $userAdress = UserAddress::find($address_id);
+
         if($payment)
         {
             $expirationDate = self::getExpirationDate($payment);
 
             $cardNumber = Payment::getCardNumber($payment);
-
-            $userAdress = UserAddress::find($address_id);
 
             $address = [
                 "zip_code" => $userAdress->zipcode,
@@ -538,20 +537,20 @@ class PagarmeApi
             $payFields = (object)array(
                 "payment_method"    =>  "boleto",
                 "boleto"            =>  (object)array(
-                    "instructions"      =>  Settings::getBilletInstructions(),
-                    "due_at"            =>  Carbon::parse($billetExpiry)->format('Y-m-d H:i:s'),
-                    "document_number"   =>  "$orderId",
-                    "type"              =>  "DM" //DM (Duplicata Mercantil) | BDP (Boleto de proposta)
+                    "instructions"      =>  "Pagar até o vencimento",
+                    "due_at"            =>  Carbon::parse($boletoExpirationDate)->format('Y-m-d H:i:s'),
+                    "document_number"   =>  (string) $client->document,
+                    "type"              =>  "DM"
                 )
             );
 
             $fields->customer->address  =   (object)array(
-                "line_1"    => "$client->address_number, $client->address, $client->address_neighbour",
-                "line_2"    => $client->address_complements,
-                "zip_code"  => preg_replace('/\D/', '', $client->zipcode),
-                "city"      => $client->address_city,
-                "state"     => $client->state,
-                "country"   => self::countryInitials($client->country)
+                "line_1"    => "$userAdress->address_number, $userAdress->street, $userAdress->neighborhood",
+                "line_2"    => $userAdress->address_complements ?? null,
+                "zip_code"  => preg_replace('/\D/', '', $userAdress->zipcode),
+                "city"      => $userAdress->city,
+                "state"     => $userAdress->state,
+                "country"   => "BR"
             );
         }
 

@@ -101,7 +101,6 @@ export default {
 
 
     saveOrder() {
-      console.log("entrou");
       const orderData = JSON.parse(localStorage.getItem('order'));
       const simplifiedOrder = {
         userId: orderData.userData.id,
@@ -116,7 +115,7 @@ export default {
 
       axios.post('/api/save-order', simplifiedOrder)
         .then(response => {
-          window.location.href = '/user/order-details'
+          window.location.href = `/user/order-details/${response.data.id}`
         })
         .catch(error => {
         });

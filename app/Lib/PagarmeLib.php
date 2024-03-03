@@ -121,7 +121,7 @@ class PagarmeLib implements IPayment
         }
         elseif ($payment_opt == 9){
             try {
-                $response = PagarmeApi::pixCharge($totalAmount, $user, $providerAmount, $provider);
+                $response = PagarmeApi::pixCharge($totalAmount, $user, $payment_opt, $order_id, $address_id);
                 if (
                     isset($response->success) ||
                     $response->success ||
@@ -133,7 +133,8 @@ class PagarmeLib implements IPayment
                         'paid'                      =>  false,
                         'status'                    =>  self::WAITING_PAYMENT,
                         'transaction_id'            =>  (string)$response->data->charges[0]->id,
-                        'billet_expiration_date'    =>  $response->data->charges[0]->last_transaction->qr_code,
+                        'qr_code_base64'            =>  $response->data->charges[0]->last_transaction->qr_code,
+                        'qr_code_url'               =>  $response->data->charges[0]->last_transaction->qr_code_url,
                         'expires_at'                =>  $response->data->charges[0]->last_transaction->expires_at
                     );
                 } else {
@@ -158,6 +159,9 @@ class PagarmeLib implements IPayment
                     'billet_expiration_date'=>  ''
                 );
             }
+        } else if ($payment_opt == 1) {
+            $boletoExpirationDate = now()->addDays(3)->toDateString();
+            $response = PagarmeApi::billetCharge($totalAmount, $user, $payment_opt, $order_id, $address_id, $boletoExpirationDate);
         }
     }
     
