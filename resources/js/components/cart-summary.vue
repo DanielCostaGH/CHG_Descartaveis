@@ -193,7 +193,7 @@ export default {
                     nextUrl = `/cart/payment/${id}`;
                     break;
             }
-            // window.location.href = nextUrl;
+            window.location.href = nextUrl;
 
         },
 
