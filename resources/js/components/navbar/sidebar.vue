@@ -3,10 +3,10 @@
         <span>BEM VINDO</span>
     </div>
 
-    <ul class="text-gray-600 py-2 border-t">
+    <ul class="text-gray-600 py-2 border-t b-color">
 
         <li class="my-2 w-full">
-            <a href="/user/info" class="flex w-full items-center p-5 text-gray-700">
+            <a href="/user/info" class="flex w-full items-center p-5 text-white">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
                     stroke="currentColor" class="w-6 h-6 mr-3">
                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -17,7 +17,7 @@
         </li>
 
         <li class="mb-4  w-full">
-            <a href="/user/address" class="flex w-full items-center p-5 text-gray-700">
+            <a href="/user/address" class="flex w-full items-center p-5 text-white">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
                     stroke="currentColor" class="w-6 h-6 mr-3">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -29,7 +29,7 @@
         </li>
 
         <li class="my-4  w-full">
-            <a href="/user/favorites" class="flex w-full items-center p-5 text-gray-700">
+            <a href="/user/favorites" class="flex w-full items-center p-5 text-white">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
                     stroke="currentColor" class="w-6 h-6 mr-3">
                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -40,7 +40,7 @@
         </li>
 
         <li class="my-4  w-full">
-            <a href="/user/orders" class="flex w-full items-center p-5 text-gray-700">
+            <a href="/user/orders" class="flex w-full items-center p-5 text-white">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
                     stroke="currentColor" class="w-6 h-6 mr-3">
                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -51,7 +51,7 @@
         </li>
 
         <li class="my-4  w-full">
-            <a :href="`/cart/${userData.id}`" class="flex w-full items-center p-5 text-gray-700">
+            <a :href="`/cart/${userData.id}`" class="flex w-full items-center p-5 text-white">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
                     stroke="currentColor" class="w-6 h-6 mr-3">
                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -61,7 +61,7 @@
             </a>
         </li>
 
-        <button @click="logoutDialog = true" class="flex w-full items-center p-5 text-red">
+        <button @click="logoutDialog = true" class="flex w-full items-center p-5 text-white bg-red rounded">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"
                 class="w-6 h-6 mr-3">
                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -111,3 +111,7 @@ export default {
 };
 </script>
   
+
+<style>
+
+</style>
