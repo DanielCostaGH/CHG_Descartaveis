@@ -88,7 +88,7 @@
             </div>
 
             <v-layout>
-                <v-navigation-drawer v-model="drawer" temporary location="right">
+                <v-navigation-drawer color="#212844" rounded v-model="drawer" temporary location="right">
                     <sidebar/>
                 </v-navigation-drawer>
             </v-layout>
