@@ -115,6 +115,7 @@ export default {
 
       axios.post('/api/save-order', simplifiedOrder)
         .then(response => {
+          console.log(response.data.id)
           window.location.href = `/user/order-details/${response.data.id}`
         })
         .catch(error => {
