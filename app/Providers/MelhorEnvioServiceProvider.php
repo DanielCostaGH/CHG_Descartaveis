@@ -16,24 +16,24 @@ class MelhorEnvioServiceProvider extends ServiceProvider
     }
 
     public function getToken($code)
-{
-    $client = new Client();
+    {
+        $client = new Client();
 
-    // Atenção: 'form_params' é usado em vez de 'json', pois estamos enviando dados de formulário
-    $response = $client->request('POST', 'https://sandbox.melhorenvio.com.br/oauth/token', [
-        'headers' => [
-            'Accept' => 'application/json',
-        ],
-        'form_params' => [
-            'grant_type' => 'authorization_code',
-            'client_id' => env('MELHOR_ENVIO_CLIENT_ID'),
-            'client_secret' => env('MELHOR_ENVIO_CLIENT_SECRET'),
-            'redirect_uri' => env('MELHOR_ENVIO_REDIRECT_URI'),
-            'code' => $code,
-        ],
-    ]);
+        // Atenção: 'form_params' é usado em vez de 'json', pois estamos enviando dados de formulário
+        $response = $client->request('POST', 'https://sandbox.melhorenvio.com.br/oauth/token', [
+            'headers' => [
+                'Accept' => 'application/json',
+            ],
+            'form_params' => [
+                'grant_type' => 'authorization_code',
+                'client_id' => '4151',
+                'client_secret' => 'p0TGKb5HJngC2WedSDI9AnKG7GoP4HBc86Vq07Ki',
+                'redirect_uri' => 'https://chgdescartaveis.com/auth',
+                'code' => $code,
+            ],
+        ]);
 
-    return json_decode((string) $response->getBody(), true);
-}
+        return json_decode((string) $response->getBody(), true);
+    }
 
 }
