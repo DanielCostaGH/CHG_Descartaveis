@@ -215,6 +215,7 @@ export default {
             })
                 .then(response => {
                     this.freteList = response.data;
+                    console.log(response.data);
                 })
                 .catch(error => {
                     console.error('Erro ao calcular o frete:', error);

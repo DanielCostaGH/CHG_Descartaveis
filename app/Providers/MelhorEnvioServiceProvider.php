@@ -20,15 +20,15 @@ class MelhorEnvioServiceProvider extends ServiceProvider
         $client = new Client();
 
         // Atenção: 'form_params' é usado em vez de 'json', pois estamos enviando dados de formulário
-        $response = $client->request('POST', 'https://sandbox.melhorenvio.com.br/oauth/token', [
+        $response = $client->request('POST', 'https://melhorenvio.com.br/oauth/token', [
             'headers' => [
                 'Accept' => 'application/json',
             ],
             'form_params' => [
                 'grant_type' => 'authorization_code',
-                'client_id' => '4151',
-                'client_secret' => 'p0TGKb5HJngC2WedSDI9AnKG7GoP4HBc86Vq07Ki',
-                'redirect_uri' => 'https://chgdescartaveis.com/auth',
+                'client_id' => '14301',
+                'client_secret' => 'vy4PrPr4KBlbrotfKOcR85woGpEOyVbDoGWlAdJH',
+                'redirect_uri' => 'https://63f3-2804-14c-5bd2-8632-40a8-bae6-e1f7-c934.ngrok-free.app/auth',
                 'code' => $code,
             ],
         ]);
