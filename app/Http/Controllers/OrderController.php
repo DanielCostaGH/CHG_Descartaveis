@@ -29,6 +29,12 @@ class OrderController extends Controller
         return response()->json($orders);
     }
 
+    public function getShippedOrders()
+    {
+        $orders = Order::getShippedOrders();
+        return response()->json($orders);
+    }
+
     public function orderDetails($id)
     {
         $order = Order::find($id);

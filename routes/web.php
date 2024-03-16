@@ -94,6 +94,8 @@ Route::group(['prefix' => 'dashboard', 'middleware' => 'AdminAuthMiddleware'], f
     Route::get('/condition-terms', [TermsController::class, 'index']);
     Route::post('/update-terms', [TermsController::class, 'store']);
     Route::get('/get-terms', [TermsController::class, 'getServiceTerms']);
+    Route::get('/get-pending-orders', [OrderController::class,'getPendingOrders']);
+    Route::get('/get-shipped-orders', [OrderController::class,'getShippedOrders']);
 });
 
 
@@ -128,7 +130,6 @@ Route::group(['prefix' => 'api'], function () {
     Route::get('/redirect-to-melhor-envio', [MelhorEnvioController::class,'redirectToProvider']);
     Route::post('calculate-frete', [MelhorEnvioController::class, 'calculate']);
     Route::get('/get-access-token', [GetApiDataController::class,'getAccessToken']);
-    Route::get('get-pedings-orders', [OrderController::class,'getPendingOrders']);
     Route::post('/save-order', [OrderController::class, 'store']);
     Route::post('/reviews', [ReviewController::class, 'store']);
     Route::get('/products/{product}/reviews', [ReviewController::class, 'index']);

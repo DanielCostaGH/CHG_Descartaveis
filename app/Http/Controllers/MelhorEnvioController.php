@@ -5,9 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Providers\MelhorEnvioServiceProvider;
 use App\Models\TokenFrete;
-use GuzzleHttp\Client;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
 
 class MelhorEnvioController extends Controller
 {
@@ -51,67 +48,58 @@ class MelhorEnvioController extends Controller
         return redirect('/dashboard/config');
     }
 
-
-
-
-    // public function calculate(Request $request)
-    // {
-    //     $fromPostalCode = '96055-710';
-    //     $toPostalCode = $request->to['postal_code'];
-    //     $token = TokenFrete::latest()->first()->access_token;
-    //     $response = Http::withHeaders([
-    //         'Accept' => 'application/json',
-    //         'Authorization' => 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI0MTUxIiwianRpIjoiNGZjNTMxYjFlYWQ0YjcwMjI1YzI0YWY0NDJiNmFmNWMyZmYzMjFlNDY2MTgyOTU0Y2M0MjU3YmMyOGYzNTlmZWNhYjY4ZjJjZDZjYjBhOGUiLCJpYXQiOjE3MTA0NTUwNTkuODI4MjM1LCJuYmYiOjE3MTA0NTUwNTkuODI4MjM5LCJleHAiOjE3MTMwNDcwNTkuNzkwMzYyLCJzdWIiOiI5YjMxYmZkMi1jYWNjLTQ3YzYtODIyNS0xNDg3MGQ4NzRmYjkiLCJzY29wZXMiOltdfQ.jDKPbhgqAdmUa4z4dp635XYSt9LrI4nnLqDbikzB_3YKW6Mk_NIwcpM4L8O0ugujJ1K0rs_RNEoh1POI7JP7wU_zBFSq0T3N8Ow50PHRX8Pi6nELPi81HD05Z9q5As611i5ccEAIpienOrZjCBZKyGhHAOm3wB-qLGBir2DH49Hv6TOsNsX-43wC_xjGbvWwF-Ga6eERw0uJx6xmqZV_-gn4o6bcTFY6DZpR9v0lRdGHYTGE19h90vjbDF_OrB86RpJfBA5mZd5hQhAFF6sEdTx9ws2xKuTw_NPcKbEXN9xugEu5H92C-QVF4ujU0Cly1CSYxVGzyvsUq746KtqP9Ut2eZcKrgOgfAOTkMG9GAPuMhFI6h-8XNdr2_QN6PcB7qyidvpspcttpcPWne975SQag29HlaiG9cGjz-6z_M58xZ5bu2AS7RdIervecXgXBPuZ-pSDR76a7sKUII9NsC4Nk7NEfg5CWTElu3tOr5u5iU4xCc-dL8oSy74TtPlqWUwvWEhSthd0l99edhjJdIY-1QGTF2B9waE3bRpKSyyCGJNdsLSMGa4YwAxQ34SeNK2AdHSAMXhMtpil9LJzrveQx6REk5D8jkurIkddbNUSnEXcoZHoTEq3_Y3zDH7gD8Zey9_mTk3UgGWvATictfMLRM7beYVb_dvoPr9iLMg', 
-    //         'Content-Type' => 'application/json',
-    //         'User-Agent' => 'CHG_Descartáveis (dfscs.costa@gmail.com)',
-    //     ])->post('https://melhorenvio.com.br/api/v2/me/shipment/calculate', [
-    //         "from" => [
-    //             "postal_code" => "96055-710"
-    //         ],
-    //         "to" => [
-    //             "postal_code" => "26210000"
-    //         ],
-    //         "package" => [ 
-    //             [
-    //                 "width" => 1,
-    //                 "height" => 5,
-    //                 "length" => 10,
-    //                 "weight" => 0.1   
-    //             ]
-    //         ],
-    //         "options" => [
-    //             "insurance_value" => 50,
-    //             "receipt" => false,
-    //             "own_hand" => false,
-    //             "collect" => false
-    //         ]
-    //     ]);
-    //     dd($response);
-        
-    //     $responseData = $response->json();
-    // }
-
     public function calculate(Request $request)
     {
-        $fromPostalCode = '96055-710';
+        $fromPostalCode = '31365-000';
         $toPostalCode = $request->to['postal_code'];
-        $token = TokenFrete::latest()->first()->access_token;
+        $token = TokenFrete::latest()->first()->access_token;    
+        $packages = [];
+
+        $packageData = [
+            'width' => 0,
+            'height' => 0,
+            'length' => 0,
+            'weight' => 0
+        ];
+    
+        foreach ($request['products'] as $product) {
+            $quantity = $product['quantity'];
+    
+            for ($i = 0; $i < $quantity; $i++) {
+                $packed = false;
+    
+                foreach ($packages as &$package) {
+                    if ($this->tryToFit($product, $package)) {
+                        $packed = true;
+                        break;
+                    }
+                }
+    
+                if (!$packed) {
+                    $packageData['width'] += $product['width'];
+                    $packageData['height'] += $product['height'];
+                    $packageData['length'] += $product['length'];
+                    $packageData['weight'] += $product['weight'];
+                }
+            }
+        }    
+        $package = $packageData;
 
         $ch = curl_init();
 
         $postData = [
             "from" => [
-                "postal_code" => "96055-710"
+                "postal_code" => $fromPostalCode
             ],
             "to" => [
-                "postal_code" => "26210000"
+                "postal_code" => $toPostalCode
             ],
             "package" => [ 
                 [
-                    "width" => 1,
-                    "height" => 5,
-                    "length" => 10,
-                    "weight" => 0.1   
+                    "width" => $package['width'],
+                    "height" => $package['height'],
+                    "length" => $package['length'],
+                    "weight" => $package['weight']   
                 ]
             ],
             "options" => [

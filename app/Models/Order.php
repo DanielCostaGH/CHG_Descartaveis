@@ -25,7 +25,12 @@ class Order extends Model
     }
 
     public static function getPendingOrders(){
-        return self::where('status','pending')->get();
+        return self::whereIn('status', ['pending', 'paid'])->get();
+    }
+
+    public static function getShippedOrders()
+    {
+        return self::whereIn('status', ['shipped', 'delivered', 'canceled'])->get();
     }
 
 }
