@@ -125,8 +125,26 @@ class MelhorEnvioController extends Controller
         $response = curl_exec($ch);
         curl_close($ch);
 
-        return response()->json($response, 200);
-    }
+        $response = json_decode($response, true);
+
+        $minPriceService = null;
+        $minPrice = PHP_INT_MAX; 
+
+        foreach ($response as $service) {
+            if (isset($service['price']) && $service['price'] < $minPrice) {
+                $minPrice = $service['price'];
+                $minPriceService = $service;
+            }
+        }
+
+
+        if ($minPriceService !== null) {
+            return response()->json($minPriceService, 200);
+        } else {
+            return response()->json(['error' => 'Nenhum serviço com preço encontrado.'], 404);
+        }
+            return response()->json($response, 200);
+        }
 
 
 }
