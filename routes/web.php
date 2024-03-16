@@ -129,6 +129,7 @@ Route::group(['prefix' => 'api'], function () {
     Route::post('get-config', [SettingsController::class, 'getConfigValue']);
     Route::get('/redirect-to-melhor-envio', [MelhorEnvioController::class,'redirectToProvider']);
     Route::post('calculate-frete', [MelhorEnvioController::class, 'calculate']);
+    Route::post('create-shipment', [MelhorEnvioController::class, 'createShipment']);
     Route::get('/get-access-token', [GetApiDataController::class,'getAccessToken']);
     Route::post('/save-order', [OrderController::class, 'store']);
     Route::post('/reviews', [ReviewController::class, 'store']);

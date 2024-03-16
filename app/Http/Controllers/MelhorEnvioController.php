@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Settings;
 use Illuminate\Http\Request;
 use App\Providers\MelhorEnvioServiceProvider;
 use App\Models\TokenFrete;
@@ -50,7 +51,7 @@ class MelhorEnvioController extends Controller
 
     public function calculate(Request $request)
     {
-        $fromPostalCode = '31365-000';
+        $fromPostalCode = Settings::where('name', 'zipcode')->first()->value;
         $toPostalCode = $request->to['postal_code'];
         $token = TokenFrete::latest()->first()->access_token;    
         $packages = [];
@@ -137,14 +138,67 @@ class MelhorEnvioController extends Controller
             }
         }
 
-
         if ($minPriceService !== null) {
             return response()->json($minPriceService, 200);
         } else {
             return response()->json(['error' => 'Nenhum serviço com preço encontrado.'], 404);
         }
             return response()->json($response, 200);
-        }
+    }
 
+    public function createShipment(Request $request) {
+        $fromPostalCode = Settings::where('name', 'zipcode')->first()->value;
+        $toPostalCode = $request->to['postal_code'];
+        $token = TokenFrete::latest()->first()->access_token; 
+        $package = $request['package'];
+
+        $serviceId = $request['frete']['id'];
+
+        $ch = curl_init();
+
+        $postData = [
+            "service" => [
+                "id" => $serviceId
+            ],
+            "from" => [
+                "postal_code" => $fromPostalCode
+            ],
+            "to" => [
+                "postal_code" => $toPostalCode
+            ],
+            "package" => [ 
+                [
+                    "width" => $package['width'],
+                    "height" => $package['height'],
+                    "length" => $package['length'],
+                    "weight" => $package['weight']   
+                ]
+            ],
+            "options" => [
+                "insurance_value" => 0,
+                "receipt" => false,
+                "own_hand" => false,
+                "collect" => false
+            ],
+            "services" => "1,2,3,4,15,16,17,27,28,29,30",
+        ];
+
+        curl_setopt($ch, CURLOPT_URL, 'https://melhorenvio.com.br/api/v2/me/shipment/calculate');
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($postData));
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Accept: application/json',
+            'Content-Type: application/json',
+            'Authorization: Bearer ' . $token,
+            'User-Agent: CHG_Descartaveis (dfscs.costa@gmail.com)'
+        ]);
+
+        $response = curl_exec($ch);
+        curl_close($ch);
+
+        $response = json_decode($response, true);
+
+    }
 
 }
