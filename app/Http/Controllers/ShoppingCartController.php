@@ -55,6 +55,7 @@ class ShoppingCartController extends Controller
             if ($cartItem) {
                 $cartItem->quantity += 1;
                 $cartItem->save();
+                $this->updateShoppingCartTotal($shoppingCart->id);
             } else {
                 $cartItem = new CartItem([
                     'product_id' => $productId,
@@ -65,6 +66,7 @@ class ShoppingCartController extends Controller
                     'variation'  => $variation
                 ]);
                 $cartItem->save();
+                $this->updateShoppingCartTotal($shoppingCart->id);
             }
 
             return response()->json(['message' => 'Produto adicionado ao carrinho'], 200);
@@ -113,6 +115,7 @@ class ShoppingCartController extends Controller
 
         $cartItem->quantity = $newQuantity;
         $cartItem->save();
+        $this->updateShoppingCartTotal($cartItem->cart_id);
 
         return response()->json(['message' => 'Quantidade atualizada com sucesso']);
     }
@@ -127,6 +130,7 @@ class ShoppingCartController extends Controller
         }
 
         $cartItem->delete();
+        $this->updateShoppingCartTotal($cartItem->cart_id);
 
         return response()->json(['message' => 'Item removido do carrinho com sucesso']);
     }
@@ -176,8 +180,37 @@ class ShoppingCartController extends Controller
             $newCartItem->save();
         }
     }
+    $this->updateShoppingCartTotal($cartItem->cart_id);
 
     return response()->json(['message' => 'Carrinho mesclado com sucesso'], 200);
+}
+
+public function updateShoppingCartTotal($cartId)
+{
+    $cartItems = CartItem::where('cart_id', $cartId)->get();
+    $totalPrice = 0;
+
+    foreach ($cartItems as $item) {
+        $totalPrice += $item->quantity * $item->unit_price;
+    }
+
+    $shoppingCart = ShoppingCart::find($cartId);
+    if ($shoppingCart) {
+        $shoppingCart->total_price = $totalPrice;
+        $shoppingCart->save();
+    }
+}
+
+public function getCartPrice(){
+    $user = auth('user')->user();
+    if (!$user) {
+        return response()->json(['message' => 'Usuário não logado.'], 401);
+    }
+
+    $response = ShoppingCart::where('user_id', $user->id)->first();
+    $price = $response->total_price;
+    
+    return response()->json($price, 200);
 }
 
 }

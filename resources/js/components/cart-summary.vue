@@ -9,13 +9,15 @@
 
         <div class="p-7">
             <span class="font-weight-bold">Valor dos Produtos: <span class="p-2 text-white rounded bg-indigo">R$ {{
-                totalPrice }}</span></span>
+                totalPrice ?? 0 }}</span></span>
             <hr class="my-5">
-            <div class="py-5">
-                <v-label class="font-weight-bold">Frete: <span class="p-2">R$ 00,00</span></v-label> <br>
+            <div class="">
+                <v-label class="font-weight-bold">Frete: <span class="p-2">R$ {{ freteList.price ?? 0 }}</span>
+                </v-label>
+                <br>
             </div>
             <span class="font-weight-bold">Valor com frete: <span class="p-2 text-white rounded bg-warning">R$ {{
-                totalPrice
+                finalPrice
             }}</span> </span>
         </div>
 
@@ -95,18 +97,16 @@ export default {
             showDialogAddress: false,
             showDialogPayment: false,
             pendingOrder: '',
+            finalPrice: null,
+            totalPrice: 0,
         }
     },
 
     props: {
-        totalPrice: {
-            type: String,
-            required: true
-        },
-
-        products: Array,
+        products: [],
         selectedMainAddress: Object,
         selectedPaymentMethod: Object,
+        initialTotalPrice: Object,
     },
 
     computed: {
@@ -158,6 +158,12 @@ export default {
 
     },
 
+    mounted() {
+        this.loadTotalPrice();
+        this.getFreteValuesByLocalStorage();
+    },
+
+
     methods: {
 
         getPendingOrder() {
@@ -173,7 +179,7 @@ export default {
                 this.showDialogAddress = true;
                 return;
             }
-                // Verificar se o método de pagamento está selecionado na etapa de pagamento
+            // Verificar se o método de pagamento está selecionado na etapa de pagamento
             if (this.cartStep === 'payment' && !this.selectedPaymentMethod) {
                 this.showDialogPayment = true;
                 return;
@@ -185,15 +191,16 @@ export default {
                 case 'payment':
                     this.$emit('continueToConfirmation');
                     nextUrl = `/cart/confirmation/${id}`;
+                    window.location.href = nextUrl;
                     break;
                 case 'confirmation':
                     this.$emit('confirmPurchase');
                     break;
                 default:
                     nextUrl = `/cart/payment/${id}`;
+                    window.location.href = nextUrl;
                     break;
             }
-            window.location.href = nextUrl;
 
         },
 
@@ -215,13 +222,46 @@ export default {
             })
                 .then(response => {
                     this.freteList = response.data;
-                    console.log(response.data);
+                    localStorage.setItem('freteResponse', JSON.stringify(response.data));
+                    console.log("Dados salvos local", response.data);
+                    this.calculateTotalPrice();
                 })
                 .catch(error => {
                     console.error('Erro ao calcular o frete:', error);
                 });
         },
 
+        getFreteValuesByLocalStorage() {
+            const freteResponse = JSON.parse(localStorage.getItem('freteResponse'));
+            if (freteResponse) {
+                this.freteList = freteResponse;
+                this.finalPrice = freteResponse.finalPrice;
+                console.log("finalPrice vindo do local", this.finalPrice);
+            }
+        },
+
+        loadTotalPrice() {
+            axios.get('/api/get-cart-price')
+                .then(response => {
+                    this.totalPrice = response.data;
+                    this.calculateTotalPrice();
+                    console.log("rodou")
+                })
+                .catch(error => {
+                    console.error('Erro ao obter o preço do carrinho:', error);
+                });
+        },
+
+        calculateTotalPrice() {
+            if (!this.freteList.price) {
+                this.finalPrice = this.totalPrice
+            } else {
+                let fullPrice = parseFloat(this.totalPrice) + parseFloat(this.freteList.price);
+                this.finalPrice = fullPrice.toFixed(2);
+                console.log(fullPrice);
+            }
+
+        },
 
     },
 }

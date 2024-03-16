@@ -151,7 +151,8 @@
             </div>
 
             <div class="lg:block flex mx-auto w-full">
-                <cartSummary :totalPrice="totalPrice" :products="products" :selectedMainAddress="selectedMainAddress" />
+                <cart-summary ref="cartSummary" :products="products" :selectedMainAddress="selectedMainAddress" :selectedPaymentMethod="selectedPaymentMethod" :initialTotalPrice="totalPrice" />
+
             </div>
         </div>
     </div>
@@ -270,11 +271,12 @@ export default {
 
     computed: {
         totalPrice() {
-            return this.products.reduce(
-                (total, product) => total + product.price * product.quantity,
-                0
-            ).toFixed(2);
-        },
+        const total = this.products.reduce(
+            (total, product) => total + product.price * product.quantity,
+            0
+        );
+        return parseFloat(total.toFixed(2)); 
+    },
         userInfo() {
             return this.$store.state.user;
         },
@@ -351,6 +353,7 @@ export default {
             const newQuantity = product.quantity + 1;
             this.updateCartItemQuantity(product.cartItemId, newQuantity);
             product.quantity = newQuantity;
+            this.$refs.cartSummary.loadTotalPrice();
         },
 
         decreaseQuantity(product) {
@@ -358,6 +361,7 @@ export default {
                 const newQuantity = product.quantity - 1;
                 this.updateCartItemQuantity(product.cartItemId, newQuantity);
                 product.quantity = newQuantity;
+                this.$refs.cartSummary.loadTotalPrice();
             }
         },
         removeProduct(productToRemove) {
@@ -365,6 +369,7 @@ export default {
                 .then(response => {
                     this.products = this.products.filter(product => product.cartItemId !== productToRemove.cartItemId);
                     this.emptyCart();
+                    this.$refs.cartSummary.loadTotalPrice();
                 })
                 .catch(error => {
                     console.error("Erro ao remover o produto do carrinho", error);
@@ -439,7 +444,8 @@ export default {
 
     mounted() {
         this.fetchAddresses(),
-            this.fetchProducts()
+        this.fetchProducts(),
+        this.totalPrice = this.totalPrice; // Isso irá atualizar a propriedade totalPrice com o valor correto
     }
 
 

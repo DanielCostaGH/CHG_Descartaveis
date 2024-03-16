@@ -44,7 +44,7 @@ Route::post('/user/store', [UserController::class, 'store'])->name('user.store')
 
 
 Route::group(['prefix' => 'user', 'middleware' => 'UserAuthMiddleware'], function () {
-    Route::get('/', [UserController::class, 'index'])->name('user.name');
+    // Route::get('/', [UserController::class, 'index'])->name('user.name');
     Route::get('/info', [UserController::class, 'basicInfo']);
     Route::get('/address', [UserController::class, 'adresses']);
     Route::get('/favorites', [UserController::class, 'favorites']);
@@ -64,6 +64,8 @@ Route::group(['prefix' => 'user', 'middleware' => 'UserAuthMiddleware'], functio
     Route::get('/get-favorites', [FavoritesController::class, 'getUserFavorites']);
     Route::get('/favorite-products', [FavoritesController::class, 'getUserFavoritesProducts']);
     Route::post('/retrievecardpayment', [PaymentController::class, 'retrieveCardPatyment'])->name('user.retrievecardpayment');
+    Route::post('/save-order', [OrderController::class, 'store']);
+
 });
 
 Route::group(['prefix' => 'products'], function () {
@@ -96,6 +98,8 @@ Route::group(['prefix' => 'dashboard', 'middleware' => 'AdminAuthMiddleware'], f
     Route::get('/get-terms', [TermsController::class, 'getServiceTerms']);
     Route::get('/get-pending-orders', [OrderController::class,'getPendingOrders']);
     Route::get('/get-shipped-orders', [OrderController::class,'getShippedOrders']);
+    Route::put('/freight-config', [ SettingsController::class, 'freteUpdate']);
+    Route::get('get-config', [SettingsController::class, 'getConfigValue']);
 });
 
 
@@ -126,14 +130,13 @@ Route::group(['prefix' => 'api'], function () {
     Route::get('/get_total_price/{cartItemId}', [ShoppingCartController::class, 'getTotalPrice']);
     Route::post('/get_local_cart_products', [ShoppingCartController::class, 'getLocalCartProducts']);
     Route::post('/merge-local-cart', [ShoppingCartController::class, 'mergeLocalCartToUserCart']);
-    Route::post('get-config', [SettingsController::class, 'getConfigValue']);
     Route::get('/redirect-to-melhor-envio', [MelhorEnvioController::class,'redirectToProvider']);
     Route::post('calculate-frete', [MelhorEnvioController::class, 'calculate']);
     Route::post('create-shipment', [MelhorEnvioController::class, 'createShipment']);
     Route::get('/get-access-token', [GetApiDataController::class,'getAccessToken']);
-    Route::post('/save-order', [OrderController::class, 'store']);
     Route::post('/reviews', [ReviewController::class, 'store']);
     Route::get('/products/{product}/reviews', [ReviewController::class, 'index']);
+    Route::get('get-cart-price', [ShoppingCartController::class, 'getCartPrice']);
 });
 
 Route::middleware('auth:user')->get('/api/get', [UserController::class, 'getUser']);

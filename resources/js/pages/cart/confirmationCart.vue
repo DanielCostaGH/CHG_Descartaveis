@@ -102,6 +102,7 @@ export default {
 
     saveOrder() {
       const orderData = JSON.parse(localStorage.getItem('order'));
+      const packageData     = JSON.parse(localStorage.getItem('freteResponse'))
       const simplifiedOrder = {
         userId: orderData.userData.id,
         addressId: orderData.address.id,
@@ -110,10 +111,13 @@ export default {
           id: product.id,
           quantity: product.quantity
         })),
-        total: orderData.total
+        total: orderData.total,
+        packages: packageData.packages,
+        frete: packageData.price,
+        service: packageData.company
       };
 
-      axios.post('/api/save-order', simplifiedOrder)
+      axios.post('/user/save-order', simplifiedOrder)
         .then(response => {
           console.log(response.data.id)
           window.location.href = `/user/order-details/${response.data.id}`

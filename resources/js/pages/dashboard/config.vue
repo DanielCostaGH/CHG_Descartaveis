@@ -25,9 +25,17 @@
                     </div>
                 </div>
 
-                <v-btn @click="connectToMelhorEnvio">
+                <!-- <v-btn @click="connectToMelhorEnvio">
                     <v-icon class="mr-3">mdi-plus</v-icon>Nova Integração
-                </v-btn>
+                </v-btn> -->
+
+                <v-form class="w-2/6" @submit.prevent="saveFreight">
+                    <div class="flex gap-5">
+                        <v-text-field v-model="zipcode" label="Cep de origem" variant="solo"></v-text-field>
+                        <v-text-field v-model="freightValue" label="Frete (valor fixo)" variant="solo"></v-text-field>
+                    </div>
+                    <v-btn type="submit" >Salvar</v-btn>
+                </v-form>
 
             </div>
 
@@ -55,6 +63,8 @@ export default {
             settingsData: [],
             accessToken: '',
             isConnectedToMelhorEnvios: Boolean,
+            freightValue: '',
+            zipcode: '',
         };
     },
 
@@ -65,18 +75,25 @@ export default {
 
     mounted() {
         this.getSettings(),
-            this.getAccessToken()
+        this.getAccessToken()
     },
 
     methods: {
         getSettings() {
-            axios.post('/api/get-config', {
-                settings: ['MELHOR_ENVIO_CLIENT_ID', 'MELHOR_ENVIO_REDIRECT_URI']
+            axios.get('/dashboard/get-config')
+            .then(response => {
+                this.settingsData = response.data;
+                const zipcodeSetting = this.settingsData.find(setting => setting.name === 'zipcode');
+                if (zipcodeSetting) {
+                    this.zipcode = zipcodeSetting.value;
+                }
+                console.log(this.zipcode);
             })
-                .then(response => {
-                    this.settingsData = response.data
-                })
+            .catch(error => {
+                console.error('Houve um erro ao obter as configurações:', error);
+            });
         },
+
 
         getAccessToken() {
             axios.get('/api/get-access-token')
@@ -100,6 +117,17 @@ export default {
                     window.open(response.data.authUrl, '_blank');
                 })
         },
+
+        saveFreight() {
+            axios.put('/dashboard/freight-config', {
+                zipcode: this.zipcode,
+                freight: this.freightValue 
+            })
+            .then(response => {
+                alert('Configurações de frete atualizadas com sucesso!')
+            })
+            .catch(error => console.error('Não foi possível atualizar as configurações de frete.', error))
+        }
     },
 };
 </script>

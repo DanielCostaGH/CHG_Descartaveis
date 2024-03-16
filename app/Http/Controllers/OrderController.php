@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CartItem;
 use App\Models\Order;
 use App\Models\Payment;
+use App\Models\Product;
 use App\Models\ShoppingCart;
 use App\Models\Transaction;
 use App\Models\User;
@@ -50,7 +52,11 @@ class OrderController extends Controller
         $transaction = Transaction::where('order_id', $order->id)->first();
         $user = User::find($order->user_id);
         $userAddress = UserAddress::where('user_id', $user->id)->first();
-        return view("user.order_details", compact('order', 'transaction', 'user', 'userAddress'));
+        $productIds = CartItem::where('cart_id', $order->cart_id)->pluck('product_id');
+        $products = Product::whereIn('id', $productIds)->get();
+
+
+        return view("user.order_details", compact('order', 'transaction', 'user', 'userAddress', 'products'));
     }
 
 
@@ -102,6 +108,6 @@ class OrderController extends Controller
                 $order->save();
             }
         }
-        return $order;
+        return response()->json($order, 201);
     }
 }

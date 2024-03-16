@@ -137,14 +137,16 @@ class MelhorEnvioController extends Controller
                 $minPriceService = $service;
             }
         }
+        $freight = Settings::where('name', 'freight')->first();
+        $minPriceService['price'] = $freight->value;
 
         if ($minPriceService !== null) {
             return response()->json($minPriceService, 200);
         } else {
             return response()->json(['error' => 'Nenhum serviço com preço encontrado.'], 404);
         }
-            return response()->json($response, 200);
-    }
+            return response()->json($response, $package, 200);
+        }
 
     public function createShipment(Request $request) {
         $fromPostalCode = Settings::where('name', 'zipcode')->first()->value;

@@ -62,7 +62,7 @@
             </div>
 
 
-            <cartSummary :totalPrice="totalPrice" :selectedMainAddress="selectedMainAddress"
+            <cartSummary :products="products" :selectedMainAddress="selectedMainAddress"
                 :selectedPaymentMethod="selectedPaymentMethod" @continueToConfirmation="createOrder" />
         </div>
     </div>

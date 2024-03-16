@@ -93,8 +93,6 @@ export default {
             payment: '/images/pay_icon.svg',
             config: '/images/config_icon.svg',
             products: [],
-            page: 1,
-            totalPages: 0,
         };
     },
 
@@ -107,19 +105,13 @@ export default {
     mounted() {
         this.fetchProducts();
     },
-    watch: {
-        page(newVal, oldVal) {
-            if (newVal !== oldVal) this.fetchProducts(); // Recarregar os dados quando a página mudar
-        }
-    },
+
 
     methods: {
         fetchProducts(filters = {}) {
-            axios.get(`/api/products?page=${this.page}`, { params: filters })
+            axios.get(`/api/products`, { params: filters })
                 .then(response => {
-                    console.log("dadosretornados:", response.data)
-                    this.products = response.data.data;
-                    this.totalPages = response.data.last_page;
+                    this.products = response.data;
                 })
                 .catch(error => {
                     console.error('Erro ao buscar produtos:', error);
