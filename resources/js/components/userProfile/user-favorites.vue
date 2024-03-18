@@ -20,7 +20,7 @@
                     </div>
                 </div>         
 
-                <a :href="`products/${product.id}`">
+                <a :href="`/products/${product.id}`">
                   <v-img :src="product.imagePath" cover height="200"></v-img>
                 </a>
                  

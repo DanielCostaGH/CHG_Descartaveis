@@ -65,7 +65,9 @@ Route::group(['prefix' => 'user', 'middleware' => 'UserAuthMiddleware'], functio
     Route::get('/favorite-products', [FavoritesController::class, 'getUserFavoritesProducts']);
     Route::post('/retrievecardpayment', [PaymentController::class, 'retrieveCardPatyment'])->name('user.retrievecardpayment');
     Route::post('/save-order', [OrderController::class, 'store']);
-
+    Route::get('/get-orders', [OrderController::class, 'getUserOrders']);
+    Route::put('/product-review', [OrderController::class, 'reviewUpdate']);
+    Route::get('/get-user-reviews', [OrderController::class, 'getUserReviews']);
 });
 
 Route::group(['prefix' => 'products'], function () {
@@ -100,6 +102,7 @@ Route::group(['prefix' => 'dashboard', 'middleware' => 'AdminAuthMiddleware'], f
     Route::get('/get-shipped-orders', [OrderController::class,'getShippedOrders']);
     Route::put('/freight-config', [ SettingsController::class, 'freteUpdate']);
     Route::get('get-config', [SettingsController::class, 'getConfigValue']);
+    Route::put('/update-access-token', [SettingsController::class, 'updateAccessToken']);
 });
 
 
@@ -137,6 +140,8 @@ Route::group(['prefix' => 'api'], function () {
     Route::post('/reviews', [ReviewController::class, 'store']);
     Route::get('/products/{product}/reviews', [ReviewController::class, 'index']);
     Route::get('get-cart-price', [ShoppingCartController::class, 'getCartPrice']);
+    Route::get('/get-product-reviews', [ProductsController::class, 'getProductReviews']);
+    Route::get('/get-product-colors', [ProductsController::class, 'getProductColors']);
 });
 
 Route::middleware('auth:user')->get('/api/get', [UserController::class, 'getUser']);

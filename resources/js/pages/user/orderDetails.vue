@@ -46,8 +46,7 @@
                   </v-list-item>
 
                   <!-- Seção de pagamento -->
-                  <div v-if="order.status == 'pending'"
-                    class="flex justify-center items-center p-7">
+                  <div v-if="order.status == 'pending'" class="flex justify-center items-center p-7">
                     <div class="w-4/6">
                       <h1 class="p-4 bg-green rounded" v-if="order">ID do Pedido: {{ order.id }}</h1>
                       <div v-if="transaction">
@@ -121,18 +120,21 @@
                       <v-list-item-title class="font-weight-bold mt-5">Produtos:</v-list-item-title>
                       <!-- Loop pelos produtos -->
                       <div v-for="product in products" :key="product.id"
-                        class="p-5 my-5 shadow-lg flex items-center justify-between">
-                        <div class="flex items-center">
+                        class="p-5 my-5 shadow-lg flex items-center justify-between hover:border hover:rounded-xl duration-300">
+                        <a :href="`/products/${product.id}`" class="flex items-center">
                           <div class="mx-5 mr-10 w-[10vh] flex justify-center items-center">
                             <img :src="product.imagePath" alt="Imagem do Produto" class="max-h-[10vh]">
                           </div>
                           <div>
-                            <h1 class="font-weight-bold">{{ product.name }}</h1>
-                            <v-label>preço: {{ product.price }}, variação: {{ product.variation }}, cor: {{
-              product.color
-                              }}</v-label>
+                            <h1 class="font-weight-bold ">{{ product.name }}</h1>
+                            <v-label>
+                              preço: {{ product.price }}, variação: {{ product.variation }}
+                            </v-label>
                           </div>
-                        </div>
+                        </a>
+                        <v-btn color="indigo" width="150" class="px-4 py-2" @click="startReviewProcess(product.id)">
+                          Avaliar
+                        </v-btn>
                       </div>
                     </v-list-item-content>
                   </v-list-item>
@@ -150,6 +152,23 @@
       </div>
     </div>
   </div>
+
+  <!-- Modal de Avaliação -->
+  <v-dialog v-model="showReviewDialog" persistent max-width="600px">
+    <v-card>
+      <v-card-title class="text-h5">Avaliar Pedido</v-card-title>
+      <v-card-text>
+        <v-rating v-model="reviewRating" dense color="amber" half-increments hover></v-rating>
+        <v-textarea v-model="reviewText" label="Deixe seu feedback" hint="Escreva aqui sua avaliação sobre o pedido."
+          persistent-hint auto-grow></v-textarea>
+      </v-card-text>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn color="blue darken-1" text @click="showReviewDialog = false">Cancelar</v-btn>
+        <v-btn color="green darken-1" text @click="submitReview">Enviar Avaliação</v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script>
@@ -164,7 +183,12 @@ export default {
       transaction: Object,
       user: Object,
       userAddress: Object,
-      products: Object
+      products: Object,
+      showReviewDialog: false,
+      currentProductId: null,
+      reviewRating: 0,
+      reviewText: '',
+      userReviews: [],
     }
   },
   props: {
@@ -181,7 +205,8 @@ export default {
     },
   },
   mounted() {
-    this.loadOrder();
+    this.loadOrder()
+    this.reviewedProduct()
   },
   methods: {
     loadOrder() {
@@ -200,12 +225,6 @@ export default {
           product.imagePath = imagePath;
         }
       });
-
-      console.log("Products:", this.products);
-      console.log("Order:", this.order);
-      console.log("Transaction:", this.transaction);
-      console.log("User:", this.user);
-      console.log("User Address:", this.userAddress);
     },
 
     copyPixCode() {
@@ -218,7 +237,50 @@ export default {
       document.execCommand('copy');
       document.body.removeChild(textarea);
       alert('Código copiado com sucesso!');
+    },
+
+    startReviewProcess(productId) {
+      this.currentProductId = productId;
+
+      const previousReview = this.userReviews.find(review => review.product_id === productId);
+      if (previousReview) {
+        this.reviewRating = previousReview.rating;
+        this.reviewText = previousReview.comment || ''; 
+      } else {
+        this.reviewRating = 0;
+        this.reviewText = '';
+      }
+      this.showReviewDialog = true;
+    },
+
+
+    submitReview() {
+      const product = this.currentProductId;
+      axios.put('/user/product-review', {
+        productId: product,
+        rating: this.reviewRating,
+        feedback: this.reviewText
+      })
+        .then(response => {
+          alert(response.data.message)
+        })
+        .catch(error => {
+          alert('A avaliação não foi salva', error)
+        });
+
+      this.showReviewDialog = false;
+      this.reviewRating = 0;
+      this.reviewText = '';
+      this.reviewedProduct();
+    },
+
+    reviewedProduct() {
+      axios.get('/user/get-user-reviews')
+        .then(response => {
+          this.userReviews = response.data
+        })
     }
+
   },
 };
 </script>

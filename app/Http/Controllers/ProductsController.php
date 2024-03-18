@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Color;
 use App\Models\Product;
+use App\Models\ProductColors;
+use App\Models\Review;
 use App\Services\ProductFilterService;
 use Illuminate\Http\Request;
 
@@ -126,6 +129,45 @@ class ProductsController extends Controller
         $count = Product::count();
         return response()->json($count);
     }
+
+    public function getProductReviews(Request $request){
+        $productId = $request->productId;
+    
+        $reviewsResponse = Review::where('product_id', $productId)->with('user')->get();
+    
+        $reviews = $reviewsResponse->map(function ($review) {
+            return [
+                'id' => $review->id,
+                'rating' => $review->rating,
+                'comment' => $review->comment,
+                'user_name' => $review->user ? $review->user->name : 'Usuário Desconhecido',
+            ];
+        });
+    
+        $averageRating = $reviewsResponse->avg('rating');
+    
+        return response()->json([
+            'reviews' => $reviews,
+            'averageRating' => $averageRating
+        ], 200);
+    }
+
+    public function getProductColors(Request $request) {
+        $productId = $request->productId;
+        $productColors = ProductColors::where('product_id', $productId)->pluck('color_id');
+    
+        $colors = Color::whereIn('id', $productColors)->get()->map(function ($color) {
+            return [
+                'id'    => $color->id,
+                'name'  => $color->name,
+                'value' => $color->value, 
+            ];
+        });
+    
+        return response()->json($colors);
+    }
+    
+    
 
 
 

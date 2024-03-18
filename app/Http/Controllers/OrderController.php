@@ -6,6 +6,7 @@ use App\Models\CartItem;
 use App\Models\Order;
 use App\Models\Payment;
 use App\Models\Product;
+use App\Models\Review;
 use App\Models\ShoppingCart;
 use App\Models\Transaction;
 use App\Models\User;
@@ -110,4 +111,56 @@ class OrderController extends Controller
         }
         return response()->json($order, 201);
     }
+
+    public function getUserOrders() {
+        $userId = auth('user')->user()->id;
+        $orders = Order::where('user_id', $userId)->get();
+    
+        $ordersWithProducts = $orders->map(function ($order) {
+            $productIds = CartItem::where('cart_id', $order->cart_id)->pluck('product_id');
+            $products = Product::whereIn('id', $productIds)->get();
+            $productsToArray = $products->toArray();
+            $order->products = $productsToArray;
+    
+            return $order;
+        });
+        $ordersToArray = $ordersWithProducts->toArray();
+    
+        return response()->json($ordersToArray, 200);
+    }
+
+
+    public function reviewUpdate(Request $request){
+        $userId = auth('user')->user()->id;
+        $productId = $request->productId;
+        $rating = $request->rating;
+        $feedback = $request->feedback;
+    
+        $lastReview = Review::where('user_id', $userId)->where('product_id', $productId)->first();
+    
+        if($lastReview){
+            $lastReview->rating = $rating;
+            $lastReview->comment = $feedback;
+            $lastReview->save();
+            return response()->json(['message' => 'Avaliação atualizada com sucesso']);
+        } else {
+            Review::create([
+                'user_id' => $userId,
+                'product_id' => $productId,
+                'comment' => $feedback,
+                'rating' => $rating,
+            ]);
+            return response()->json(['message' => 'Obrigado por nos avaliar!']);
+        }
+    }
+    
+
+    public function getUserReviews(){
+        $userId     = auth('user')->user()->id;
+        $reviewsResponse    = Review::where('user_id', $userId)->get();
+        $reviews = $reviewsResponse->toArray();
+
+        return response()->json($reviews, 200);
+    }
+
 }

@@ -24,6 +24,17 @@
                         </div>
                     </div>
                 </div>
+                <div class="flex gap-5 items-center">
+                    <v-text-field v-model="accessToken" label="Token de integração Melhor Envios" variant="solo"></v-text-field>
+                    <v-btn @click="saveAccessToken">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.0" stroke="green" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                        </svg>
+                    </v-btn>
+                </div>
+               
+
+
 
                 <!-- <v-btn @click="connectToMelhorEnvio">
                     <v-icon class="mr-3">mdi-plus</v-icon>Nova Integração
@@ -62,7 +73,7 @@ export default {
             originZip: '',
             settingsData: [],
             accessToken: '',
-            isConnectedToMelhorEnvios: Boolean,
+            isConnectedToMelhorEnvios: false,
             freightValue: '',
             zipcode: '',
         };
@@ -84,8 +95,12 @@ export default {
             .then(response => {
                 this.settingsData = response.data;
                 const zipcodeSetting = this.settingsData.find(setting => setting.name === 'zipcode');
+                const freightSetting = this.settingsData.find(setting => setting.name === 'freight');
                 if (zipcodeSetting) {
                     this.zipcode = zipcodeSetting.value;
+                }
+                if(freightSetting){
+                    this.freightValue = freightSetting.value;
                 }
                 console.log(this.zipcode);
             })
@@ -98,10 +113,29 @@ export default {
         getAccessToken() {
             axios.get('/api/get-access-token')
                 .then(response => {
-                    this.accessToken = response.data;
+                    this.accessToken = response.data.access_token;
+                    console.log(this.accessToken)
                     this.statusCheck();
                 })
         },
+
+        saveAccessToken() {
+            const data = {
+                token: this.accessToken
+            };
+
+            axios.put('/dashboard/update-access-token', data)
+                .then(response => {
+                    this.getAccessToken(); 
+                    alert('Token alterado com sucesso.');
+                    console.log(response.data);
+                })
+                .catch(error => {
+                    console.error('Erro ao atualizar o token:', error);
+                    alert('Falha ao alterar o token.');
+                });
+        },
+
 
         statusCheck() {
             if (Object.keys(this.accessToken).length === 0) {

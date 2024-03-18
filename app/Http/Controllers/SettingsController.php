@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 use App\Models\Settings;
+use App\Models\TokenFrete;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class SettingsController extends Controller
@@ -13,8 +15,8 @@ class SettingsController extends Controller
 
     public function freteUpdate(Request $request){
         $validatedData = $request->validate([
-            'freight' => 'required|numeric',
-            'zipcode' => 'required|string|max:9'
+            'freight' => 'numeric',
+            'zipcode' => 'numeric|max:9'
         ]);
     
         // Atualiza o valor do frete
@@ -45,6 +47,22 @@ class SettingsController extends Controller
         }
     
         return response()->json(['message' => 'Configurações de frete e CEP atualizadas com sucesso!']);
+    }
+
+    public function updateAccessToken(Request $request){
+        $freightToken = TokenFrete::first();
+        if($freightToken){
+            $freightToken->access_token = $request->token;
+            $freightToken->expires_at = Carbon::now()->addMonths(6);
+            $freightToken->save();
+        } else {
+            TokenFrete::create([
+                'access_token' => $request->token,
+                'expires_at'   => Carbon::now()->addMonths(6)
+            ]);
+        }
+
+        return response()->json(['message' => 'Token salvo com sucesso!']);
     }
     
 }

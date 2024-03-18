@@ -26,7 +26,8 @@
                         <div class="flex items-center w-full lg:w-auto">
                             <div class="switch mr-3">
                                 <input type="checkbox" class="sr-only">
-                                <div :class="{ 'slider': true, 'checked': isSwitchChecked }" @click="toggleSwitch"></div>
+                                <div :class="{ 'slider': true, 'checked': isSwitchChecked }" @click="toggleSwitch">
+                                </div>
                             </div>
                             <a class="text-[#1A1A1A]" href="#"> Salvar senha</a>
                         </div>
@@ -40,19 +41,16 @@
                             type="button">Entrar</button>
                     </div>
 
-
-                    <div class="text-center">
-                        <button
-                            class="bg-[#F3F3F3] text-[#1A1A1A] w-full h-[6vh] my-4 rounded flex justify-center items-center"
-                            type="submit">
-                            <v-icon class="p-4">mdi-account</v-icon>Criar conta</button>
+                    <div class="hidden lg:flex justify-center my-10">
+                        <a href="/" class="text-blue-500 ">Voltar para pagina inicial?</a>
                     </div>
                 </form>
             </div>
-            <div class="flex w-full justify-center my-10">
+            <div class="flex lg:hidden w-full justify-center my-10">
                 <a href="/" class="text-blue-500 ">Voltar para pagina inicial?</a>
             </div>
-            
+
+
         </div>
     </div>
 </template>
@@ -143,4 +141,5 @@ export default {
 
 .switch-label {
     margin-right: 10px;
-}</style>
+}
+</style>

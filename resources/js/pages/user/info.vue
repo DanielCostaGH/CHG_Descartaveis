@@ -12,7 +12,7 @@
         </main>
 
         <!-- MOBILE SECTION -->
-        <section>
+        <section class="lg:hidden">
             <div class="h-full">
                 <info :user-data="userData" />
             </div>

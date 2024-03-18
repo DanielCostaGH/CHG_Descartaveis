@@ -34,7 +34,7 @@
             </div>
 
             <div>
-                <product_reviews />
+                <product_reviews :product="product" />
             </div>
 
         </div>
@@ -67,7 +67,7 @@
                     </section>
             </div>
             <div class="w-full">
-                <product_description :product="product" />
+                <!-- <product_description :product="product" /> -->
             </div>
 
             <div>
@@ -75,7 +75,7 @@
             </div>
 
             <div>
-                <product_reviews />
+                <product_reviews :product="product" />
             </div>
 
         </div>

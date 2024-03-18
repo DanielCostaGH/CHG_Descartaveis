@@ -3,7 +3,7 @@
         <navbar />
 
 
-        <main class="hidden lg:flex container mx-auto my-10  rounded-lg min-h-[75vh]">
+        <main class="hidden lg:flex container mx-auto my-10 rounded-lg ">
             <sidebar :user-data="userData"/>
 
             <div class="w-3/4 h-full">
@@ -13,7 +13,7 @@
         </main>
 
         <!-- MOBILE SECTION -->
-        <section>
+        <section class="lg:hidden">
             <div class="h-full">
                 <orders :user-data="userData" />
             </div>
