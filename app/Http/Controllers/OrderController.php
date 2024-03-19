@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\CartItem;
 use App\Models\Order;
+use App\Models\OrderItem;
 use App\Models\Payment;
 use App\Models\Product;
 use App\Models\Review;
@@ -29,36 +30,50 @@ class OrderController extends Controller
     public function getPendingOrders()
     {
         $orders = Order::getPendingOrders();
+        foreach ($orders as $order) {
+            $orderItems = OrderItem::where('order_id', $order->id)->get();
+            $productIds = $orderItems->pluck('product_id');
+            $products = Product::whereIn('id', $productIds)->get();
+            $order->products = $products;
+        }
+    
         return response()->json($orders);
     }
 
     public function getShippedOrders()
     {
         $orders = Order::getShippedOrders();
+        foreach ($orders as $order) {
+            $orderItems = OrderItem::where('order_id', $order->id)->get();
+            $productIds = $orderItems->pluck('product_id');
+            $products = Product::whereIn('id', $productIds)->get();
+            $order->products = $products;
+        }
         return response()->json($orders);
     }
 
-    public function orderDetails($id)
-    {
+    public function orderDetails($id) {
         $order = Order::find($id);
-
+    
         if (!$order) {
             return view('user.orders');
         }
-
+    
         if (!$this->checkIfOrderBelongsToUser($order)) {
             return view('user.orders');
         }
-
+    
         $transaction = Transaction::where('order_id', $order->id)->first();
         $user = User::find($order->user_id);
         $userAddress = UserAddress::where('user_id', $user->id)->first();
-        $productIds = CartItem::where('cart_id', $order->cart_id)->pluck('product_id');
+    
+        $orderItems = OrderItem::where('order_id', $order->id)->get();
+        $productIds = $orderItems->pluck('product_id');
         $products = Product::whereIn('id', $productIds)->get();
-
-
+    
         return view("user.order_details", compact('order', 'transaction', 'user', 'userAddress', 'products'));
     }
+    
 
 
     public function checkIfOrderBelongsToUser($order)
@@ -109,25 +124,39 @@ class OrderController extends Controller
                 $order->save();
             }
         }
+
+
+        $cartItems = CartItem::where('cart_id', $order->cart_id)->get();
+
+        foreach ($cartItems as $item) {
+            $orderItem = new OrderItem(); 
+            $orderItem->order_id = $order->id;
+            $orderItem->product_id = $item->product_id;
+            $orderItem->quantity = $item->quantity; 
+            $orderItem->unit_price = $item->unit_price;
+            $orderItem->variation = $item->variation; 
+            $orderItem->color = $item->color;
+            $orderItem->save(); 
+        }
         return response()->json($order, 201);
     }
 
     public function getUserOrders() {
         $userId = auth('user')->user()->id;
+        
         $orders = Order::where('user_id', $userId)->get();
-    
-        $ordersWithProducts = $orders->map(function ($order) {
-            $productIds = CartItem::where('cart_id', $order->cart_id)->pluck('product_id');
+        
+        foreach ($orders as $order) {
+            $orderItems = OrderItem::where('order_id', $order->id)->get();
+            $productIds = $orderItems->pluck('product_id');
             $products = Product::whereIn('id', $productIds)->get();
-            $productsToArray = $products->toArray();
-            $order->products = $productsToArray;
+            $order->products = $products;
+        }
     
-            return $order;
-        });
-        $ordersToArray = $ordersWithProducts->toArray();
-    
-        return response()->json($ordersToArray, 200);
+        return response()->json($orders);
     }
+    
+    
 
 
     public function reviewUpdate(Request $request){

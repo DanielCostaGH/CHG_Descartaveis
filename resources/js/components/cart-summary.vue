@@ -181,7 +181,7 @@ export default {
             const id = this.userInfo ? this.userInfo.id : '';
             switch (this.cartStep) {
                 case 'payment':
-                    this.$emit('continueToConfirmation');
+                    this.$emit('createLocalOrder');
                     nextUrl = `/cart/confirmation/${id}`;
                     window.location.href = nextUrl;
                     break;
@@ -228,7 +228,6 @@ export default {
             if (freteResponse) {
                 this.freteList = freteResponse;
                 this.finalPrice = freteResponse.finalPrice;
-                console.log("finalPrice vindo do local", this.finalPrice);
             }
         },
 
@@ -237,7 +236,6 @@ export default {
                 .then(response => {
                     this.totalPrice = response.data;
                     this.calculateTotalPrice();
-                    console.log("rodou")
                 })
                 .catch(error => {
                     console.error('Erro ao obter o preço do carrinho:', error);
@@ -250,7 +248,6 @@ export default {
             } else {
                 let fullPrice = parseFloat(this.totalPrice) + parseFloat(this.freteList.price);
                 this.finalPrice = fullPrice.toFixed(2);
-                console.log(fullPrice);
             }
 
         },

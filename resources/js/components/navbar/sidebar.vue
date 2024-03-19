@@ -106,7 +106,6 @@ export default {
             axios.get('/api/get')
                 .then(response => {
                     this.userData = response.data;
-                    console.log('desgr', this.userData)
                     this.cartUrl();
                 })
                 .catch(error => {

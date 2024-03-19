@@ -24,13 +24,18 @@ class Order extends Model
         return $this->belongsTo(UserAddress::class, 'address_id');
     }
 
+    public function orderItems()
+    {
+        return $this->hasMany(OrderItem::class);
+    }
+
     public static function getPendingOrders(){
-        return self::whereIn('status', ['pending', 'paid'])->get();
+        return self::with('user')->whereIn('status', ['pending', 'paid'])->get();
     }
 
     public static function getShippedOrders()
     {
-        return self::whereIn('status', ['shipped', 'delivered', 'canceled'])->get();
+        return self::with('user')->whereIn('status', ['shipped', 'delivered', 'canceled'])->get();
     }
 
 }

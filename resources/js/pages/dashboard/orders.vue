@@ -6,25 +6,85 @@
         <painel :orders="orders" />
       </header>
 
-      <section class="bg-white h-screen rounded-lg">
+      <section class="bg-white h-[80vh] shadow rounded-lg overflow-scroll">
         <div class="p-5"><span class="font-weight-bold text-gray-600 text-2xl">Pedidos pendentes de envio</span></div>
-        <div v-for="order in orders" :key="order.id"
-          class="border shadow p-4 rounded-lg mt-4 flex flex-col md:flex-row items-center justify-between">
-          <div class="flex items-center w-full md:w-4/6 overflow-x-hidden">
-            <img :src="`/images/products/${order.products[0].id}/${order.products[0].images}`"
-              class="w-20 h-20 object-cover rounded mr-4" />
-            <div>
-              <div class="text-lg font-semibold">{{ order.products[0].name }}</div>
-              <div class="text-gray-500">Valor: R$ {{ order.total_price }}</div>
-              <div class="text-gray-500">Status: {{ order.status }}</div>
+
+        <div class="w-full flex flex-wrap">
+          <div v-for="order in orders" :key="order.id" class="border shadow p-6 mx-10 rounded-lg mt-4 w-[40vh]">
+            <div class="flex items-center w-full overflow-x-hidden">
+              <div class="text-lg font-semibold h-full py-6 px-4 bg-green-500 text-white mx-5 rounded">ID: {{ order.id
+                }}</div>
+              <div>
+                <div class="text-lg">Cliente: {{ order.user.name }}</div>
+                <div class="text-lg">Valor: R$ {{ order.total_price }}</div>
+                <div class="text-lg text-gray-500">Status: {{ order.status }}</div>
+              </div>
+            </div>
+            <div class="flex flex-wrap justify-center w-full mt-4">
+              <v-btn :href="`/dashboard/order-details/${order.id}`" color="blue darken-1" width="250"
+                class="px-4 py-2 my-3">
+                Ver Pedido
+              </v-btn>
             </div>
           </div>
-          <div class="flex flex-wrap justify-center w-full md:w-2/6 mt-4 md:mt-0">
-            <v-btn :href="`/user/order-details/${order.id}`" color="blue darken-1" width="250" class="px-4 py-2 my-3">
-              Ver compra
-            </v-btn>
+
+          <div v-for="order in orders" :key="order.id" class="border shadow p-6 mx-10 rounded-lg mt-4 w-[40vh]">
+            <div class="flex items-center w-full overflow-x-hidden">
+              <div class="text-lg font-semibold h-full py-6 px-4 bg-green-500 text-white mx-5 rounded">ID: {{ order.id
+                }}</div>
+              <div>
+                <div class="text-lg">Cliente: {{ order.user.name }}</div>
+                <div class="text-lg">Valor: R$ {{ order.total_price }}</div>
+                <div class="text-lg text-gray-500">Status: {{ order.status }}</div>
+              </div>
+            </div>
+            <div class="flex flex-wrap justify-center w-full mt-4">
+              <v-btn :href="`/dashboard/order-details/${order.id}`" color="blue darken-1" width="250"
+                class="px-4 py-2 my-3">
+                Ver Pedido
+              </v-btn>
+            </div>
           </div>
+
+          <div v-for="order in orders" :key="order.id" class="border shadow p-6 mx-10 rounded-lg mt-4 w-[40vh]">
+            <div class="flex items-center w-full overflow-x-hidden">
+              <div class="text-lg font-semibold h-full py-6 px-4 bg-green-500 text-white mx-5 rounded">ID: {{ order.id
+                }}</div>
+              <div>
+                <div class="text-lg">Cliente: {{ order.user.name }}</div>
+                <div class="text-lg">Valor: R$ {{ order.total_price }}</div>
+                <div class="text-lg text-gray-500">Status: {{ order.status }}</div>
+              </div>
+            </div>
+            <div class="flex flex-wrap justify-center w-full mt-4">
+              <v-btn :href="`/dashboard/order-details/${order.id}`" color="blue darken-1" width="250"
+                class="px-4 py-2 my-3">
+                Ver Pedido
+              </v-btn>
+            </div>
+          </div>
+
+          <div v-for="order in orders" :key="order.id" class="border shadow p-6 mx-10 rounded-lg mt-4 w-[40vh]">
+            <div class="flex items-center w-full overflow-x-hidden">
+              <div class="text-lg font-semibold h-full py-6 px-4 bg-green-500 text-white mx-5 rounded">ID: {{ order.id
+                }}</div>
+              <div>
+                <div class="text-lg">Cliente: {{ order.user.name }}</div>
+                <div class="text-lg">Valor: R$ {{ order.total_price }}</div>
+                <div class="text-lg text-gray-500">Status: {{ order.status }}</div>
+              </div>
+            </div>
+            <div class="flex flex-wrap justify-center w-full mt-4">
+              <v-btn :href="`/dashboard/order-details/${order.id}`" color="blue darken-1" width="250"
+                class="px-4 py-2 my-3">
+                Ver Pedido
+              </v-btn>
+            </div>
+          </div>
+
+          
         </div>
+
       </section>
     </main>
   </div>

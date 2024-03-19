@@ -7,7 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
 {
-    protected $fillable = ['id', 'sku', 'name', 'description', 'price', 'images', 'category_id', 'brand', 'color', 'variation', 'quantity', 'status'];    protected $table = 'product';
+    protected $fillable = ['id', 'sku', 'name', 'description', 'price', 'images', 'category_id', 'brand', 'color', 'variation', 'quantity', 'status'];    
+    protected $table = 'product';
     protected $appends = ['avg_rating'];
     use HasFactory;
 
@@ -40,6 +41,11 @@ class Product extends Model
     public function cartItems()
     {
         return $this->hasMany(CartItem::class);
+    }
+
+    public function orderItems()
+    {
+        return $this->hasMany(OrderItem::class);
     }
 
     public static function searchByName($query)

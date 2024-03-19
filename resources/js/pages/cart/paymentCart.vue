@@ -61,9 +61,8 @@
 
             </div>
 
-
-            <cartSummary :products="products" :selectedMainAddress="selectedMainAddress"
-                :selectedPaymentMethod="selectedPaymentMethod" @continueToConfirmation="createOrder" />
+            <cart-summary ref="cartSummary" :products="products" :selectedMainAddress="selectedMainAddress"
+            :selectedPaymentMethod="selectedPaymentMethod" :initialTotalPrice="totalPrice" @createLocalOrder="localOrder"/>
         </div>
     </div>
 
@@ -158,7 +157,7 @@
 
             <div class="lg:block flex mx-auto w-full">
                 <cart-summary ref="cartSummary" :products="products" :selectedMainAddress="selectedMainAddress"
-                    :selectedPaymentMethod="selectedPaymentMethod" :initialTotalPrice="totalPrice" />
+            :selectedPaymentMethod="selectedPaymentMethod" :initialTotalPrice="totalPrice" @createLocalOrder="localOrder"/>
 
             </div>
         </div>
@@ -493,7 +492,7 @@ export default {
                 });
         },
 
-        createOrder() {
+        localOrder() {
             const id = this.userInfo ? this.userInfo.id : '';
             const order = {
                 userData: this.userInfo,
@@ -503,6 +502,7 @@ export default {
                 total: this.totalPrice
             };
 
+
             localStorage.setItem('order', JSON.stringify(order));
         }
 
@@ -510,8 +510,8 @@ export default {
 
     mounted() {
         this.fetchCards(),
-            this.fetchAddresses(),
-            this.fetchProducts()
+        this.fetchAddresses(),
+        this.fetchProducts()
     }
 
 

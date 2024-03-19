@@ -39,7 +39,7 @@
                       class="p-5 my-5 shadow-lg flex items-center justify-between">
                       <div class="flex items-center">
                         <div class="lg:mx-5 lg:mr-10 w-[10vh] flex justify-center items-center">
-                          <img :src="product.imagePath" alt="Imagem do Produto" class="max-h-[10vh]">
+                          <img :src="product.imagePath" alt="Imagem do Produto" class="h-[10vh] mr-5">
                         </div>
 
                         <div class="hidden lg:block">
@@ -47,6 +47,7 @@
                           <v-label>preço: {{ product.price }}, variação: {{ product.variation }}, cor: {{
                             product.color }}</v-label>
                         </div>
+
                         <div class="lg:hidden">
                           <h1 class="font-weight-bold">{{ product.name }}</h1>
                           <p class="text-gray-600">preço: {{ product.price }}, variação: {{ product.variation }}, cor: {{
@@ -124,7 +125,6 @@ export default {
 
       axios.post('/user/save-order', simplifiedOrder)
         .then(response => {
-          console.log(response.data.id)
           window.location.href = `/user/order-details/${response.data.id}`
         })
         .catch(error => {

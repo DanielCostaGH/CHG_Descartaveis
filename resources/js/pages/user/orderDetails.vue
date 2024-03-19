@@ -120,10 +120,10 @@
                       <v-list-item-title class="font-weight-bold mt-5">Produtos:</v-list-item-title>
                       <!-- Produtos Desktop -->
                       <div v-for="product in products" :key="product.id"
-                        class="p-5 my-5 shadow-lg flex flex-wrap items-center justify-between hover:border hover:rounded-xl duration-300">
+                        class="p-5 my-5 shadow-lg flex flex-wrap items-center justify-between item hover:text-blue-700 rounded-lg duration-300">
                         <a :href="`/products/${product.id}`" class="flex items-center">
                           <div class="mx-5 mr-10 w-[10vh] flex justify-center items-center">
-                            <img :src="product.imagePath" alt="Imagem do Produto" class="max-h-[10vh]">
+                            <img :src="product.imagePath" alt="Imagem do Produto" class="h-[10vh]">
                           </div>
                           <div>
                             <h1 class="font-weight-bold ">{{ product.name }}</h1>
@@ -295,4 +295,14 @@ export default {
   width: 500px;
   height: 500px;
 }
+
+.item {
+    border: 2px solid transparent; /* Adiciona uma borda transparente */
+    transition: border-color 0.3s; /* Faz a transição da cor da borda suave */
+}
+
+.item:hover {
+    border-color: #0f6dd8; 
+}
+
 </style>
