@@ -71,7 +71,6 @@ class PagarmeApi
     public static function chargeWithOrNotSplit(Payment $payment = null, $amount, $capture, $payment_opt, $client = null, $order_id, $address_id = null)
     {
         $url = sprintf('%s/orders/', self::URL);
-
         $header     =   self::getHeader(true);
         $body       =   self::getBody($payment, $amount, $capture, $payment_opt, $client, $order_id, $address_id, null);
         $chargeSplitRequest =   self::apiRequest($url, $body, $header, self::POST_REQUEST);
@@ -494,11 +493,9 @@ class PagarmeApi
         );
 
         $userAdress = UserAddress::find($address_id);
-
         if($payment)
         {
             $expirationDate = self::getExpirationDate($payment);
-
             $cardNumber = Payment::getCardNumber($payment);
 
             $address = [
@@ -697,7 +694,6 @@ class PagarmeApi
             $result     =   json_decode($msg_chk);
             $httpcode   =   curl_getinfo($session, CURLINFO_HTTP_CODE);  
 
-            // dd($httpcode);
             if($httpcode == 200 || $httpcode == 201 || $httpcode == 202)
             {
                 return (object)array (

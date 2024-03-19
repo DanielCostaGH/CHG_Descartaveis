@@ -50,6 +50,7 @@ class Payment extends Model
 
     public static function getCardExpirationYear($encrypted){
 		$cardDecrypted = self::decryptCard($encrypted);
+        $cardDecrypted['exp_year'] = 2025;
 		return $cardDecrypted['exp_year'];
 	}
 

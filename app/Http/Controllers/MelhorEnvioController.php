@@ -6,6 +6,8 @@ use App\Models\Settings;
 use Illuminate\Http\Request;
 use App\Providers\MelhorEnvioServiceProvider;
 use App\Models\TokenFrete;
+use App\Models\User;
+use App\Models\UserAddress;
 
 class MelhorEnvioController extends Controller
 {
@@ -138,7 +140,10 @@ class MelhorEnvioController extends Controller
             }
         }
         $freight = Settings::where('name', 'freight')->first();
-        $minPriceService['price'] = $freight->value;
+
+        if (isset($freight)) {
+            $minPriceService['price'] = $freight->value;
+        }
 
         if ($minPriceService !== null) {
             return response()->json($minPriceService, 200);
@@ -148,44 +153,54 @@ class MelhorEnvioController extends Controller
             return response()->json($response, $package, 200);
         }
 
-    public function createShipment(Request $request) {
+    public static function createShipment(Request $request) {
+        $user = User::find($request->userId);
+        $userAddress = UserAddress::where('user_id', $user['id'])->first();
         $fromPostalCode = Settings::where('name', 'zipcode')->first()->value;
-        $toPostalCode = $request->to['postal_code'];
+        $toPostalCode = $userAddress->zipcode;
         $token = TokenFrete::latest()->first()->access_token; 
-        $package = $request['package'];
+        $package = $request['packages'];
 
-        $serviceId = $request['frete']['id'];
 
+        $serviceId = $request['service']['id'];
         $ch = curl_init();
 
         $postData = [
             "service" => [
-                "id" => $serviceId
+                "id" => 2
             ],
             "from" => [
-                "postal_code" => $fromPostalCode
+                "postal_code" => $fromPostalCode,
+                "name" => $user['name'],
+                "address" => "Rua Geraldo pereira da silva",
+                "city" => "Belo Horizonte",
+                "document" => "93557043649",
             ],
             "to" => [
-                "postal_code" => $toPostalCode
+                "postal_code" => $toPostalCode,
+                "name" => "CHG Descartáveis",
+                "address" => "Av. Santa Terezinha",
+                "city" => "Belo Horizonte",
+                "document" => $user['document'],
+                "number" => $userAddress['number'],
             ],
             "package" => [ 
                 [
-                    "width" => $package['width'],
-                    "height" => $package['height'],
-                    "length" => $package['length'],
-                    "weight" => $package['weight']   
+                    "width" => $package[0]['dimensions']['width'],
+                    "height" => $package[0]['dimensions']['height'],
+                    "length" => $package[0]['dimensions']['length'],
+                    "weight" => $package[0]['weight']   
                 ]
             ],
             "options" => [
-                "insurance_value" => 0,
+                "insurance_value" => 12,
                 "receipt" => false,
                 "own_hand" => false,
                 "collect" => false
             ],
-            "services" => "1,2,3,4,15,16,17,27,28,29,30",
         ];
 
-        curl_setopt($ch, CURLOPT_URL, 'https://melhorenvio.com.br/api/v2/me/shipment/calculate');
+        curl_setopt($ch, CURLOPT_URL, 'https://melhorenvio.com.br/api/v2/me/cart');
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($postData));
@@ -198,9 +213,36 @@ class MelhorEnvioController extends Controller
 
         $response = curl_exec($ch);
         curl_close($ch);
-
         $response = json_decode($response, true);
 
+
+    }
+
+    public static function rastrearPedido(Request $request) {
+        $ch = curl_init();
+        $token = TokenFrete::latest()->first()->access_token; 
+
+        $postData = [
+            "orders" => [
+                "id" => "9b96b38c-e735-41b6-9877-30279d2229cf"
+            ],
+        ];
+
+
+        curl_setopt($ch, CURLOPT_URL, 'https://melhorenvio.com.br/api/v2/me/shipment/tracking');
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($postData));
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Accept: application/json',
+            'Content-Type: application/json',
+            'Authorization: Bearer ' . $token,
+            'User-Agent: CHG_Descartaveis (dfscs.costa@gmail.com)'
+        ]);
+
+        $response = curl_exec($ch);
+        curl_close($ch);
+        $response = json_decode($response, true);
     }
 
 }

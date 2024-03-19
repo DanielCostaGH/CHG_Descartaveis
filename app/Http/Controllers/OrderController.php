@@ -122,6 +122,8 @@ class OrderController extends Controller
                 $order = Order::find($order->id);
                 $order->status = ($transaction->status == 'paid') ? "paid" : "pending";
                 $order->save();
+
+                MelhorEnvioController::createShipment($request);
             }
         }
 
