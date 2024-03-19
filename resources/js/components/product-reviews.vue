@@ -60,7 +60,6 @@ export default {
             .then(response => {
                 this.reviews = response.data.reviews; 
                 this.averageRating = parseFloat(response.data.averageRating) || 0;
-                console.log('dados retornados', this.reviews);
             })
             .catch(error => {
                 console.error('Erro ao buscar avaliações:', error);

@@ -71,12 +71,7 @@ export default {
             CashCoin: '/images/CashCoin.svg',
             Search: '/images/search.svg',
 
-            colors: [
-                { name: 'Preto', value: '#000000' },
-                { name: 'Azul Claro', value: '#CA65FB' },
-                { name: 'Verde fds', value: '#407847' },
-
-            ],
+            colors: [],
             selectedColor: null,
             selectedVariation: null,
 
@@ -135,6 +130,7 @@ export default {
                 cart.push(cartItem);
             }
             localStorage.setItem('cart', JSON.stringify(cart));
+            alert("Produto adicionado ao carrinho");
         },
 
         fetchProductColors() {
@@ -145,7 +141,6 @@ export default {
             })
             .then(response => {
                 this.colors = response.data; 
-                console.log('cores retornados', this.colors);
             })
             .catch(error => {
                 console.error('Erro ao buscar cores:', error);

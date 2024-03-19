@@ -46,12 +46,19 @@ export default {
         fetchProducts(filters = {}) {
             axios.get(`/api/products`, { params: filters })
                 .then(response => {
-                    this.products = response.data;
+                    this.products = response.data.map(product => {
+                        return {
+                            ...product,
+                            avg_rating: parseFloat(product.avg_rating)
+                        };
+                    });
+                    console.log(this.products);
                 })
                 .catch(error => {
                     console.error('Erro ao buscar produtos:', error);
                 });
         },
+
 
 
 

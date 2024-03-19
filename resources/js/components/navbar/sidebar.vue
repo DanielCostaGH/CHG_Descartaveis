@@ -50,8 +50,8 @@
                 Meus pedidos</a>
         </li>
 
-        <li class="my-4  w-full">
-            <a :href="`/cart/${userData.id}`" class="flex w-full items-center p-5 text-white">
+        <li class="my-4 w-full">
+            <a :href="this.carturl" class="flex w-full items-center p-5 text-white">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
                     stroke="currentColor" class="w-6 h-6 mr-3">
                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -70,6 +70,21 @@
             Sair
         </button>
     </ul>
+
+
+    <v-dialog v-model="logoutDialog" width="500">
+            <v-card title="Atenção!">
+                <v-card-text>
+                    Tem certeza que deseja sair?
+                </v-card-text>
+
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn class="blue-grey-lighten-4" text="Cancelar" @click="logoutDialog = false"></v-btn>
+                    <v-btn class="bg-red-darken-4" text="Sair" @click="logout"></v-btn>
+                </v-card-actions>
+            </v-card>
+    </v-dialog>
 </template>
   
 <script>
@@ -78,35 +93,51 @@ export default {
         user: '/images/user.svg',
         cart: '/images/buy.svg',
         userData: [],
+        logoutDialog: false,
+        carturl: '',
     }),
 
-    computed: {
-        userInfo() {
-            return this.$store.state.user;
-        },
-
-        cartUrl() {
-            if (this.userInfo) {
-                return `/cart/${this.userData.id}`;
-            } else {
-                return '/local/cart';
-            }
-        },
-    },
-
-    watch: {
-        '$store.state.user': {
-            handler(newValue, oldValue) {
-                this.setUserData();
-            },
-            deep: true,
-        },
+    mounted() {
+        this.getUser()
     },
 
     methods: {
-        setUserData() {
-            this.userData = this.userInfo;
+        getUser() {
+            axios.get('/api/get')
+                .then(response => {
+                    this.userData = response.data;
+                    console.log('desgr', this.userData)
+                    this.cartUrl();
+                })
+                .catch(error => {
+                    console.error('Erro ao obter dados do usuário:', error);
+                    this.cartUrl();
+                });
         },
+
+        cartUrl() {
+            if (this.userData) {
+                this.carturl = `/cart/${this.userData.id}`;
+            } else {
+                this.carturl = '/local/cart';
+            }
+        },
+
+        async logout() {
+            try {
+                const response = await axios.post('/user/logout', {
+                    email: this.userData.email,
+                });
+
+                if (response.status === 200) {
+                    window.location.href = '/user/login';
+                } else {
+                    console.error('Falha ao efetuar logout');
+                }
+            } catch (error) {
+                console.error('Erro ao efetuar logout:', error);
+            }
+        }
     }
 };
 </script>

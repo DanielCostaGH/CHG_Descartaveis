@@ -1,9 +1,9 @@
 <template>
   <navbar />
-  <div class="container mx-auto my-5">
+  <div class="lg:container mx-auto my-5">
     <div class="flex flex-col md:flex-row">
       <div class="flex-grow">
-        <div class="mx-5  p-5">
+        <div class="mx-2 lg:mx-5 lg:p-5">
           <v-card class="my-5 h-full">
             <div class="p-7 text-h5 font-weight-bold flex items-center" style="background-color: #F5F5F5;">
               <v-icon color="#2B9D44">mdi-file-search</v-icon>
@@ -22,8 +22,8 @@
                   <v-list-item-content>
                     <v-list-item-title>Endereço de Entrega</v-list-item-title>
                     <v-list-item-subtitle>{{ order.address.street }}, {{ order.address.number }} - {{
-                      order.address.neighborhood }}, {{ order.address.city }}, {{ order.address.state
-  }}</v-list-item-subtitle>
+                      order.address.neighborhood }}, {{ order.address.city }}, {{ order.address.state}}
+                    </v-list-item-subtitle>
                   </v-list-item-content>
                 </v-list-item>
                 <v-list-item>
@@ -38,14 +38,19 @@
                     <div v-for="product in order.products" :key="product.id"
                       class="p-5 my-5 shadow-lg flex items-center justify-between">
                       <div class="flex items-center">
-                        <div class="mx-5 mr-10 w-[10vh] flex justify-center items-center">
+                        <div class="lg:mx-5 lg:mr-10 w-[10vh] flex justify-center items-center">
                           <img :src="product.imagePath" alt="Imagem do Produto" class="max-h-[10vh]">
                         </div>
 
-                        <div>
+                        <div class="hidden lg:block">
                           <h1 class="font-weight-bold">{{ product.name }}</h1>
                           <v-label>preço: {{ product.price }}, variação: {{ product.variation }}, cor: {{
                             product.color }}</v-label>
+                        </div>
+                        <div class="lg:hidden">
+                          <h1 class="font-weight-bold">{{ product.name }}</h1>
+                          <p class="text-gray-600">preço: {{ product.price }}, variação: {{ product.variation }}, cor: {{
+                            product.color }}</p>
                         </div>
                       </div>
                     </div>

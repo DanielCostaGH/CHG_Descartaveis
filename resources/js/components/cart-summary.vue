@@ -39,18 +39,10 @@
             </v-btn>
         </div>
 
-        <div v-if="cartStep !== 'confirmation'" class="lg:w-5/6 md:w-3/6 mx-auto px-5 my-5">
+        <div v-if="cartStep !== 'confirmation' && cartStep !== 'payment'" class="lg:w-5/6 md:w-3/6 mx-auto px-5 my-5">
             <v-label>Calcular frete</v-label>
             <v-text-field v-model="destinationPostalCode" placeholder="Digite o CEP de destino"></v-text-field>
             <v-btn @click="calculateFrete">Calcular</v-btn>
-        </div>
-
-        <div v-if="freteList.length > 0" class="my-10">
-            <v-list>
-                <v-list-item v-for="(frete, index) in freteList" :key="index">
-                    {{ frete.service_name }} - R$ {{ frete.price }}
-                </v-list-item>
-            </v-list>
         </div>
 
     </div>

@@ -130,14 +130,11 @@ export default {
 
         async logout() {
             try {
-                // Realiza uma requisição para a rota de logout
                 const response = await axios.post('/user/logout', {
                     email: this.userData.email,
                 });
 
-                // Verifica o status da resposta
                 if (response.status === 200) {
-                    // Se a requisição for bem-sucedida, redirecione o usuário para a página de login
                     window.location.href = '/user/login';
                 } else {
                     console.error('Falha ao efetuar logout');

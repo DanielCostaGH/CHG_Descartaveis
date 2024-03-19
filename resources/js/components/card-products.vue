@@ -6,9 +6,9 @@
 
 
                 <div class="flex justify-between items-center p-2 border-b-2 mb-4">
-                    <div class="flex items-center">
-                        <v-rating hover :length="5" :size="27" :model-value="3" active-color="warning" readonly />
-                        <v-label>(544)</v-label>
+                    <div class="flex items-center gap-3">
+                        <v-rating v-model="product.avg_rating" size="27" dense color="amber" disabled></v-rating>
+                        <v-label>({{ product.reviews.length }})</v-label>
                     </div>
 
                     <div>
@@ -53,9 +53,9 @@
 
 
                 <div class="flex justify-between items-center p-2 border-b-2 mb-4">
-                    <div class="flex items-center">
-                        <v-rating hover :length="5" :size="27" :model-value="3" active-color="warning" readonly />
-                        <v-label>(544)</v-label>
+                    <div class="flex items-center gap-3">
+                        <v-rating v-model="product.avg_rating" size="27" dense color="amber" disabled></v-rating>
+                        <v-label>({{ product.reviews.length }})</v-label>
                     </div>
 
                     <div>
@@ -107,6 +107,8 @@ export default {
     data: () => ({
         loading: false,
         favorites: [],
+        averageRating: 0,
+        reviews: [],
     }),
 
     mounted() {

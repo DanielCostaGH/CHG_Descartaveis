@@ -1,11 +1,11 @@
 <template>
-  <div>
+  
     <navbar />
-    <div class="container mx-auto my-5 flex">
+    <div class="lg:container mx-auto my-5 flex">
       <div class="flex flex-col md:flex-row w-full">
         <!-- Seção de detalhes do pedido -->
         <div class="flex-grow">
-          <div class="mx-5  p-5">
+          <div class="lg:mx-5 lg:p-5">
             <!-- Se o pedido estiver disponível -->
             <v-card v-if="order" class="my-5 h-full">
               <!-- Conteúdo do pedido -->
@@ -46,9 +46,9 @@
                   </v-list-item>
 
                   <!-- Seção de pagamento -->
-                  <div v-if="order.status == 'pending'" class="flex justify-center items-center p-7">
-                    <div class="w-4/6">
-                      <h1 class="p-4 bg-green rounded" v-if="order">ID do Pedido: {{ order.id }}</h1>
+                  <div v-if="order.status == 'pending'" class="lg:flex justify-center items-center lg:p-7 my-5 lg:my-0">
+                    <div class="lg:w-4/6">
+                      <h1 class="p-4 bg-green w-full rounded" v-if="order">ID do Pedido: {{ order.id }}</h1>
                       <div v-if="transaction">
                         <div class="flex items-center">
                           <h1 class="p-4 text-lg">Pix copia e cola:</h1>
@@ -60,12 +60,12 @@
                       </div>
                     </div>
 
-                    <div class="w-2/6 flex justify-center items-center">
+                    <div class="hidden w-2/6 lg:flex justify-center items-center">
                       <qrcode-vue :value="transaction.pix_base64" style="width: 200px; height: 200px;"></qrcode-vue>
                     </div>
                   </div>
 
-                  <div class="p-4 flex items-center gap-4">
+                  <div class="lg:p-4 flex items-center gap-4">
                     <h1 class="p-2 text-lg">Status do Pedido:</h1>
                     <div v-if="order.status === 'paid'"
                       class="font-weight-bold text-lg bg-green p-3 rounded flex items-center gap-3">
@@ -118,9 +118,9 @@
                   <v-list-item>
                     <v-list-item-content>
                       <v-list-item-title class="font-weight-bold mt-5">Produtos:</v-list-item-title>
-                      <!-- Loop pelos produtos -->
+                      <!-- Produtos Desktop -->
                       <div v-for="product in products" :key="product.id"
-                        class="p-5 my-5 shadow-lg flex items-center justify-between hover:border hover:rounded-xl duration-300">
+                        class="p-5 my-5 shadow-lg flex flex-wrap items-center justify-between hover:border hover:rounded-xl duration-300">
                         <a :href="`/products/${product.id}`" class="flex items-center">
                           <div class="mx-5 mr-10 w-[10vh] flex justify-center items-center">
                             <img :src="product.imagePath" alt="Imagem do Produto" class="max-h-[10vh]">
@@ -132,7 +132,7 @@
                             </v-label>
                           </div>
                         </a>
-                        <v-btn color="indigo" width="150" class="px-4 py-2" @click="startReviewProcess(product.id)">
+                        <v-btn v-if="order.status === 'delivered'" color="indigo" width="150" class="px-4 py-2" @click="startReviewProcess(product.id)">
                           Avaliar
                         </v-btn>
                       </div>
@@ -151,7 +151,7 @@
         </div>
       </div>
     </div>
-  </div>
+ 
 
   <!-- Modal de Avaliação -->
   <v-dialog v-model="showReviewDialog" persistent max-width="600px">

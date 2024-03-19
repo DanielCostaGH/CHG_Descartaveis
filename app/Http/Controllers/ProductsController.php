@@ -48,8 +48,13 @@ class ProductsController extends Controller
         } else {
             $products = Product::getAvailableProducts();
         }
+
+        // Certifique-se de carregar as avaliações relacionadas
+        $products->load('reviews');
+
         return response()->json($products);
     }
+
 
 
     protected function hasFilters(Request $request)
@@ -130,11 +135,12 @@ class ProductsController extends Controller
         return response()->json($count);
     }
 
-    public function getProductReviews(Request $request){
+    public function getProductReviews(Request $request)
+    {
         $productId = $request->productId;
-    
+
         $reviewsResponse = Review::where('product_id', $productId)->with('user')->get();
-    
+
         $reviews = $reviewsResponse->map(function ($review) {
             return [
                 'id' => $review->id,
@@ -143,31 +149,32 @@ class ProductsController extends Controller
                 'user_name' => $review->user ? $review->user->name : 'Usuário Desconhecido',
             ];
         });
-    
+
         $averageRating = $reviewsResponse->avg('rating');
-    
+
         return response()->json([
             'reviews' => $reviews,
             'averageRating' => $averageRating
         ], 200);
     }
 
-    public function getProductColors(Request $request) {
+    public function getProductColors(Request $request)
+    {
         $productId = $request->productId;
         $productColors = ProductColors::where('product_id', $productId)->pluck('color_id');
-    
+
         $colors = Color::whereIn('id', $productColors)->get()->map(function ($color) {
             return [
-                'id'    => $color->id,
-                'name'  => $color->name,
-                'value' => $color->value, 
+                'id' => $color->id,
+                'name' => $color->name,
+                'value' => $color->value,
             ];
         });
-    
+
         return response()->json($colors);
     }
-    
-    
+
+
 
 
 
